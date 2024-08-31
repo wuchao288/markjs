@@ -10,12 +10,26 @@
   },
   "dependencies": {
     "vue": "^3.4.37",
-    "@types/node": "^20.11.24"
+    "@types/node": "^20.11.24",
+    "leafer-ui": "1.0.2",
+    "leafer-draw": "1.0.2",
+    "leafer-editor": "1.0.2",
+    "@leafer-in/editor": "^1.0.2",
+    "@leafer-in/text-editor": "^1.0.2",
+    "@leafer-in/view": "^1.0.2",
+    "@leafer-in/scroll": "^1.0.2",
+    "@leafer-in/arrow": "^1.0.2",
+    "@leafer-in/html": "^1.0.2",
+    "@leafer-in/flow": "^1.0.2",
+    "@leafer-in/state": "^1.0.2",
+    "leafer-x-ruler": "^1.0.12",
+    "leafer-x-tooltip": "^1.2.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
-    "vue-tsc": "^2.0.29"
+    "vue-tsc": "^2.0.29",
+    "@types/node": "^20.11.24"
   }
 }
