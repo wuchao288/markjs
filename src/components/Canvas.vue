@@ -10,11 +10,13 @@
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
 
-    let canvasApp:any
+    let canvasApp:App
+
+    let frame:Frame
 
     onMounted(() => {
         
-        let appWrap=  document.getElementById("main-canvas")
+        let appWrap=  document.getElementById("main-canvas") as HTMLDivElement
 
         appWrap.style.height= (window.innerHeight- 60)+"px"
         appWrap.style.marginTop="60px"
@@ -29,7 +31,7 @@
 
         })
 
-        const frame = new Frame({
+     frame = new Frame({
             x:width/2,
             y:height/2,
             width: 800,
@@ -57,8 +59,10 @@
     frame.add(box)
 
     canvasApp.tree.add(frame)
+    })
 
-    frame.add(new Box({
+    function addLine(){
+        frame.add(new Box({
         fill: '#fff',
         cornerRadius: 20,
         editable: true,
@@ -67,20 +71,16 @@
         children: [{
             tag: 'Text',
             editable: true,
-            text: 'Welcome to LeaferJS ewrwr',
+            text: 'Welcome to LeaferJS 355353535',
             fill: 'black',
             padding: [10, 20],
             textAlign: 'left',
             verticalAlign: 'top'
         }]
     }))
+    }
 
-  
-
-     
-    })
-
-    defineExpose({canvasApp})
+    defineExpose({addLine})
 </script>
 
 <style scoped>

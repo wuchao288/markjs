@@ -8,13 +8,7 @@ import Lang from '@/components/lang/index.vue'
 
 import type { UploadProps } from 'element-plus'
 
-import { Box } from 'leafer-ui'
-
 import { PageSizeList,PageSizeItem } from '@/assets/data/PageSize'
-
-let props= defineProps<{ canvasApp: object }>()
-
-debugger
 
 const imageUrl = ref('')
 
@@ -29,7 +23,13 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
   imageUrl.value = URL.createObjectURL(uploadFile.raw!)
 }
 
-let canvasApp =props.canvasApp;
+const emit = defineEmits(['handleLine'])
+
+
+const handleLine=()=>{
+  debugger;
+  emit('handleLine',false);
+}
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (rawFile.type !== 'image/jpeg') {
@@ -46,28 +46,7 @@ onMounted(() => {
 
 })
 
-async function addLine() {
-    console.info("addLine");
 
-    const box = new Box({
-        fill: '#fff',
-        cornerRadius: 20,
-        editable: true,
-        stroke: '#000',
-        strokeWidth: 2,
-        children: [{
-            tag: 'Text',
-            editable: true,
-            text: 'Welcome to LeaferJS',
-            fill: 'black',
-            padding: [10, 20],
-            textAlign: 'left',
-            verticalAlign: 'top'
-        }]
-    })
-
-    canvasApp.add(box)
-}
 
 //defineExpose({addLine})
 
@@ -105,7 +84,7 @@ async function addLine() {
           <el-button>矩形</el-button>
          </li>
          <li>
-          <el-button @click="addLine">直线</el-button>
+          <el-button @click="handleLine">直线</el-button>
          </li>
          <li>
           <el-dropdown split-button  trigger="click">

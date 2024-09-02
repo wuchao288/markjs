@@ -1,6 +1,7 @@
 <template>
-     <Header v-if="secondComponentLoaded" :canvasApp="childRef.canvasApp" />
-     <Canvas ref="childRef" />
+  
+     <Header @handleLine="onLine"/>
+     <Canvas ref="childRef"   />
   </template>
 <script setup lang="ts">
 import Header from '@/components/Header.vue'
@@ -8,14 +9,16 @@ import Canvas from '@/components/Canvas.vue'
 
 import {onMounted, ref} from 'vue'
 
-const childRef = ref(null);
+const childRef = ref();
 
-let secondComponentLoaded=ref(false)
 
+const onLine = () => {
+  debugger
+  childRef.value.addLine();
+}
 
 onMounted(()=>{
-
-  secondComponentLoaded.value=true
+   
 })
 
 </script>
