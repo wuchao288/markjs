@@ -12,7 +12,9 @@ import { Box } from 'leafer-ui'
 
 import { PageSizeList,PageSizeItem } from '@/assets/data/PageSize'
 
-defineProps<{ canvasApp: object }>()
+let props= defineProps<{ canvasApp: object }>()
+
+debugger
 
 const imageUrl = ref('')
 
@@ -26,6 +28,8 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
 ) => {
   imageUrl.value = URL.createObjectURL(uploadFile.raw!)
 }
+
+let canvasApp =props.canvasApp;
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (rawFile.type !== 'image/jpeg') {
