@@ -3,8 +3,8 @@
 import {reactive, ref,onMounted} from 'vue'
 
 import { ElButton,ElDropdown,ElDropdownItem,ElUpload,ElMessage  } from 'element-plus'
-import { Plus  } from '@element-plus/icons-vue'
-import Lang from '@/components/lang/index.vue'
+
+import Lang from './lang/index.vue'
 
 import type { UploadProps } from 'element-plus'
 
@@ -17,7 +17,7 @@ let pageSizeData=reactive<PageSizeItem[]>(PageSizeList);
 let pageSize=reactive<PageSizeItem>(pageSizeData[0]);
 
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  response,
+  _response,
   uploadFile
 ) => {
   imageUrl.value = URL.createObjectURL(uploadFile.raw!)

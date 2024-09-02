@@ -15,9 +15,9 @@ const resolve = (...data: string[]) => path.resolve(__dirname, ...data)
 // https://vitejs.dev/config/
 
 
-export default defineConfig(() => {
+export default defineConfig(
 
-  return {
+   {
     base: '/editor',
     plugins: [
       vue(),
@@ -52,4 +52,4 @@ export default defineConfig(() => {
       }
     }
   }
-})
+)

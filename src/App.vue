@@ -15,7 +15,7 @@ import ja from 'element-plus/es/locale/lang/ja'
 import { useI18n } from 'vue-i18n'
 import { getDefaultLang } from './languages'
 
-import Index from '@/components/Index.vue'
+import Index from './components/Index.vue'
 
 
 const lang = getDefaultLang()

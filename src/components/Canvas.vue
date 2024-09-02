@@ -4,9 +4,9 @@
     </div>
 </template>
 <script setup lang="ts">
-    import {onMounted,getCurrentInstance} from 'vue'
+    import {onMounted} from 'vue'
 
-    import { App, Box ,Text,Frame } from 'leafer-ui'
+    import { App, Box ,Frame } from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
 

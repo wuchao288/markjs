@@ -4,8 +4,8 @@
      <Canvas ref="childRef"   />
   </template>
 <script setup lang="ts">
-import Header from '@/components/Header.vue'
-import Canvas from '@/components/Canvas.vue'
+import Header from './Header.vue'
+import Canvas from './Canvas.vue'
 
 import {onMounted, ref} from 'vue'
 
