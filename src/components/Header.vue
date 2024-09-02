@@ -16,7 +16,7 @@ defineProps<{ msg: string }>()
              <li><button>Ellipse</button></li>
              <li><button>Line</button></li>
              <li><button>Arrow</button></li>
-             <li><button>Save As</button></li>
+             <li><button>Save As  </button></li>
          </ul>
      </div>
  </div>
