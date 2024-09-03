@@ -76,7 +76,7 @@ const handleSharp=(type:string,subtype:string)=>{
 
         }else{
 
-            markType.value= MarkTypeList.find((m:MarkTypeItem)=>m.type==subtype)
+            markType.value= MarkTypeList.find((m:MarkTypeItem)=>m.rotate==subtype)
         }
   }
 
