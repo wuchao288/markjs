@@ -163,8 +163,8 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
               </el-dropdown>
          </li>
          <li>
-          <el-dropdown split-button @click="handleSharp('Mark',markType.type)">
-                标注线
+          <el-dropdown split-button @click="handleSharp('Mark',markType.rotate)">
+            {{markType.title}}
                   <template #dropdown>
                     <el-dropdown-menu>
                       <el-dropdown-item @click="handleSharp('Mark',item.rotate)"  
