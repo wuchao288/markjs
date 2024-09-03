@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {reactive, ref,onMounted} from 'vue'
+import {ref,onMounted} from 'vue'
 
 import { ElButton,ElDropdown,ElDropdownItem,ElUpload,ElMessage  } from 'element-plus'
 
@@ -8,13 +8,36 @@ import Lang from './lang/index.vue'
 
 import type { UploadProps } from 'element-plus'
 
-import { PageSizeList,PageSizeItem } from '@/assets/data/PageSize'
+import { Plus,Minus  } from '@element-plus/icons-vue'
+
+import { 
+  ZoomItemList,
+  ZoomItem,
+  PageSizeList,
+  PageSizeItem,
+  TextTypeList,
+  TextTypeItem,
+  ArrowTypeList,
+  ArrowTypeItem,
+  MarkTypeItem,
+  MarkTypeList
+ } from '@/assets/data/PageSetting'
 
 const imageUrl = ref('')
 
-let pageSizeData=reactive<PageSizeItem[]>(PageSizeList);
+import useEditStore from "@/stores/useEditStore"
 
-let pageSize=reactive<PageSizeItem>(pageSizeData[0]);
+const editorStore = useEditStore()
+
+let pageZoom=ref<ZoomItem>(ZoomItemList[ZoomItemList.length-1]);
+
+let pageSize=ref<PageSizeItem>(PageSizeList[0]);
+
+let  textType = ref<TextTypeItem>(TextTypeList[0])
+
+let  arrowType =ref<ArrowTypeItem>(ArrowTypeList[0])
+
+let  markType =ref<MarkTypeItem>(MarkTypeList[0])
 
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
   _response,
@@ -23,13 +46,6 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
   imageUrl.value = URL.createObjectURL(uploadFile.raw!)
 }
 
-const emit = defineEmits(['handleLine'])
-
-
-const handleLine=()=>{
-  debugger;
-  emit('handleLine',false);
-}
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (rawFile.type !== 'image/jpeg') {
@@ -42,19 +58,54 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   return true
 }
 
-onMounted(() => {
+const emit = defineEmits(['handleAddSharp','handleZoomTo','handlePageSizeTo'])
 
-})
+const handleSharp=(type:string,subtype:string)=>{
+
+  editorStore.setUseTool(type,subtype)
+
+  if(["Text","Mark","Arrow"].includes(type)){
+
+        if(type=="Text"){
+
+            textType.value= TextTypeList.find((m:TextTypeItem)=>m.type==subtype)
+
+        }else if(type=="Arrow"){
+
+            arrowType.value= ArrowTypeList.find((m:ArrowTypeItem)=>m.type==subtype)
+
+        }else{
+
+            markType.value= MarkTypeList.find((m:MarkTypeItem)=>m.type==subtype)
+        }
+  }
+
+  emit('handleAddSharp');
+
+
+}
 
 
 
-//defineExpose({addLine})
+//处理放大缩小
+const handleZoomCommand = (command:ZoomItem) => {
+  
+  pageZoom.value=command
 
+  emit('handleZoomTo',command.value)
+}
+
+//处理画布
+const handlePageSizeCommand = (command:PageSizeItem) => {
+
+  pageSize.value=command
+
+  editorStore.setPageSize(command)
+
+  emit('handlePageSizeTo',command)
+}
 
 </script>
-
-
-
 
 <template>
  <div class="header">
@@ -74,36 +125,51 @@ onMounted(() => {
               </template>
             </el-upload>
          </li>
+         
          <li>
-          <el-button>文字</el-button>
+          <el-button @click="handleSharp('Ellipse','')">圆形</el-button>
          </li>
          <li>
-          <el-button>圆形</el-button>
+          <el-button @click="handleSharp('Rect','')">矩形</el-button>
          </li>
          <li>
-          <el-button>矩形</el-button>
+          <el-button @click="handleSharp('Line','')">直线</el-button>
          </li>
          <li>
-          <el-button @click="handleLine">直线</el-button>
-         </li>
-         <li>
-          <el-dropdown split-button  trigger="click">
-                 箭头
+          <el-dropdown split-button  @click="handleSharp('Text',textType.type)">
+                 {{textType.title}}
+
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item>单箭头</el-dropdown-item>
-                      <el-dropdown-item>双箭头</el-dropdown-item>
+
+                      <el-dropdown-item @click="handleSharp('Text',item.type)"  
+                      :key="item.id" v-for="item in TextTypeList">{{item.title}}</el-dropdown-item>
+
                     </el-dropdown-menu>
                   </template>
               </el-dropdown>
          </li>
          <li>
-          <el-dropdown split-button  trigger="click">
+          <el-dropdown split-button @click="handleSharp('Arrow',arrowType.type)">
+              {{arrowType.title}}
+                  <template #dropdown>
+                    <el-dropdown-menu>
+
+                      <el-dropdown-item @click="handleSharp('Arrow',item.type)"  
+                      :key="item.id" v-for="item in ArrowTypeList">{{item.title}}</el-dropdown-item>
+
+                    </el-dropdown-menu>
+                  </template>
+              </el-dropdown>
+         </li>
+         <li>
+          <el-dropdown split-button @click="handleSharp('Mark',markType.type)">
                 标注线
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item>垂直标注线</el-dropdown-item>
-                      <el-dropdown-item>水平标注线</el-dropdown-item>
+                      <el-dropdown-item @click="handleSharp('Mark',item.rotate)"  
+                      :key="item.id" v-for="item in MarkTypeList">{{item.title}}</el-dropdown-item>
+
                     </el-dropdown-menu>
                   </template>
               </el-dropdown>
@@ -118,11 +184,11 @@ onMounted(() => {
           <el-button>导出图片</el-button>
          </li>
          <li>
-              <el-dropdown split-button type="primary" trigger="click">
-                {{pageSize.title}}
+              <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">
+                <span>{{pageSize.title}}</span>
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item :key="item.id" v-for="item in pageSizeData">{{item.title}}</el-dropdown-item>
+                      <el-dropdown-item :command="item"  :key="item.id" v-for="item in PageSizeList">{{item.title}}</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
               </el-dropdown>
@@ -132,6 +198,22 @@ onMounted(() => {
          </li>
          </ul>
      </div>
+ </div>
+ <div class="zoom">
+  <el-button-group >
+    <el-button size="large" round :icon="Plus" />
+    <el-button size="large">
+      <el-dropdown @command="handleZoomCommand">
+        <span>{{pageZoom.title}}</span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item :command="item"  :key="item.id" v-for="item in ZoomItemList">{{item.title}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+       </el-dropdown>
+      </el-button>
+    <el-button size="large" round  :icon="Minus" />
+  </el-button-group>
  </div>
 </template>
 
@@ -143,7 +225,7 @@ onMounted(() => {
     height: 60px;
     right: 0px;
     padding: 0px;
-    z-index: 19850910;
+    z-index: 2004;
     background-color: #fff;
     box-shadow: 0 0 .4rem #0000004d;
     filter: drop-shadow(0 0 1.2rem rgba(255, 255, 255, .6));
@@ -164,5 +246,12 @@ onMounted(() => {
 }
 .action ul li{
   margin-right: 5px;
+}
+
+.zoom{
+  position: fixed;
+  bottom: 40px;
+  right: 200px;
+  z-index: 20008;
 }
 </style>

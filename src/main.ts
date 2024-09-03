@@ -5,5 +5,11 @@ import '@/assets/styles/index.less'
 import App from './App.vue'
 import I18n from './languages/index'
 
+import { createPinia } from 'pinia'
 
-createApp(App).use(I18n).mount('#app')
+
+const pinia = createPinia()
+const app = createApp(App)
+app.use(pinia)
+
+app.use(I18n).mount('#app')
