@@ -91,7 +91,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
       }
       
     },
-    addShape(shape:object) {
+    addShape(shape:{id:string}) {
         this.shapes.set(shape.id, shape);
     }
   }

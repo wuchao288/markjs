@@ -95,9 +95,9 @@
         let width=window.innerWidth;
         let height=window.innerHeight- 60;
 
-        const params = new URLSearchParams(window.location.search);
+        //getMarkJson {setting:{},imgUrl}
 
-        const paramImage = params.get('imgUrl');
+        var settingJson=window.parent.getMarkJson?window.parent.getMarkJson():undefined;
 
         canvasApp = new App({
             view: window,
@@ -125,8 +125,6 @@
             if(canvasApp.tree.scale){
                 editorStore.setScale(canvasApp.tree.scale);
             }
-           
-
         });
         canvasApp.tree.on(ResizeEvent.RESIZE, () => {
 
@@ -136,9 +134,6 @@
 
         });
        
-
-        Platform.image.crossOrigin = 'anonymous'
-        
         const button = Box.one({// 添加移除按钮
             around: 'center',
             fill: {
@@ -161,33 +156,40 @@
         })
 
 
-        frame = new Frame({
+        
+        
+
+        if(settingJson&&settingJson.setting){
+            canvasApp.set(settingJson.setting)
+        }else{
+            frame = new Frame({
             x:width/2,
             y:height/2,
             width: editorStore.pageWidth,
             height: editorStore.pageHeight
         })
+        canvasApp.tree.add(frame)
 
-        if(paramImage){
+            if(settingJson&&settingJson.imgUrl){
 
-            addBgImg(paramImage)
+                addBgImg(settingJson.imgUrl)
 
-            // rectImg.once(ImageEvent.LOADED, function (e: ImageEvent) {
-            //     console.log(e)
+                // rectImg.once(ImageEvent.LOADED, function (e: ImageEvent) {
+                //     console.log(e)
 
-            //     frame.add(rectImg)
-            // })
+                //     frame.add(rectImg)
+                // })
 
-            // rectImg.once(ImageEvent.ERROR, function (e: ImageEvent) {
-            //     console.log(e.error)
-            // })
+                // rectImg.once(ImageEvent.ERROR, function (e: ImageEvent) {
+                //     console.log(e.error)
+                // })
 
+            
+            }
            
         }
-        
 
-
-        canvasApp.tree.add(frame)
+      
 
         canvasApp.tree.zoom('fit', 100) 
 
@@ -204,7 +206,7 @@
             frame.remove(frame.findId("image0"))
         }
 
-        var img=  await getImage(imgUrl);
+        //var img=  await getImage(imgUrl);
 
         const rectImg = new Rect({
                 id:'image0',
@@ -490,7 +492,7 @@
 
     const handleDownImg=()=>{
         
-        frame.export(new Date().getTime()+'.png',{ pixelRatio: 2 }) 
+        frame.export(new Date().getTime()+'.png',{ pixelRatio: 1 }) 
     }
 
     const  handleSaveImg=async ()=>{
@@ -502,7 +504,8 @@
 
         console.log(result) 
 
-        window.parent.saveMakeImg({json,})
+        tslint:'disable'
+        window.parent.saveMakeImg?window.parent.saveMakeImg({json,file:result}):null
     }
 
 
