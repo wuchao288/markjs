@@ -2,7 +2,11 @@
   
      <Header 
       @handleAddSharp="addSharp" 
+      @handleClearAll="clearAll"
       @handleZoomTo="zoomTo" 
+      @handleAddImg="addImg"
+      @handleDownImg="downImg"
+      @handleSaveImg="saveImg"
       @handlePageSizeTo="pageSizeTo" />
      <Canvas ref="childRef"   />
   </template>
@@ -22,8 +26,25 @@ const addSharp = () => {
   childRef.value.handleAddSharp();
 }
 
+const downImg = () => {
+  childRef.value.handleDownImg();
+}
+
+
+const clearAll=()=>{
+  childRef.value.handleClearAll();
+}
+
 const zoomTo=(m:IZoomType)=>{
   childRef.value.zoomTo(m);
+}
+
+const addImg=(m:any)=>{
+  childRef.value.handleAddImg(m);
+}
+
+const  saveImg=()=>{
+  childRef.value.handleSaveImg();
 }
 
 const pageSizeTo=(m:PageSizeItem)=>{

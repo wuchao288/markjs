@@ -24,6 +24,8 @@ type TSotreAction = {
     setUseTool: (type: string,subType:string) => void
     getShape:(e:string)=>object|undefined
     addShape:(e:object)=>void
+    delShape:(id:string)=>void
+    clearShape:()=>void
 }
 
 const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('editor', {
@@ -34,9 +36,13 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     editor:null,
     useTool:"",
     useToolType:"",
-    shapes:new Map()
+    shapes:new Map(),
+
   }),
   actions: {
+
+
+    
 
     setUseTool(type:string,subType:string){
 
@@ -68,6 +74,22 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         return this.shapes.get(id);
       }
 
+    },
+
+    delShape(id:string){
+
+      if(this.shapes.has(id)){
+        return this.shapes.delete(id);
+      }
+
+    },
+
+    clearShape(){
+
+      if(this.shapes.size>0){
+        return this.shapes.clear();
+      }
+      
     },
     addShape(shape:object) {
         this.shapes.set(shape.id, shape);

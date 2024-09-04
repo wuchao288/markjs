@@ -29,6 +29,8 @@ const i18n = createI18n({
  */
 export function getDefaultLang() {
 
+  
+
   let owlang= Cookies.get('owlang');
 
   owlang=owlang==undefined?"":owlang
@@ -36,13 +38,13 @@ export function getDefaultLang() {
   let defaultLang:string = ''
 
   //(baseLang != 'ja_jp' && baseLang != 'zh_cn' && baseLang != 'en_us'
-  if (['ja_jp', 'zh_cn', 'en_us'].includes(owlang)) {
+  if (!(['ja_jp', 'zh_cn', 'en_us'].includes(owlang))) {
 
-    defaultLang = 'ja_jp'
+    defaultLang = 'jp'
 
   } else {
 
-    defaultLang = owlang;
+    defaultLang = (defaultLang=="ja_jp"?"jp":(defaultLang=="zh_cn"?"zh":"en"));
 
   }
   return defaultLang

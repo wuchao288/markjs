@@ -1,3 +1,5 @@
+
+
 export type  ZoomItem={
     title: string
     value:string|number

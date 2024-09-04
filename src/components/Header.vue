@@ -4,6 +4,8 @@ import {ref,onMounted} from 'vue'
 
 import { ElButton,ElDropdown,ElDropdownItem,ElUpload,ElMessage  } from 'element-plus'
 
+
+
 import Lang from './lang/index.vue'
 
 import type { UploadProps } from 'element-plus'
@@ -39,26 +41,45 @@ let  arrowType =ref<ArrowTypeItem>(ArrowTypeList[0])
 
 let  markType =ref<MarkTypeItem>(MarkTypeList[0])
 
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  _response,
+
+
+
+const emit = defineEmits([
+'handleAddSharp',
+'handleZoomTo',
+'handlePageSizeTo',
+'handleClearAll',
+'handleDownImg',
+'handleAddImg',
+'handleSaveImg'
+])
+
+const handleAvatarSuccess: UploadProps['onChange'] = (
   uploadFile
 ) => {
-  imageUrl.value = URL.createObjectURL(uploadFile.raw!)
-}
 
-
-const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  if (rawFile.type !== 'image/jpeg') {
+  if(uploadFile.raw==undefined){
     ElMessage.error('Avatar picture must be JPG format!')
     return false
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error('Avatar picture size can not exceed 2MB!')
+  }
+
+  let rawFile=(uploadFile.raw);
+  
+  if (rawFile.type !== 'image/jpeg'&&rawFile.type !== 'image/png') {
+    ElMessage.error('Avatar picture must be JPG/PNG format!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 1) {
+    ElMessage.error('Avatar picture size can not exceed 1MB!')
     return false
   }
+
+  imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+
+  emit('handleAddImg',imageUrl.value)
+
   return true
 }
 
-const emit = defineEmits(['handleAddSharp','handleZoomTo','handlePageSizeTo'])
 
 const handleSharp=(type:string,subtype:string)=>{
 
@@ -82,10 +103,24 @@ const handleSharp=(type:string,subtype:string)=>{
 
   emit('handleAddSharp');
 
+   
+}
 
+const handleDownImg=()=>{
+  emit('handleDownImg')
 }
 
 
+const handleSaveImg=()=>{
+  emit('handleSaveImg')
+}
+
+
+
+
+const handleClearAll = () => {
+  emit('handleClearAll')
+}
 
 //处理放大缩小
 const handleZoomCommand = (command:ZoomItem) => {
@@ -103,6 +138,8 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
   editorStore.setPageSize(command)
 
   emit('handlePageSizeTo',command)
+
+  emit('handleZoomTo',"fit")
 }
 
 </script>
@@ -117,8 +154,8 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
               class="upload-demo"
               action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
               :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
+              :auto-upload="false"
+              :on-change="handleAvatarSuccess"
             >
               <template #trigger>
                 <el-button type="primary">上传图片</el-button>
@@ -175,13 +212,13 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
               </el-dropdown>
          </li>
          <li>
-          <el-button>保存设计</el-button>
+          <el-button @click="handleSaveImg">保存设计</el-button>
          </li>
          <li>
-          <el-button>清空画板</el-button>
+          <el-button @click="handleClearAll">清空画板</el-button>
          </li>
          <li>
-          <el-button>导出图片</el-button>
+          <el-button @click="handleDownImg" >导出图片</el-button>
          </li>
          <li>
               <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">
@@ -194,7 +231,7 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
               </el-dropdown>
          </li>
          <li>
-          <Lang />
+          <Lang  />
          </li>
          </ul>
      </div>

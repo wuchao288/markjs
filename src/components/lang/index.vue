@@ -7,16 +7,16 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <el-dropdown style="margin-left: 10px;">
-    <el-button type="primary" >
+  <el-dropdown   style="margin-left: 10px;"   >
+    <el-button type="primary" split-button >
       {{language}} 
-      <arrow-down-bold style="width: 1em; height: 1em; margin-right: 8px;margin-left: 10px;" />
+      <arrow-down-bold  style="width: 1em; height: 1em; margin-right: 8px;margin-left: 10px;" />
     </el-button>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item @click="changeJp">日本語</el-dropdown-item>
-        <el-dropdown-item @click="changeZh">中文</el-dropdown-item>
-        <el-dropdown-item @click="changeEn">English</el-dropdown-item>
+        <el-dropdown-item   @click="changeJp">日本語</el-dropdown-item>
+        <el-dropdown-item   @click="changeZh">中文</el-dropdown-item>
+        <el-dropdown-item   @click="changeEn">English</el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
@@ -34,10 +34,8 @@
   //getCurrentInstance函数获取当前组件实例,并通过.appContext.config.globalProperties访问全局属性
   //?号表示前面如果返回null，后面不执行
   let $this = getCurrentInstance()?.appContext.config.globalProperties as any
-  
-  $this.$i18n.localeName="日本語"
 
-  let lang: { [key: string]: any }={'zh_cn':'中文','ja_jp':'日本語','en_us':'English'};
+  let lang: { [key: string]: any }={'zh':'中文','jp':'日本語','en':'English'};
 
   let langThis=$this.$i18n.locale;
 
@@ -46,19 +44,19 @@
   
   //切换中文，存储语言状态
   const changeZh = () => {
-    $this.$i18n.locale = 'zh_cn'
+    $this.$i18n.locale = 'zh'
     Cookies.set("owlang","zh_cn")
-    language.value=lang["zh_cn"];
+    language.value=lang["zh"];
   }
   const changeEn = () => {
-    $this.$i18n.locale = 'en_us'
+    $this.$i18n.locale = 'en'
     Cookies.set("owlang","en_us")
-    language.value=lang["en_us"];
+    language.value=lang["en"];
   }
   const changeJp = () => {
-    $this.$i18n.locale = 'ja_jp'
+    $this.$i18n.locale = 'jp'
     Cookies.set("owlang","ja_jp")
-    language.value=lang["ja_jp"];
+    language.value=lang["jp"];
   }
 
 
