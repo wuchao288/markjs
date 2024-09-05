@@ -1,5 +1,5 @@
 <template>
-    <div id="main-canvas">
+    <div id="main-canvas" >
 
     </div>
 
@@ -10,9 +10,12 @@
              @click="locked(false)">解锁</div>
         <div class="contextmenu__item"
              @click="locked(true)">锁定</div>
-      <div class="contextmenu__item"
+           <div class="contextmenu__item"
              @click="toTop">移至顶层</div>
-     </div>
+
+             <div class="contextmenu__item"@click="toBottom">移至底层</div>
+       </div>
+       
 </template>
 
 <script lang="ts">
@@ -42,15 +45,14 @@
 <script setup lang="ts">
 
 
-
-
-
-    import {onMounted,ref} from 'vue'
+    import {onMounted,ref,watch} from 'vue'
 
     import { App, Box ,Frame,ZoomEvent,ResizeEvent,Platform  ,Rect,Ellipse,Line,Text,PointerEvent,ImageEvent} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
     import '@leafer-in/view'
+
+    import { Ruler } from 'leafer-x-ruler'
 
     import { Arrow } from '@leafer-in/arrow'
 
@@ -65,21 +67,18 @@
 
     import  {nanoid} from  'nanoid'
     import '@leafer-in/state'
+    import { storeToRefs } from 'pinia'
 
 
-     
     let menuVisible=ref(false)
+
     let ctop=ref("0px");
     let cleft=ref("0px");
     
 
-    //Rect.setEditOuter('CustomEditTool')
-    //Text.setEditOuter('CustomEditTool') // 1. 为元素类绑定编辑工具
-
-
-
-
     const editorStore = useEditStore()
+
+    const {useColor,useBorderWidth,pageHeight,pageWidth,useTool,useToolType} = storeToRefs(editorStore)
 
     let canvasApp:App
 
@@ -100,12 +99,14 @@
         var settingJson=window.parent.getMarkJson?window.parent.getMarkJson():undefined;
 
         canvasApp = new App({
-            view: window,
+            view: 'main-canvas',
             editor:{
                 lockRatio: 'corner',
                 stroke: '#3f99f7',
                 skewable: false,
-                hover: false,
+                hover: true,
+                flipable:false,
+                rotateGap:15,
                 middlePoint: { cornerRadius: 100, width: 20, height: 6 },
                 rotatePoint: {
                     width: 20,
@@ -117,6 +118,23 @@
                 }
             }
         })
+
+
+        const ruler = new Ruler(canvasApp)
+
+        // 添加自定义主题  
+        // ruler.addTheme('custom1', {
+        // backgroundColor: '#6cb0ab',
+        // textColor: '#a45454',
+        // borderColor: '#6f4593',
+        // highlightColor: 'rgba(22,93,255,0.75)'
+        // })
+
+        // // 切换主题  
+        // ruler.changeTheme('custom1')
+
+        // // 启用、禁用  
+        // ruler.enabled = true
 
         editorStore.setApp(canvasApp);
 
@@ -154,37 +172,24 @@
             })
             canvasApp.editor.target = undefined
         })
-
-
-        
-        
+ 
 
         if(settingJson&&settingJson.setting){
-            canvasApp.set(settingJson.setting)
+
+            canvasApp.tree.set(settingJson.setting)
+
         }else{
             frame = new Frame({
             x:width/2,
             y:height/2,
-            width: editorStore.pageWidth,
-            height: editorStore.pageHeight
-        })
-        canvasApp.tree.add(frame)
+            width: pageWidth.value,
+            height: pageHeight.value
+            })
+            canvasApp.tree.add(frame)
 
             if(settingJson&&settingJson.imgUrl){
 
                 addBgImg(settingJson.imgUrl)
-
-                // rectImg.once(ImageEvent.LOADED, function (e: ImageEvent) {
-                //     console.log(e)
-
-                //     frame.add(rectImg)
-                // })
-
-                // rectImg.once(ImageEvent.ERROR, function (e: ImageEvent) {
-                //     console.log(e.error)
-                // })
-
-            
             }
            
         }
@@ -198,27 +203,41 @@
         // }
     })
 
+    watch(()=>useColor.value,(newVal)=>{
+        ////SquareFill.Ellipse,Arrow-one,Arrow-two,Mark,Line,Text-normal,Text-rect,Text-radius
+        canvasApp.editor.list.forEach(m=>{
+            if(["Rect","Ellipse","Arrow","Line"].includes(m.tag)){
+               m.stroke=newVal
+            }else if(["Text"].includes(m.tag)){
+                debugger
+                m.fill=newVal
+            }
 
+            console.info(m);
+        })
+        
+    })
 
    const addBgImg=async (imgUrl:any)=>{
 
-        if(frame.findId("image0")){
-            frame.remove(frame.findId("image0"))
+        let id="image0";
+        let zIndex=0;
+
+        if(frame.findId(id)){
+            id=nanoid()
+            zIndex=editorStore.shapes.size + 1
         }
-
-        //var img=  await getImage(imgUrl);
-
         const rectImg = new Rect({
-                id:'image0',
+                id:id,
                 around: 'center',
                 fill: {
                     type: 'image',
                     url: imgUrl,
                     mode: 'fit'
                 },
-                zIndex:0,
+                zIndex:editorStore.shapes.size + 1,
                 editable: true,
-                locked:true,
+                locked:false,
                 // width:img.width<editorStore.pageWidth*0.9?img.width:editorStore.pageWidth*0.9,
                 // height:img.height<editorStore.pageHeight*0.9?img.width:editorStore.pageHeight*0.9,
                 x: editorStore.pageWidth/2,
@@ -248,8 +267,10 @@
       menuVisible.value=false
    }
 
-
-
+   const toBottom=()=>{
+      canvasApp.editor.toBottom()
+      menuVisible.value=false
+   }
    
 
     type TDefaultOption = {
@@ -263,6 +284,7 @@
         zIndex:number,
         points:number[],
         text:string
+        stroke:string
    }
 
 
@@ -270,23 +292,24 @@
 
     const onStart = () => {
 
-        if (!editorStore.useTool) return;
+        if (!useTool.value) return;
 
         shapeId = nanoid();
 
         const shape = editorStore.getShape(shapeId);
         if (shape) return;
 
-        const type = editorStore.useTool;
-        const subType = editorStore.useToolType;
+        const type = useTool.value;
+        const subType = useToolType.value;
         const newShape = {
             id: shapeId,
             type,
             subType,
-            strokeWidth: 4,
+            stroke:useColor.value,
+            strokeWidth: useBorderWidth.value,
             fill:'',
             text:'',
-            zIndex: editorStore.shapes.size + 1
+            zIndex:100000+ editorStore.shapes.size + 1
         } as TDefaultOption;
         return newShape;
     }
@@ -294,19 +317,17 @@
 
    const addSharp=(model:TDefaultOption)=>{
     
-    let {id,type,subType,width,height,zIndex,points}=model
+    let {id,type,subType,width,height,zIndex,points,stroke,strokeWidth}=model
 
     let defaultOption={
         width: width|100,
-        strokeWidth: 1,
         editable:true,
-        x: editorStore.pageWidth/2,
-        y: editorStore.pageHeight/2,
-        stroke: 'rgb(0,0,0)',
+        x: pageWidth.value/2,
+        y: pageHeight.value/2,
         fill:"transparent",
-        
     }
 
+    
     if (type === 'SquareFill') {
 
         Object.assign(defaultOption,{fill:"transparent"})
@@ -315,17 +336,22 @@
                 id,
                 height,
                 zIndex,
+                stroke,
+                strokeWidth,
                 cursor:'pointer',
+                name:"SquareFill",
                 ...defaultOption
             });
-    }
+        }
+
         if (type === 'Ellipse') {
-
-
             return new Ellipse({
                 id,
                 height,
                 zIndex,
+                stroke,
+                strokeWidth,
+                name:"Ellipse",
                 cursor:'pointer',
                 ...defaultOption
             });
@@ -334,29 +360,29 @@
         if (type === 'Arrow') {
             if(subType=="one"){
                 Object.assign(defaultOption,{
-                    strokeWidth:2,
-                    endArrow:'arrow',
-                    height:20
+                    endArrow:'arrow'
                })
             }else if(subType=="two"){
                 Object.assign(defaultOption,{
-                    strokeWidth:2,
                     startArrow:'arrow',
-                    endArrow:'arrow',
-                    height:20
+                    endArrow:'arrow'
                })
             }
             return new Arrow({
                 id,
+                name:"Arrow-"+subType,
                 points,
                 zIndex,
+                stroke,
+                strokeWidth,
+                height:20,
                 strokeCap: 'round',
                 strokeJoin: 'round',
                 cursor:'pointer',
                 ...defaultOption
             });
         }
-
+       
 
         if (type === 'Mark') {
 
@@ -369,8 +395,11 @@
             })
             return new Arrow({
                 id,
+                name:"Mark",
                 points,
                 zIndex,
+                stroke,
+                strokeWidth,
                 strokeCap: 'round',
                 strokeJoin: 'round',
                 cursor:'pointer',
@@ -385,8 +414,11 @@
 
             return new Line({
                 id,
+                name:"Line",
                 points,
                 zIndex,
+                stroke,
+                strokeWidth,
                 curve: true,
                 cursor:'pointer',
                 ...defaultOption
@@ -394,17 +426,20 @@
         }
         if (type === 'Text') {
             
+            
 
             if(subType=="normal"){
 
-                Object.assign(defaultOption,{strokeWidth:0,fill:'black',width:'',height:''})
+                Object.assign(defaultOption,{width:'',height:'',fill:stroke})
 
                 return new Text({
                     id,
+                    name:"Text-"+subType,
                     zIndex,
-                    text: 'Welcome SuperSize',
+                    text: '100cm',
+                    selected:true,
                     resizeFontSize: true,
-                    fontSize: 12,
+                    fontSize: 14,
                     cursor:'pointer',
                     ...defaultOption
                });
@@ -416,16 +451,24 @@
             
                 let box= new Box({
                         id,
+                        name:"Text-"+subType,
                         zIndex,
                         cornerRadius: 0,
                         cursor:'pointer',
+                        stroke:useColor.value,
+                        strokeWidth:useBorderWidth.value,
                         children: [Text.one({
-                            text: 'Welcome to SuperSize',
+                            text: '100cm',
                             editable: false,
-                            fontSize: 12,
+                            fontSize: 14,
+                            selected:true,
                             resizeFontSize: true,
                             padding: [4, 8],
+                            fill:stroke,
                             event:{
+                                'innerEditor.open':function(e){
+                                  // (e.target as Text).width="wid"
+                                },
                                 'innerEditor.close':function(e){
                                     canvasApp.editor.target=undefined
                                 }
@@ -446,7 +489,12 @@
 
 
         return new Rect({
-
+            id,
+            name:"Rect",
+            zIndex,
+            cursor:'pointer',
+            stroke:stroke,
+            strokeWidth:useBorderWidth.value,
             cornerRadius: 8,
             height,
             ...defaultOption
@@ -479,7 +527,7 @@
 
         editorStore.addShape(newSharp)
 
-        //canvasApp.editor.target=newSharp
+        canvasApp.editor.target=newSharp
 
     }
 
@@ -497,14 +545,10 @@
 
     const  handleSaveImg=async ()=>{
         
-        const json = canvasApp.toJSON() 
-        console.log(json) 
+        const json = canvasApp.tree.toJSON() 
 
         const result = await frame.export('png', { blob: true })
 
-        console.log(result) 
-
-        tslint:'disable'
         window.parent.saveMakeImg?window.parent.saveMakeImg({json,file:result}):null
     }
 

@@ -12,6 +12,8 @@ import type { UploadProps } from 'element-plus'
 
 import { Plus,Minus  } from '@element-plus/icons-vue'
 
+
+
 import { 
   ZoomItemList,
   ZoomItem,
@@ -28,6 +30,7 @@ import {
 const imageUrl = ref('')
 
 import useEditStore from "@/stores/useEditStore"
+import { storeToRefs } from 'pinia'
 
 const editorStore = useEditStore()
 
@@ -41,8 +44,28 @@ let  arrowType =ref<ArrowTypeItem>(ArrowTypeList[0])
 
 let  markType =ref<MarkTypeItem>(MarkTypeList[0])
 
+const {useColor,useBorderWidth} = storeToRefs(editorStore)
 
-
+const predefineColors = ref([
+  '#ff4500',
+  '#ff8c00',
+  '#ffd700',
+  '#90ee90',
+  '#00ced1',
+  '#1e90ff',
+  '#c71585',
+  'rgba(255, 69, 0, 0.68)',
+  'rgb(255, 120, 0)',
+  'hsv(51, 100, 98)',
+  'hsva(120, 40, 94, 0.5)',
+  'hsl(181, 100%, 37%)',
+  'hsla(209, 100%, 56%, 0.73)',
+  '#c7158577',
+  '#D0021B', '#F5A623', '#F8E71C', '#8B572A', '#7ED321',
+  '#417505', '#BD10E0', '#9013FE', '#4A90E2', '#50E3C2',
+  '#B8E986', '#000000', '#4A4A4A', '#9B9B9B', '#FFFFFF',
+  'rgba(0,0,0,0)'
+])
 
 const emit = defineEmits([
 'handleAddSharp',
@@ -79,7 +102,6 @@ const handleAvatarSuccess: UploadProps['onChange'] = (
 
   return true
 }
-
 
 const handleSharp=(type:string,subtype:string)=>{
 
@@ -212,13 +234,17 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
               </el-dropdown>
          </li>
          <li>
-          <el-button @click="handleSaveImg">保存设计</el-button>
-         </li>
+        
+          <el-color-picker v-model="useColor" show-alpha :predefine="predefineColors" />
+        </li>
          <li>
           <el-button @click="handleClearAll">清空画板</el-button>
          </li>
          <li>
           <el-button @click="handleDownImg" >导出图片</el-button>
+         </li>
+         <li>
+          <el-button type="primary" @click="handleSaveImg">保存设计</el-button>
          </li>
          <li>
               <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">

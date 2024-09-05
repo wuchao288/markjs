@@ -5,6 +5,8 @@ import '@/assets/styles/index.less'
 import App from './App.vue'
 import I18n from './languages/index'
 
+
+
 import { createPinia } from 'pinia'
 
 
@@ -20,6 +22,8 @@ app.directive('aria-hidden', (el, binding) => {
       el.removeAttribute('aria-hidden');
     }
   });
+
+
 
 app.use(pinia)
 

@@ -15,6 +15,8 @@ type TStoreBaseState = {
   useTool:string
   useToolType:string
   shapes:Map<string,object>
+  useColor:string
+  useBorderWidth:number
 }
 
 type TSotreAction = {
@@ -26,6 +28,8 @@ type TSotreAction = {
     addShape:(e:object)=>void
     delShape:(id:string)=>void
     clearShape:()=>void
+    setUseColor:(color:string)=>void
+    setUseBorderWidth:(width:number)=>void
 }
 
 const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('editor', {
@@ -37,11 +41,22 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     useTool:"",
     useToolType:"",
     shapes:new Map(),
-
+    useColor:'rgba(0, 0, 0, 1)',
+    useBorderWidth:2
   }),
   actions: {
 
+    setUseColor(model:string){
 
+      this.useColor=model
+
+   },
+
+   setUseBorderWidth(width:number) {
+
+       this.useBorderWidth=width
+
+   },
     
 
     setUseTool(type:string,subType:string){
