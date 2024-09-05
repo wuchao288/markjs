@@ -110,7 +110,7 @@
 
     let frame:Frame
 
-    
+
 
     onMounted(() => {
         
@@ -348,6 +348,7 @@
    }
 
    const toTop=()=>{
+    debugger
       canvasApp.editor.toTop()
       menuVisible.value=false
    }
