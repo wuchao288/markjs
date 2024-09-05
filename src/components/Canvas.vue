@@ -51,7 +51,7 @@
 
     import {onMounted,ref,watch,shallowRef,defineAsyncComponent} from 'vue'
 
-    import { App, Box ,Frame,ZoomEvent,ResizeEvent,Platform , Rect,Ellipse,Line,Text,PointerEvent,ImageEvent} from 'leafer-ui'
+    import { App, Box ,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Line,Text,PointerEvent,ImageEvent} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
     import '@leafer-in/view'
@@ -109,6 +109,8 @@
     let canvasApp:App
 
     let frame:Frame
+
+    
 
     onMounted(() => {
         
@@ -198,6 +200,7 @@
             },
             cornerRadius: 20,
             cursor: 'pointer'
+            
         })
 
         canvasApp.editor.buttons.add(button)
