@@ -9,10 +9,16 @@
       @handleSaveImg="saveImg"
       @handlePageSizeTo="pageSizeTo" />
      <Canvas ref="childRef"   />
+
+ 
+     
+
+
   </template>
 <script setup lang="ts">
 import Header from './Header.vue'
 import Canvas from './Canvas.vue'
+
 
 import {onMounted, ref} from 'vue'
 
@@ -20,6 +26,7 @@ import { IZoomType } from '@leafer/interface'
 import { PageSizeItem } from '@/assets/data/PageSetting';
 
 const childRef = ref();
+
 
 
 const addSharp = () => {

@@ -12,8 +12,6 @@ import type { UploadProps } from 'element-plus'
 
 import { Plus,Minus  } from '@element-plus/icons-vue'
 
-
-
 import { 
   ZoomItemList,
   ZoomItem,
@@ -24,13 +22,16 @@ import {
   ArrowTypeList,
   ArrowTypeItem,
   MarkTypeItem,
-  MarkTypeList
+  MarkTypeList,
+  BorderWidthItem,
+  BorderWidthList
  } from '@/assets/data/PageSetting'
 
 const imageUrl = ref('')
 
 import useEditStore from "@/stores/useEditStore"
 import { storeToRefs } from 'pinia'
+
 
 const editorStore = useEditStore()
 
@@ -43,6 +44,9 @@ let  textType = ref<TextTypeItem>(TextTypeList[0])
 let  arrowType =ref<ArrowTypeItem>(ArrowTypeList[0])
 
 let  markType =ref<MarkTypeItem>(MarkTypeList[0])
+
+let  borderWidthType =ref<BorderWidthItem>(BorderWidthList[1])
+
 
 const {useColor,useBorderWidth} = storeToRefs(editorStore)
 
@@ -76,6 +80,8 @@ const emit = defineEmits([
 'handleAddImg',
 'handleSaveImg'
 ])
+
+
 
 const handleAvatarSuccess: UploadProps['onChange'] = (
   uploadFile
@@ -125,7 +131,6 @@ const handleSharp=(type:string,subtype:string)=>{
 
   emit('handleAddSharp');
 
-   
 }
 
 const handleDownImg=()=>{
@@ -136,7 +141,6 @@ const handleDownImg=()=>{
 const handleSaveImg=()=>{
   emit('handleSaveImg')
 }
-
 
 
 
@@ -163,6 +167,13 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
 
   emit('handleZoomTo',"fit")
 }
+
+
+const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
+    borderWidthType.value=command
+    useBorderWidth.value=command.width
+}
+
 
 </script>
 
@@ -234,9 +245,18 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
               </el-dropdown>
          </li>
          <li>
-        
           <el-color-picker v-model="useColor" show-alpha :predefine="predefineColors" />
         </li>
+        <li>
+              <el-dropdown split-button  @command="handleBrorderWidthCommand">
+                <span>{{borderWidthType.title}}</span>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item :command="item"  :key="item.id" v-for="item in BorderWidthList">{{item.title}}</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+              </el-dropdown>
+         </li>
          <li>
           <el-button @click="handleClearAll">清空画板</el-button>
          </li>
@@ -246,7 +266,7 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
          <li>
           <el-button type="primary" @click="handleSaveImg">保存设计</el-button>
          </li>
-         <li>
+         <!-- <li>
               <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">
                 <span>{{pageSize.title}}</span>
                   <template #dropdown>
@@ -255,7 +275,7 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
                     </el-dropdown-menu>
                   </template>
               </el-dropdown>
-         </li>
+         </li> -->
          <li>
           <Lang  />
          </li>
@@ -314,7 +334,7 @@ const handlePageSizeCommand = (command:PageSizeItem) => {
 .zoom{
   position: fixed;
   bottom: 40px;
-  right: 200px;
+  right: 300px;
   z-index: 20008;
 }
 </style>

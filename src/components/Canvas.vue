@@ -16,6 +16,10 @@
              <div class="contextmenu__item"@click="toBottom">移至底层</div>
        </div>
        
+    <keep-alive>
+      <component  :is="componen"> </component>
+    </keep-alive>
+
 </template>
 
 <script lang="ts">
@@ -45,9 +49,9 @@
 <script setup lang="ts">
 
 
-    import {onMounted,ref,watch} from 'vue'
+    import {onMounted,ref,watch,shallowRef,defineAsyncComponent} from 'vue'
 
-    import { App, Box ,Frame,ZoomEvent,ResizeEvent,Platform  ,Rect,Ellipse,Line,Text,PointerEvent,ImageEvent} from 'leafer-ui'
+    import { App, Box ,Frame,ZoomEvent,ResizeEvent,Platform , Rect,Ellipse,Line,Text,PointerEvent,ImageEvent} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
     import '@leafer-in/view'
@@ -57,7 +61,7 @@
     import { Arrow } from '@leafer-in/arrow'
 
     import { IZoomType } from '@leafer/interface'
-    import { PageSizeItem } from '@/assets/data/PageSetting'
+    import { PageSizeItem, PageSizeList } from '@/assets/data/PageSetting'
 
 
     import delPng from '@/assets/images/del.png'
@@ -68,7 +72,18 @@
     import  {nanoid} from  'nanoid'
     import '@leafer-in/state'
     import { storeToRefs } from 'pinia'
+    import { InnerEditorEvent ,EditorEvent} from '@leafer-in/editor'
 
+    let componen = shallowRef(null);
+    const PagePanel = defineAsyncComponent(() => import("./PagePanel.vue"));
+    const TextPanel = defineAsyncComponent(() => import("./TextPanel.vue"));
+    let objcomponen = shallowRef({
+        PagePanel,
+        TextPanel,
+    });
+
+
+    componen.value = objcomponen.value.PagePanel
 
     let menuVisible=ref(false)
 
@@ -78,7 +93,18 @@
 
     const editorStore = useEditStore()
 
-    const {useColor,useBorderWidth,pageHeight,pageWidth,useTool,useToolType} = storeToRefs(editorStore)
+    const {useColor,useBorderWidth,usePageSizeId,useTool,useToolType,usePageBgColor} = storeToRefs(editorStore)
+
+
+    let pageHeight=ref(0);
+
+    let pageWidth=ref(0);
+
+    let pageSize= PageSizeList.find(m=>m.id==usePageSizeId.value);
+
+    pageHeight.value=pageSize.height;
+
+    pageWidth.value=pageSize.width;
 
     let canvasApp:App
 
@@ -151,6 +177,18 @@
             }
 
         });
+
+        canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
+            if(e.list.length==1){
+               if(e.list[0].tag=="Box"&&e.list[0].name.startsWith("Text")){
+                    componen.value = objcomponen.value.TextPanel
+               }else{
+                   componen.value = objcomponen.value.PagePanel
+               }
+            }else{
+                componen.value = objcomponen.value.PagePanel
+            }
+        })
        
         const button = Box.one({// 添加移除按钮
             around: 'center',
@@ -166,7 +204,6 @@
 
         button.on(PointerEvent.TAP, () => { // 点击删除元素，并取消选择
             canvasApp.editor.list.forEach(rect => {
-               
                 editorStore.delShape(rect.id as string)
                 rect.remove()
             })
@@ -181,6 +218,7 @@
         }else{
             frame = new Frame({
             x:width/2,
+            fill:usePageBgColor.value,
             y:height/2,
             width: pageWidth.value,
             height: pageHeight.value
@@ -188,19 +226,13 @@
             canvasApp.tree.add(frame)
 
             if(settingJson&&settingJson.imgUrl){
-
                 addBgImg(settingJson.imgUrl)
             }
            
         }
 
-      
 
         canvasApp.tree.zoom('fit', 100) 
-
-        // window.onresize=()=>{
-        //     canvasApp.tree.zoom("fit") 
-        // }
     })
 
     watch(()=>useColor.value,(newVal)=>{
@@ -209,14 +241,64 @@
             if(["Rect","Ellipse","Arrow","Line"].includes(m.tag)){
                m.stroke=newVal
             }else if(["Text"].includes(m.tag)){
-                debugger
                 m.fill=newVal
+            }else if(["Box"].includes(m.tag)){
+                m.stroke=newVal
+
+                setChild(m,newVal)
+
+                function  setChild(item,color){
+                     if(item.tag=="Text"){
+                        item.fill=color;
+                     }
+                     if(item.children){
+                        item.children.forEach(element => {
+                            setChild(element,color)
+                        });
+                     }
+                }
             }
 
             console.info(m);
         })
         
     })
+
+
+    watch(()=>useBorderWidth.value,(newVal)=>{
+
+        ////SquareFill.Ellipse,Arrow-one,Arrow-two,Mark,Line,Text-normal,Text-rect,Text-radius
+        canvasApp.editor.list.forEach(m=>{
+            if(["Rect","Ellipse","Arrow","Line"].includes(m.tag)){
+                debugger
+               m.strokeWidth=newVal
+            }else if(["Text"].includes(m.tag)){
+                //m.fill=newVal
+            }else if(["Box"].includes(m.tag)){
+
+                m.strokeWidth=newVal
+            }
+
+            console.info(m);
+        })
+        
+    })
+
+    watch(()=>usePageSizeId.value,()=>{
+        let newSize= PageSizeList.find(m=>m.id==usePageSizeId.value);
+        pageHeight.value=newSize.height
+        pageWidth.value=newSize.width
+
+        frame.width=pageWidth.value;
+        frame.height=pageHeight.value;
+
+        canvasApp.tree.zoom("fit", 100)
+    })
+
+    watch(()=>usePageBgColor.value,()=>{
+        frame.fill=usePageBgColor.value
+    })
+
 
    const addBgImg=async (imgUrl:any)=>{
 
@@ -240,8 +322,8 @@
                 locked:false,
                 // width:img.width<editorStore.pageWidth*0.9?img.width:editorStore.pageWidth*0.9,
                 // height:img.height<editorStore.pageHeight*0.9?img.width:editorStore.pageHeight*0.9,
-                x: editorStore.pageWidth/2,
-                y: editorStore.pageHeight/2
+                x: pageWidth.value/2,
+                y: pageHeight.value/2
         }) 
 
         rectImg.on(PointerEvent.MENU,function(e){
@@ -426,67 +508,46 @@
         }
         if (type === 'Text') {
             
-            
+            //normal,rect,radius
 
-            if(subType=="normal"){
-
-                Object.assign(defaultOption,{width:'',height:'',fill:stroke})
-
-                return new Text({
+            Object.assign(defaultOption,{width:'',height:'',cornerRadius: subType=="rect"?0:6})
+        
+            let box= new Box({
                     id,
                     name:"Text-"+subType,
                     zIndex,
-                    text: '100cm',
-                    selected:true,
-                    resizeFontSize: true,
-                    fontSize: 14,
+                    cornerRadius: 0,
                     cursor:'pointer',
+                    stroke:useColor.value,
+                    strokeWidth:subType=="normal"?0:useBorderWidth.value,
+                    children: [],
                     ...defaultOption
-               });
-            }
+            })
 
-            if(subType=="rect"||subType=="radius"){
 
-                Object.assign(defaultOption,{width:'',height:'',cornerRadius: subType=="rect"?0:6})
+            let text=Text.one({
+                        text: '100cm',
+                        editable: false,
+                        fontSize: 14,
+                        selected:true,
+                        resizeFontSize: true,
+                        padding: [4, 8],
+                        fill:stroke
+            })
+
+            text.on(InnerEditorEvent.CLOSE, function (e) {
+                canvasApp.editor.openInnerEditor(e.target)
+            }, true)
+
+            box.add(text);
+
+            box.on(PointerEvent.DOUBLE_TAP, function (e) {
+                canvasApp.editor.openInnerEditor(e.target)
+            }, true)
+
+            return box
             
-                let box= new Box({
-                        id,
-                        name:"Text-"+subType,
-                        zIndex,
-                        cornerRadius: 0,
-                        cursor:'pointer',
-                        stroke:useColor.value,
-                        strokeWidth:useBorderWidth.value,
-                        children: [Text.one({
-                            text: '100cm',
-                            editable: false,
-                            fontSize: 14,
-                            selected:true,
-                            resizeFontSize: true,
-                            padding: [4, 8],
-                            fill:stroke,
-                            event:{
-                                'innerEditor.open':function(e){
-                                  // (e.target as Text).width="wid"
-                                },
-                                'innerEditor.close':function(e){
-                                    canvasApp.editor.target=undefined
-                                }
-                            }
-                        })],
-                        event: {
-                           double_tap: function (e) {
-                             canvasApp.editor.openInnerEditor(e.target)
-                           }
-                        },
-                        ...defaultOption
-                })
-                return box
-            }
-
         }
-
-
 
         return new Rect({
             id,
@@ -499,8 +560,6 @@
             height,
             ...defaultOption
         });
-
-
    }
 
 

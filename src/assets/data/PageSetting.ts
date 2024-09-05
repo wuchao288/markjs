@@ -45,20 +45,20 @@ export type  PageSizeItem={
     title: string
     width:number
     height:number
-    id:string|number
+    id:number
 }
 
 export const PageSizeList=[
    {
-     title: "800px*600px",
-     width: 800,
-     height: 600,
-     id:1
-   },
-   {
     title: "600px*600px",
     width: 600,
     height: 600,
+    id:1
+  },
+  {
+    title: "800px*800px",
+    width: 800,
+    height: 800,
     id:2
   }
 ] as PageSizeItem[]
@@ -133,3 +133,32 @@ export const MarkTypeList=[
   }
 ] as MarkTypeItem[]
 
+
+export type BorderWidthItem={
+  title: string,
+  id:string|number,
+  width:number 
+}
+
+export const BorderWidthList=[
+  {
+    title: "1px",
+    id:1,
+    width:1
+  },
+  {
+    title: "2px",
+    id:2,
+    width:2
+  },
+  {
+    title: "3px",
+    id:3,
+    width:3
+  },
+  {
+    title: "4px",
+    id:4,
+    width:4
+  }
+] as BorderWidthItem[]

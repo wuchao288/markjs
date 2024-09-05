@@ -1,5 +1,5 @@
 
-import { PageSizeItem } from '@/assets/data/PageSetting'
+import { PageSizeItem,PageSizeList } from '@/assets/data/PageSetting'
 import { App } from 'leafer-ui'
 import { Store, defineStore } from 'pinia'
 
@@ -9,14 +9,15 @@ import {IPointData}  from '@leafer-ui/interface'
 
 type TStoreBaseState = {
   scale: number| IPointData
-  pageWidth: number
-  pageHeight: number
   editor:App|null
   useTool:string
   useToolType:string
   shapes:Map<string,object>
   useColor:string
+  usePageBgColor:string
   useBorderWidth:number
+  usePageSizeId:number
+  useCurrPanel:string
 }
 
 type TSotreAction = {
@@ -35,14 +36,15 @@ type TSotreAction = {
 const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('editor', {
   state: () => ({
     scale: 1,
-    pageWidth: 800,
-    pageHeight: 600,
     editor:null,
     useTool:"",
     useToolType:"",
     shapes:new Map(),
     useColor:'rgba(0, 0, 0, 1)',
-    useBorderWidth:2
+    useBorderWidth:2,
+    usePageBgColor:'rgba(255, 255,255, 1)',
+    usePageSizeId:PageSizeList[0].id,
+    useCurrPanel:"PagePanel"
   }),
   actions: {
 
