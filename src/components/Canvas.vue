@@ -7,13 +7,13 @@
            v-show="menuVisible"
            class="menu">
         <div class="contextmenu__item"
-             @click="locked(false)">解锁</div>
+             @click="locked(false)">锁定</div>
         <div class="contextmenu__item"
-             @click="locked(true)">锁定</div>
+             @click="locked(true)">解锁</div>
            <div class="contextmenu__item"
-             @click="toTop">移至顶层</div>
+             @click="toTop">到最顶层</div>
 
-             <div class="contextmenu__item"@click="toBottom">移至底层</div>
+             <div class="contextmenu__item" @click="toBottom">到最底层</div>
        </div>
        
     <keep-alive>
@@ -62,7 +62,7 @@
 
     import { IZoomType} from '@leafer/interface'
 
-    import {  IFontWeight} from '@leafer-ui/interface'
+    import {  IFontWeight,IFrameInputData} from '@leafer-ui/interface'
    
 
     import { PageSizeItem, PageSizeList } from '@/assets/data/PageSetting'
@@ -225,7 +225,7 @@
                     componen.value = objcomponen.value.TextPanel
 
 
-               }else if(e.list[0].tag!="Text"){
+               }else if(e.list[0].tag!="Text"&&!e.list[0].name.startsWith("image")){
 
                  
                    let sharp=e.list[0]
@@ -252,6 +252,33 @@
                 componen.value = objcomponen.value.PagePanel
             }
         })
+
+
+        canvasApp.editor.on(PointerEvent.DOUBLE_TAP,  (e:PointerEvent)=> {
+            //debugger
+            if(canvasApp.editor.editing==false){ return }
+
+            if(e.current.target.tag=="Box"&&e.current.target.name.startsWith("Text")){
+               canvasApp.editor.openInnerEditor(e.current.target.children[0])
+            }
+        }, true)
+
+
+        canvasApp.editor.on(InnerEditorEvent.CLOSE, function (e:InnerEditorEvent) {
+         
+            if(e.editTarget.parent){
+                canvasApp.editor.openInnerEditor(e.editTarget.parent)
+            }   
+            
+        })
+
+
+        canvasApp.editor.on(PointerEvent.MENU,function(e){
+            menuVisible.value=true
+            cleft.value=e.x+"px"
+            ctop.value=e.y+"px"
+        })
+
        
         const button = Box.one({// 添加移除按钮
             around: 'center',
@@ -273,13 +300,21 @@
             })
             canvasApp.editor.target = undefined
         })
- 
 
-        if(settingJson&&settingJson.setting){
+        if(settingJson&&settingJson.setting.initData){
 
-            canvasApp.tree.set(settingJson.setting)
+            let setting=JSON.parse(settingJson.setting.initData)
+
+            frame=new Frame(setting)
+            
+            usePageBgColor.value=frame.fill.toString()
+
+            canvasApp.tree.add(frame)
 
         }else{
+
+
+
             frame = new Frame({
             x:width/2,
             fill:usePageBgColor.value,
@@ -287,6 +322,8 @@
             width: pageWidth.value,
             height: pageHeight.value
             })
+
+            
             canvasApp.tree.add(frame)
 
             if(settingJson&&settingJson.imgUrl){
@@ -322,8 +359,6 @@
                      }
                 }
             }
-
-            console.info(m);
         })
         
     })
@@ -334,7 +369,7 @@
         ////SquareFill.Ellipse,Arrow-one,Arrow-two,Mark,Line,Text-normal,Text-rect,Text-radius
         canvasApp.editor.list.forEach(m=>{
             if(["Rect","Ellipse","Arrow","Line"].includes(m.tag)){
-                debugger
+                
                m.strokeWidth=newVal
             }else if(["Text"].includes(m.tag)){
                 //m.fill=newVal
@@ -343,7 +378,6 @@
                 m.strokeWidth=newVal
             }
 
-            console.info(m);
         })
         
     })
@@ -357,6 +391,8 @@
         frame.height=pageHeight.value;
 
         canvasApp.tree.zoom("fit", 100)
+
+        
     })
 
     watch(()=>usePageBgColor.value,()=>{
@@ -367,32 +403,24 @@
     watch(()=>useTextStyle.value,async (value)=>{
      
         canvasApp.editor.list.forEach(async (elem)=>{
+
             if(elem.tag=="Box"&&elem.name.startsWith("Text")){
 
                 let text= elem.children[0] as Text
-
-                await  nextTick()
 
                 text.fill=value.fill
                 text.fontSize=value.fontSize
                 text.fontWeight=value.fontWeight as IFontWeight
                 text.text=value.text
         
-
                 elem.stroke=value.stroke;
                 elem.strokeWidth=value.strokeWidth;
-
-               
-
+            
                 if(value.lineStyle=="dashed"){
-
-                
                    elem.dashPattern=[6,6];
                 }else{
                     elem.dashPattern=[];
-              
                 }
-
             }
         })
     },{ deep: true })
@@ -437,6 +465,7 @@
         }
         const rectImg = new Rect({
                 id:id,
+                name:'image',
                 around: 'center',
                 fill: {
                     type: 'image',
@@ -637,7 +666,7 @@
             
             //normal,rect,radius
 
-            Object.assign(defaultOption,{width:'',height:'',cornerRadius: subType=="rect"?0:6})
+            Object.assign(defaultOption,{width:undefined,height:undefined,cornerRadius: subType=="rect"?0:6})
         
             let box= new Box({
                     id,
@@ -653,24 +682,24 @@
 
 
             let text=Text.one({
-                        text: '100cm',
-                        editable: false,
-                        fontSize: 14,
-                        selected:true,
-                        resizeFontSize: true,
-                        padding: [4, 8],
-                        fill:stroke
+                text: '100cm',
+                editable: false,
+                fontSize: 14,
+                selected:true,
+                resizeFontSize: true,
+                padding: [4, 8],
+                fill:useTextStyle.value.fill
             })
 
-            text.on(InnerEditorEvent.CLOSE, function (e) {
-                canvasApp.editor.openInnerEditor(e.target)
-            }, true)
+            // text.on(InnerEditorEvent.CLOSE, function (e) {
+            //     canvasApp.editor.openInnerEditor(e.target)
+            // }, true)
 
             box.add(text);
 
-            box.on(PointerEvent.DOUBLE_TAP, function (e) {
-                canvasApp.editor.openInnerEditor(e.target)
-            }, true)
+            // box.on(PointerEvent.DOUBLE_TAP, function (e) {
+            //     //canvasApp.editor.openInnerEditor(e.target)
+            // }, true)
 
             return box
             
@@ -702,13 +731,6 @@
         }
         let newSharp= addSharp(sharp);
 
-
-        newSharp.on(PointerEvent.MENU,function(e){
-            menuVisible.value=true
-            cleft.value=e.x+"px"
-            ctop.value=e.y+"px"
-        })
-
         frame.add(newSharp)
 
         editorStore.addShape(newSharp)
@@ -731,11 +753,11 @@
 
     const  handleSaveImg=async ()=>{
         
-        const json = canvasApp.tree.toJSON() 
+        const json = frame.toJSON() 
 
         const result = await frame.export('png', { blob: true })
 
-        window.parent.saveMakeImg?window.parent.saveMakeImg({json,file:result}):null
+        window.parent.saveMakeImg?window.parent.saveMakeImg({json:JSON.stringify(json),file:result}):null
     }
 
 

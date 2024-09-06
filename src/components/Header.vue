@@ -181,33 +181,23 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
  <div class="header">
      <div class="action">
          <ul>
-          <li>
-            <el-upload
-              ref="uploadRef"
-              class="upload-demo"
-              :show-file-list="false"
-              :auto-upload="false"
-              :on-change="handleAvatarSuccess"
-            >
-              <template #trigger>
-                <el-button type="primary">上传图片</el-button>
-              </template>
-            </el-upload>
-         </li>
+          
          
          <li>
-          <el-button @click="handleSharp('Ellipse','')">Ellipse</el-button>
+          <el-button @click="handleSharp('Ellipse','')">圆形</el-button>
          </li>
          <li>
-          <el-button @click="handleSharp('Rect','')">Rect</el-button>
+          <el-button @click="handleSharp('Rect','')">矩形</el-button>
          </li>
-         <li>
-          <el-button @click="handleSharp('Line','')">Line</el-button>
-         </li>
+    
+        <li style="margin-right: 20px;">&nbsp;&nbsp;</li>
+
+         
 
          <li>
-            <el-button @click="handleSharp('Text','normal')">Text</el-button>
+            <el-button @click="handleSharp('Text','normal')">文本</el-button>
          </li>
+         <li style="margin-right: 20px;">&nbsp;&nbsp;</li>
          <!-- <li>
           <el-dropdown split-button  @click="handleSharp('Text',textType.type)">
                  {{textType.title}}
@@ -222,6 +212,9 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
                   </template>
               </el-dropdown>
          </li> -->
+         <li>
+          <el-button @click="handleSharp('Line','')">直线</el-button>
+         </li>
          <li>
           <el-dropdown split-button @click="handleSharp('Arrow',arrowType.type)">
               {{arrowType.title}}
@@ -260,14 +253,29 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
                   </template>
               </el-dropdown>
          </li> -->
+
+         <li>&nbsp;&nbsp;</li>
          <li>
-          <el-button @click="handleClearAll">清空画板</el-button>
+            <el-upload
+              ref="uploadRef"
+              class="upload-demo"
+              :show-file-list="false"
+              :auto-upload="false"
+              :on-change="handleAvatarSuccess"
+            >
+              <template #trigger>
+                <el-button type="primary">{{ $t('src.components.Header.916025-4') }}</el-button>
+              </template>
+            </el-upload>
          </li>
          <li>
-          <el-button @click="handleDownImg" >导出图片</el-button>
+          <el-button @click="handleClearAll">{{ $t('src.components.Header.916025-5') }}</el-button>
          </li>
          <li>
-          <el-button type="primary" @click="handleSaveImg">保存设计</el-button>
+          <el-button @click="handleDownImg" >{{ $t('src.components.Header.916025-6') }}</el-button>
+         </li>
+         <li>
+          <el-button type="primary" @click="handleSaveImg">{{ $t('src.components.Header.916025-7') }}</el-button>
          </li>
          <!-- <li>
               <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">
@@ -279,9 +287,9 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
                   </template>
               </el-dropdown>
          </li> -->
-         <li>
+         <!-- <li>
           <Lang  />
-         </li>
+         </li> -->
          </ul>
      </div>
  </div>
