@@ -185,7 +185,6 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
             <el-upload
               ref="uploadRef"
               class="upload-demo"
-              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
               :show-file-list="false"
               :auto-upload="false"
               :on-change="handleAvatarSuccess"
@@ -197,15 +196,19 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
          </li>
          
          <li>
-          <el-button @click="handleSharp('Ellipse','')">圆形</el-button>
+          <el-button @click="handleSharp('Ellipse','')">Ellipse</el-button>
          </li>
          <li>
-          <el-button @click="handleSharp('Rect','')">矩形</el-button>
+          <el-button @click="handleSharp('Rect','')">Rect</el-button>
          </li>
          <li>
-          <el-button @click="handleSharp('Line','')">直线</el-button>
+          <el-button @click="handleSharp('Line','')">Line</el-button>
          </li>
+
          <li>
+            <el-button @click="handleSharp('Text','normal')">Text</el-button>
+         </li>
+         <!-- <li>
           <el-dropdown split-button  @click="handleSharp('Text',textType.type)">
                  {{textType.title}}
 
@@ -218,7 +221,7 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
                     </el-dropdown-menu>
                   </template>
               </el-dropdown>
-         </li>
+         </li> -->
          <li>
           <el-dropdown split-button @click="handleSharp('Arrow',arrowType.type)">
               {{arrowType.title}}
@@ -244,7 +247,7 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
                   </template>
               </el-dropdown>
          </li>
-         <li>
+         <!-- <li>
           <el-color-picker v-model="useColor" show-alpha :predefine="predefineColors" />
         </li>
         <li>
@@ -256,7 +259,7 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
                     </el-dropdown-menu>
                   </template>
               </el-dropdown>
-         </li>
+         </li> -->
          <li>
           <el-button @click="handleClearAll">清空画板</el-button>
          </li>

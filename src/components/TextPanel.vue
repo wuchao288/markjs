@@ -2,57 +2,87 @@
     <div id="main-right" >
         <el-form
       class="form"
-      :model="config"
       label-position="top"
       label-width="50px"
     >
     <el-form-item label="Content">
-         <el-input  v-model="config.text"/>
-      </el-form-item>
-
-      <el-form-item label="Scale">
-        <el-slider v-model="config.scale" />
+         <el-input  v-model="useTextStyle.text"/>
       </el-form-item>
 
       <el-form-item label="FontSize">
-        <el-slider v-model="config.font.fontSize" />
+        <el-slider v-model="useTextStyle.fontSize" />
       </el-form-item>
 
       <el-form-item label="Color">
-        <el-color-picker v-model="config.font.color"  :predefine="predefineColors" />
+        <el-color-picker v-model="useTextStyle.fill"  :predefine="predefineColors" />
       </el-form-item>
      
+
+      <el-form-item label="LineStyle">
+           <el-radio-group v-model="useTextStyle.lineStyle">
+               <el-radio value="line" border style="border-width: 2px;">line</el-radio>
+               <el-radio value="dashed" style="border-style: dashed;border-width: 2px;" border>dashed</el-radio>
+            </el-radio-group>
+      </el-form-item>
+
+      <el-form-item label="StrokeWidth">
+        <el-slider v-model="useTextStyle.strokeWidth"  :max="10"  :min="0" />
+      </el-form-item>
+
+      <el-form-item label="StrokeColor">
+        <el-color-picker v-model="useTextStyle.stroke"  :predefine="predefineColors" />
+      </el-form-item>
+
     </el-form>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { reactive,ref } from 'vue'
+    import { ref,watch} from 'vue'
 
-    import { ElForm,ElFormItem,ElSelect,ElOption,ElSpace,ElInputNumber,ElInput,ElSlider,ElColorPicker  } from 'element-plus'
-    import { PageSizeItem,PageSizeList } from '@/assets/data/PageSetting';
-
+    import { ElForm,ElFormItem,ElInput,ElSlider,ElColorPicker,ElRadioGroup,ElRadio  } from 'element-plus'
 
     import useEditStore from "@/stores/useEditStore"
-    import { storeToRefs } from 'pinia'
 
+    import {TTextSetting} from "@/stores/useEditStore"
+    
+    import { storeToRefs } from 'pinia'
 
     const editorStore = useEditStore()
 
-    const {usePageSizeId,usePageBgColor} = storeToRefs(editorStore)
-
-    const config = reactive({
-      width:null,
-      height:null,
-      text:"",
-      scale:1,
-      font: {
-          fontSize: 16,
-          color: 'rgba(255,255,255,1)'
-      }
-    })
+    type TState = {
+      activeNames: string[],
+      innerElement: TTextSetting,
+      tag: boolean,
+      ingoreKeys: string[],
+      fontSizeList: number[],
+      fontClassList: Record<string, any>, 
+      lineHeightList: number[],
+      letterSpacingList: number[]
+  }
 
 
+  const {useTextStyle} = storeToRefs(editorStore)
+
+
+//   let LineStyle=ref("line");
+
+// if(useTextStyle.value.dashPattern&&useTextStyle.value.dashPattern.length==2){
+
+//    LineStyle.value="dashed"
+// }else{
+//    LineStyle.value="line"
+// }
+
+// watch(()=>LineStyle.value,(value,newVal)=>{
+
+//    if(value=="line"){
+//     useTextStyle.value.dashPattern=[]
+     
+//    }else{
+//     useTextStyle.value.dashPattern=[6, 6] 
+//    }
+// })
 
     const predefineColors = ref([
       '#ff4500',

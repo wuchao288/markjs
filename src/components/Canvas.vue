@@ -49,7 +49,7 @@
 <script setup lang="ts">
 
 
-    import {onMounted,ref,watch,shallowRef,defineAsyncComponent} from 'vue'
+    import {onMounted,ref,watch,shallowRef,defineAsyncComponent,nextTick} from 'vue'
 
     import { App, Box ,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Line,Text,PointerEvent,ImageEvent} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
@@ -60,7 +60,11 @@
 
     import { Arrow } from '@leafer-in/arrow'
 
-    import { IZoomType } from '@leafer/interface'
+    import { IZoomType} from '@leafer/interface'
+
+    import {  IFontWeight} from '@leafer-ui/interface'
+   
+
     import { PageSizeItem, PageSizeList } from '@/assets/data/PageSetting'
 
 
@@ -77,9 +81,11 @@
     let componen = shallowRef(null);
     const PagePanel = defineAsyncComponent(() => import("./PagePanel.vue"));
     const TextPanel = defineAsyncComponent(() => import("./TextPanel.vue"));
+    const SharpPanel = defineAsyncComponent(() => import("./SharpPanel.vue"));
     let objcomponen = shallowRef({
         PagePanel,
         TextPanel,
+        SharpPanel
     });
 
 
@@ -93,7 +99,12 @@
 
     const editorStore = useEditStore()
 
-    const {useColor,useBorderWidth,usePageSizeId,useTool,useToolType,usePageBgColor} = storeToRefs(editorStore)
+    const {useColor,useBorderWidth,usePageSizeId,
+        useTool,useToolType,
+        usePageBgColor,
+        useTextStyle,
+        useSharpStyle
+    } = storeToRefs(editorStore)
 
 
     let pageHeight=ref(0);
@@ -183,9 +194,59 @@
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
             if(e.list.length==1){
                if(e.list[0].tag=="Box"&&e.list[0].name.startsWith("Text")){
+
+                   
+                    let text=e.list[0].children[0] as Text
+
+                    useTextStyle.value.fill=text.fill.toString()
+
+                    useTextStyle.value.fontSize= parseInt(text.fontSize.toString())
+
+                    useTextStyle.value.fontWeight=text.fontWeight.toString()
+
+                    useTextStyle.value.text=text.text
+
+                    let box=e.list[0]
+
+                    useTextStyle.value.stroke=box.stroke.toString()
+
+                    useTextStyle.value.strokeWidth=Number(box.strokeWidth.toString())
+
+                    
+                    if(box.dashPattern&&box.dashPattern.length==2){
+
+                        useSharpStyle.value.lineStyle="dashed"
+                        
+                    }else{
+
+                        useSharpStyle.value.lineStyle="line"
+                    }
+
                     componen.value = objcomponen.value.TextPanel
-               }else{
-                   componen.value = objcomponen.value.PagePanel
+
+
+               }else if(e.list[0].tag!="Text"){
+
+                 
+                   let sharp=e.list[0]
+
+                    useSharpStyle.value.fill=sharp.fill.toString()
+
+                    useSharpStyle.value.stroke=sharp.stroke.toString()
+
+                    useSharpStyle.value.strokeWidth= Number(sharp.strokeWidth.toString())
+
+                    if(sharp.dashPattern&&sharp.dashPattern.length==2){
+
+                       useSharpStyle.value.lineStyle="dashed"
+
+                    }else{
+
+                        useSharpStyle.value.lineStyle="line"
+                    }
+
+                    componen.value = objcomponen.value.SharpPanel
+
                }
             }else{
                 componen.value = objcomponen.value.PagePanel
@@ -303,6 +364,68 @@
     })
 
 
+    watch(()=>useTextStyle.value,async (value)=>{
+     
+        canvasApp.editor.list.forEach(async (elem)=>{
+            if(elem.tag=="Box"&&elem.name.startsWith("Text")){
+
+                let text= elem.children[0] as Text
+
+                await  nextTick()
+
+                text.fill=value.fill
+                text.fontSize=value.fontSize
+                text.fontWeight=value.fontWeight as IFontWeight
+                text.text=value.text
+        
+
+                elem.stroke=value.stroke;
+                elem.strokeWidth=value.strokeWidth;
+
+               
+
+                if(value.lineStyle=="dashed"){
+
+                
+                   elem.dashPattern=[6,6];
+                }else{
+                    elem.dashPattern=[];
+              
+                }
+
+            }
+        })
+    },{ deep: true })
+
+
+    watch(()=>useSharpStyle.value,async (value)=>{
+     
+     canvasApp.editor.list.forEach(async (elem)=>{
+         if(elem.tag=="Box"&&elem.name.startsWith("Text")){
+             
+         }else{
+            
+            let text= elem
+
+            await  nextTick()
+
+            text.fill=value.fill
+            text.stroke=value.stroke
+            text.strokeWidth=value.strokeWidth
+
+            if(value.lineStyle=="dashed"){
+
+               elem.dashPattern=[6,6];
+            }else{
+                elem.dashPattern=[];
+
+            }
+
+         }
+     })
+ },{ deep: true })
+    
+
    const addBgImg=async (imgUrl:any)=>{
 
         let id="image0";
@@ -348,7 +471,7 @@
    }
 
    const toTop=()=>{
-    debugger
+    
       canvasApp.editor.toTop()
       menuVisible.value=false
    }
@@ -410,13 +533,13 @@
         editable:true,
         x: pageWidth.value/2,
         y: pageHeight.value/2,
-        fill:"transparent",
+        fill:useSharpStyle.value.fill,
     }
 
     
     if (type === 'SquareFill') {
 
-        Object.assign(defaultOption,{fill:"transparent"})
+        Object.assign(defaultOption,{fill:useSharpStyle.value.fill})
 
             return new Rect({
                 id,

@@ -3,8 +3,25 @@ import { PageSizeItem,PageSizeList } from '@/assets/data/PageSetting'
 import { App } from 'leafer-ui'
 import { Store, defineStore } from 'pinia'
 
-import {IPointData}  from '@leafer-ui/interface'
+import {IPointData,IUI}  from '@leafer-ui/interface'
 
+export type TTextSetting={
+  text:string,
+  fontSize:number,
+  fill:string,
+  fontWeight:string,
+  strokeWidth:number,
+  stroke:string,
+  lineStyle: string
+}
+
+export type TSharpSetting={
+  fill:string,
+  strokeWidth:number,
+  zIndex:number,
+  stroke:string,
+  lineStyle: string
+}
 
 
 type TStoreBaseState = {
@@ -17,7 +34,10 @@ type TStoreBaseState = {
   usePageBgColor:string
   useBorderWidth:number
   usePageSizeId:number
-  useCurrPanel:string
+  useCurrPanel:string,
+  dActiveElement:IUI,
+  useTextStyle:TTextSetting,
+  useSharpStyle:TSharpSetting
 }
 
 type TSotreAction = {
@@ -44,7 +64,24 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     useBorderWidth:2,
     usePageBgColor:'rgba(255, 255,255, 1)',
     usePageSizeId:PageSizeList[0].id,
-    useCurrPanel:"PagePanel"
+    useCurrPanel:"PagePanel",
+    useTextStyle:{
+        text:'10cm',
+        fill:'#000000',
+        fontSize:14,
+        fontWeight:'normal',
+        strokeWidth:2,
+        stroke:"#000000",
+        lineStyle: 'line'
+    } as TTextSetting,
+    useSharpStyle:{
+      fill:"#FFFFFF",
+      strokeWidth:2,
+      zIndex:10000,
+      stroke:"#000000",
+      lineStyle:'line'
+  } as TSharpSetting,
+    dActiveElement:null
   }),
   actions: {
 
