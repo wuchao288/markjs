@@ -213,7 +213,7 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
               </el-dropdown>
          </li> -->
          <li>
-          <el-button @click="handleSharp('Line','')">直线</el-button>
+          <el-button @click="handleSharp('Line','')">直线{{$t('home.welcome')}}</el-button>
          </li>
          <li>
           <el-dropdown split-button @click="handleSharp('Arrow',arrowType.type)">
