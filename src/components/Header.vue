@@ -264,18 +264,18 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
               :on-change="handleAvatarSuccess"
             >
               <template #trigger>
-                <el-button type="primary">{{ $t('src.components.Header.916025-4') }}</el-button>
+                <el-button type="primary">上传图片</el-button>
               </template>
             </el-upload>
          </li>
          <li>
-          <el-button @click="handleClearAll">{{ $t('src.components.Header.916025-5') }}</el-button>
+          <el-button @click="handleClearAll">清空画板</el-button>
          </li>
          <li>
-          <el-button @click="handleDownImg" >{{ $t('src.components.Header.916025-6') }}</el-button>
+          <el-button @click="handleDownImg" >下载图片</el-button>
          </li>
          <li>
-          <el-button type="primary" @click="handleSaveImg">{{ $t('src.components.Header.916025-7') }}</el-button>
+          <el-button type="primary" @click="handleSaveImg">保存设计</el-button>
          </li>
          <!-- <li>
               <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">
