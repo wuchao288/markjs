@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import 'normalize.css/normalize.css'
 import 'element-plus/theme-chalk/index.css'
 import '@/assets/styles/index.less'
+import '@/assets/styles/iconfont/iconfont.css'
 import App from './App.vue'
 import I18n from './languages/index'
 

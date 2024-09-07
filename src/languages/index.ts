@@ -29,8 +29,6 @@ const i18n = createI18n({
  */
 export function getDefaultLang() {
 
-  debugger
-
   let owlang= Cookies.get('owlang');
 
   owlang=owlang==undefined?"":owlang

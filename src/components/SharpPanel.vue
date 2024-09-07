@@ -6,26 +6,38 @@
       label-width="50px"
     >
 
-    <el-form-item label="LineStyle">
+    <el-form-item :label="t('stylepanel.size')">
+        <el-space>
+          <el-input-number style="width: 100px;" v-model="useSharpStyle.width" controls-position="right" />
+          <el-input-number style="width: 100px;"  v-model="useSharpStyle.height"  controls-position="right" />
+        </el-space>
+      </el-form-item>
+
+    <el-form-item  :label="t('stylepanel.linestyle')">
            <el-radio-group v-model="useSharpStyle.lineStyle">
-               <el-radio value="line" border style="border-width: 2px;">line</el-radio>
-               <el-radio value="dashed" style="border-style: dashed;border-width: 2px;" border>dashed</el-radio>
+            <el-radio value="solid" border style="border-width: 2px;">{{$t("stylepanel.solid")}}</el-radio>
+               <el-radio value="dashed" style="border-style: dashed;border-width: 2px;" border>{{$t("stylepanel.dashed")}}</el-radio>
             </el-radio-group>
       </el-form-item>
 
-      <el-form-item label="StrokeWidth">
+      <el-form-item :label="t('stylepanel.strokewidth')">
         <el-slider v-model="useSharpStyle.strokeWidth"  :max="10"  :min="1" />
       </el-form-item>
 
-      <el-form-item label="StrokeColor">
+      <el-form-item :label="t('stylepanel.stroke')">
         <el-color-picker v-model="useSharpStyle.stroke"  :predefine="predefineColors" />
       </el-form-item>
 
-      <el-form-item label="FillColor">
-        <el-color-picker v-model="useSharpStyle.fill"  :predefine="predefineColors" />
+      <el-form-item :label="t('stylepanel.fill')">
+        <el-color-picker v-model="useSharpStyle.fill"  show-alpha :predefine="predefineColors" />
       </el-form-item>
 
+      <el-form-item :label="t('stylepanel.corners')" v-if="useSharpStyle.sharpname=='Star'">
+        <el-slider v-model="useSharpStyle.corners"  :max="8"  :min="3" />
+      </el-form-item>
       
+      
+
     </el-form>
     </div>
 </template>
@@ -34,14 +46,15 @@
 
     import { ref,watch} from 'vue'
 
-    import { ElForm,ElFormItem,ElRadioGroup,ElRadio,ElSlider,ElColorPicker  } from 'element-plus'
+    import { ElForm,ElFormItem,ElRadioGroup,ElRadio,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
 
     import useEditStore from "@/stores/useEditStore"
 
     import {TSharpSetting} from "@/stores/useEditStore"
     
     import { storeToRefs } from 'pinia'
-
+    import { useI18n } from "vue-i18n"
+    const { t } = useI18n()
 
     const editorStore = useEditStore()
 
@@ -58,30 +71,6 @@
 
 
   const {useSharpStyle} = storeToRefs(editorStore)
-
-//   let LineStyle=ref("line");
-
-//   if(useSharpStyle.value.dashPattern&&useSharpStyle.value.dashPattern.length==2){
-
-//      LineStyle.value="dashed"
-//   }else{
-//      LineStyle.value="line"
-//   }
-
-//   watch(()=>useSharpStyle.value,(value,newVal)=>{
-
-//     console.info(value);
-// })
-
-//   watch(()=>LineStyle.value,(value,newVal)=>{
-
-//      if(value=="line"){
-//         useSharpStyle.value.dashPattern=[]
-       
-//      }else{
-//         useSharpStyle.value.dashPattern=[6, 6] 
-//      }
-//   })
 
     const predefineColors = ref([
       '#ff4500',

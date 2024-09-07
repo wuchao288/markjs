@@ -3,7 +3,7 @@ import { PageSizeItem,PageSizeList } from '@/assets/data/PageSetting'
 import { App } from 'leafer-ui'
 import { Store, defineStore } from 'pinia'
 
-import {IPointData,IUI}  from '@leafer-ui/interface'
+import {IPointData,IUI,IShadowEffect}  from '@leafer-ui/interface'
 
 export type TTextSetting={
   text:string,
@@ -12,7 +12,12 @@ export type TTextSetting={
   fontWeight:string,
   strokeWidth:number,
   stroke:string,
-  lineStyle: string
+  lineStyle: string,
+  cornerRadius:number,
+  fontFamily:string,
+  letterSpacing:number,
+  lineHeight:number,
+  shadow:IShadowEffect
 }
 
 export type TSharpSetting={
@@ -20,7 +25,11 @@ export type TSharpSetting={
   strokeWidth:number,
   zIndex:number,
   stroke:string,
-  lineStyle: string
+  lineStyle: string,
+  sharpname:string,
+  corners:number,
+  width:number,
+  height:number
 }
 
 
@@ -72,14 +81,26 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         fontWeight:'normal',
         strokeWidth:2,
         stroke:"#000000",
-        lineStyle: 'line'
+        lineStyle: 'solid',
+        cornerRadius:2,
+        fontFamily:undefined,
+        letterSpacing:undefined,
+        lineHeight:undefined,
+        shadow:{
+
+        } 
     } as TTextSetting,
+
     useSharpStyle:{
       fill:"#FFFFFF",
       strokeWidth:2,
       zIndex:10000,
       stroke:"#000000",
-      lineStyle:'line'
+      lineStyle:'solid',
+      sharpname:'',
+      corners:5,
+      width:100,
+      height:100
   } as TSharpSetting,
     dActiveElement:null
   }),

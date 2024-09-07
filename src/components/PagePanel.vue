@@ -2,13 +2,12 @@
     <div id="main-right" >
         <el-form
       class="form"
-      :model="config"
       label-position="top"
       label-width="50px"
     >
       <el-form-item label="页面大小">
         
-        <el-select @change="pageSizeChange" v-model="config.pageSize" placeholder="Select" style="width: 240px">
+        <el-select  v-model="usePageSizeId" placeholder="Select" style="width: 240px">
         <el-option
           v-for="item in PageSizeList"
           :key="item.id"
@@ -19,7 +18,7 @@
   </el-select>
       </el-form-item>
       <el-form-item label="背景颜色">
-        <el-color-picker v-model="config.pageBgColor"  :predefine="predefineColors" />
+        <el-color-picker v-model="usePageBgColor"  :predefine="predefineColors" />
       </el-form-item>
      
     </el-form>
@@ -30,7 +29,7 @@
     import { reactive,ref } from 'vue'
 
     import { ElForm,ElFormItem,ElSelect,ElOption,ElSpace,ElInputNumber,ElInput,ElSlider,ElColorPicker  } from 'element-plus'
-    import { PageSizeItem,PageSizeList } from '@/assets/data/PageSetting';
+    import { PageSizeList } from '@/assets/data/PageSetting';
 
 
     import useEditStore from "@/stores/useEditStore"
@@ -40,26 +39,6 @@
     const editorStore = useEditStore()
 
     const {usePageSizeId,usePageBgColor} = storeToRefs(editorStore)
-
-    const config = reactive({
-
-      pageBgColor:usePageBgColor,
-      pageSize:usePageSizeId,
-      
-      font: {
-          fontSize: 16,
-          color: 'rgba(255,255,255,1)',
-      },
-      zIndex: -1,
-      rotate: -22
-    })
-
-
-    const  pageSizeChange=(value)=>{
-      console.info(config.pageSize);
-
-    }
-
 
     const predefineColors = ref([
       '#ff4500',

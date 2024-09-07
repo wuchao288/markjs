@@ -33,7 +33,7 @@ export const ZoomItemList=[
         id:5
     },
    {
-     title: "适用屏幕",
+     title: "header.fitscreen",
      value:"fit",
      id:6
    }
@@ -64,47 +64,25 @@ export const PageSizeList=[
 ] as PageSizeItem[]
 
 
-
-export type TextTypeItem={
-  title: string,
-  id:string|number,
-  type:string 
-}
-
-export const TextTypeList=[
-  {
-    title: "普通文本",
-    id:1,
-    type:"normal" 
-  },
-  {
-    title: "矩形边框",
-    id:2,
-    type:"rect" 
-  },
-  {
-    title: "圆角边框",
-    id:3,
-    type:"radius" 
-  }
-] as TextTypeItem[]
-
 export type ArrowTypeItem={
   title: string,
   id:string|number,
-  type:string 
+  type:string,
+  icon:string
 }
 
 export const ArrowTypeList=[
   {
-    title: "单箭头",
+    title: "header.onearrow",
     id:1,
-    type:"one" 
+    type:"one" ,
+    icon:"icon-arrow-down"
   },
   {
-    title: "双箭头",
+    title: "header.twoarrow",
     id:2,
-    type:"two" 
+    type:"two",
+    icon:"icon-shuangjiantou2"
   }
 ] as ArrowTypeItem[]
 
@@ -112,24 +90,28 @@ export const ArrowTypeList=[
 export type MarkTypeItem={
   title: string,
   id:string|number,
-  rotate:string 
+  rotate:string,
+  icon:string
 }
 
 export const MarkTypeList=[
   {
-    title: "垂直标注",
+    title: "header.verticalmark",
     id:1,
-    rotate:'90'
+    rotate:'90',
+    icon:"icon-markv-copy"
   },
   {
-    title: "水平标注",
+    title: "header.horizontalmark",
     id:2,
-    rotate:'0'
+    rotate:'0',
+    icon:"icon-xianduan"
   },
   {
-    title: "45标注",
+    title: "header.anglemark45",
     id:3,
-    rotate:'45'
+    rotate:'45',
+    icon:"icon-caotuxianduanchangduyueshu"
   }
 ] as MarkTypeItem[]
 
@@ -141,6 +123,11 @@ export type BorderWidthItem={
 }
 
 export const BorderWidthList=[
+  {
+    title: "0px",
+    id:0,
+    width:0
+  },
   {
     title: "1px",
     id:1,
@@ -160,5 +147,71 @@ export const BorderWidthList=[
     title: "4px",
     id:4,
     width:4
+  },
+  {
+    title: "5px",
+    id:5,
+    width:5
   }
 ] as BorderWidthItem[]
+
+
+export type SharpTypeItem={
+  title: string,
+  id:string|number,
+  value:string,
+  type:string,
+  icon:string
+}
+
+export const SharpTypeList=[
+  {
+    title: "header.rect",
+    id:1,
+    value:"",
+    type:'Rect',
+    icon:'icon-juxing'
+  },
+  {
+    title: 'header.ellipse',
+    id:2,
+    value:'',
+    type:'Ellipse',
+    icon:'icon-yuanxing'
+  },
+  {
+    title: 'header.line',
+    id:2,
+    value:'',
+    type:'Line',
+    icon:'icon-xianduan-zhixian'
+  },
+  {
+    title: "header.star",
+    id:3,
+    value:'5',
+    type:'Star',
+    icon:'icon-star'
+  },
+  {
+    title: "header.triangle",
+    id:4,
+    value:"3",
+    type:'Polygon',
+    icon:'icon-sanjiaoxing'
+  },
+  {
+    title: "header.pentagon",
+    id:5,
+    value:"5",
+    type:'Polygon',
+    icon:'icon-pentagon'
+  },
+  {
+    title: "header.hexagon",
+    id:6,
+    value:"6",
+    type:'Polygon',
+    icon:'icon-hexagon'
+  }
+] as SharpTypeItem[]

@@ -51,7 +51,7 @@
 
     import {onMounted,ref,watch,shallowRef,defineAsyncComponent,nextTick} from 'vue'
 
-    import { App, Box ,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Line,Text,PointerEvent,ImageEvent} from 'leafer-ui'
+    import { App, Box ,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,ImageEvent} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
     import '@leafer-in/view'
@@ -193,9 +193,9 @@
 
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
             if(e.list.length==1){
+
                if(e.list[0].tag=="Box"&&e.list[0].name.startsWith("Text")){
 
-                   
                     let text=e.list[0].children[0] as Text
 
                     useTextStyle.value.fill=text.fill.toString()
@@ -219,7 +219,7 @@
                         
                     }else{
 
-                        useSharpStyle.value.lineStyle="line"
+                        useSharpStyle.value.lineStyle="solid"
                     }
 
                     componen.value = objcomponen.value.TextPanel
@@ -236,16 +236,32 @@
 
                     useSharpStyle.value.strokeWidth= Number(sharp.strokeWidth.toString())
 
+                    if('corners' in sharp){
+                        useSharpStyle.value.corners=Number(sharp.corners.toString())
+                    }
+                   
+                    if('height' in sharp){
+                        useSharpStyle.value.height=sharp.height
+                    }
+
+                 
+                    useSharpStyle.value.width=sharp.width
+                    
+
                     if(sharp.dashPattern&&sharp.dashPattern.length==2){
 
                        useSharpStyle.value.lineStyle="dashed"
 
                     }else{
 
-                        useSharpStyle.value.lineStyle="line"
+                        useSharpStyle.value.lineStyle="solid"
                     }
+                    
+                    useSharpStyle.value.sharpname=e.list[0].name
 
                     componen.value = objcomponen.value.SharpPanel
+
+                   
 
                }
             }else{
@@ -406,15 +422,21 @@
 
             if(elem.tag=="Box"&&elem.name.startsWith("Text")){
 
+
+                await  nextTick()
+
+
                 let text= elem.children[0] as Text
 
                 text.fill=value.fill
                 text.fontSize=value.fontSize
                 text.fontWeight=value.fontWeight as IFontWeight
                 text.text=value.text
-        
-                elem.stroke=value.stroke;
-                elem.strokeWidth=value.strokeWidth;
+
+                
+                elem.cornerRadius=value.cornerRadius
+                elem.stroke=value.stroke
+                elem.strokeWidth=value.strokeWidth
             
                 if(value.lineStyle=="dashed"){
                    elem.dashPattern=[6,6];
@@ -433,14 +455,24 @@
              
          }else{
             
-            let text= elem
 
             await  nextTick()
 
-            text.fill=value.fill
-            text.stroke=value.stroke
-            text.strokeWidth=value.strokeWidth
+            elem.fill=value.fill
+            elem.stroke=value.stroke
+            elem.strokeWidth=value.strokeWidth
 
+            if("corners" in elem){
+                elem.corners=value.corners
+            }
+
+            if("height" in elem){
+                elem.height=value.height
+            }
+
+           
+            elem.width=value.width
+            
             if(value.lineStyle=="dashed"){
 
                elem.dashPattern=[6,6];
@@ -501,12 +533,32 @@
 
    const toTop=()=>{
     
-      canvasApp.editor.toTop()
-      menuVisible.value=false
+        canvasApp.editor.toTop()
+
+        let maxZindex=0;
+        
+        frame.children.forEach((elem)=>{ 
+        if(elem.zIndex>maxZindex){
+            maxZindex=elem.zIndex
+        }})
+
+        canvasApp.editor.list.forEach((elem)=>{ elem.zIndex=maxZindex  })
+
+        menuVisible.value=false
    }
 
    const toBottom=()=>{
       canvasApp.editor.toBottom()
+
+      let minZindex=0;
+        
+        frame.children.forEach((elem)=>{ 
+        if(elem.zIndex<minZindex){
+            minZindex=elem.zIndex
+        }})
+
+        canvasApp.editor.list.forEach((elem)=>{ elem.zIndex=minZindex  })
+
       menuVisible.value=false
    }
    
@@ -547,7 +599,7 @@
             strokeWidth: useBorderWidth.value,
             fill:'',
             text:'',
-            zIndex:100000+ editorStore.shapes.size + 1
+            zIndex:editorStore.shapes.size + 1
         } as TDefaultOption;
         return newShape;
     }
@@ -562,25 +614,8 @@
         editable:true,
         x: pageWidth.value/2,
         y: pageHeight.value/2,
-        fill:useSharpStyle.value.fill,
+        fill:"#ffffff",
     }
-
-    
-    if (type === 'SquareFill') {
-
-        Object.assign(defaultOption,{fill:useSharpStyle.value.fill})
-
-            return new Rect({
-                id,
-                height,
-                zIndex,
-                stroke,
-                strokeWidth,
-                cursor:'pointer',
-                name:"SquareFill",
-                ...defaultOption
-            });
-        }
 
         if (type === 'Ellipse') {
             return new Ellipse({
@@ -665,17 +700,17 @@
         if (type === 'Text') {
             
             //normal,rect,radius
-
-            Object.assign(defaultOption,{width:undefined,height:undefined,cornerRadius: subType=="rect"?0:6})
+            
+            Object.assign(defaultOption,{width:undefined,height:undefined})
         
             let box= new Box({
                     id,
-                    name:"Text-"+subType,
+                    name:"Text",
                     zIndex,
-                    cornerRadius: 0,
+                    cornerRadius:4,
                     cursor:'pointer',
                     stroke:useColor.value,
-                    strokeWidth:subType=="normal"?0:useBorderWidth.value,
+                    strokeWidth:0,
                     children: [],
                     ...defaultOption
             })
@@ -688,7 +723,13 @@
                 selected:true,
                 resizeFontSize: true,
                 padding: [4, 8],
-                fill:useTextStyle.value.fill
+                fill:'#000000',
+                shadow: {
+                    x: 0,
+                    y: 0,
+                    blur: 4,
+                    color: "#4DCB71AA"
+                }
             })
 
             // text.on(InnerEditorEvent.CLOSE, function (e) {
@@ -705,13 +746,57 @@
             
         }
 
+        if(type === 'Polygon'){
+            
+
+            //Object.assign(defaultOption,{})
+            let polygon = new Polygon({
+                width: 100,
+                height: 100,
+                sides: Number(subType),
+                fill: '#ffffff',
+                stroke:stroke,
+                strokeWidth:2,
+                x:defaultOption.x,
+                y:defaultOption.y,
+                editable:true,
+                id,
+                name:'Polygon',
+                zIndex,
+                cursor:'pointer'
+            })
+            return polygon
+        }
+
+
+        if(type==="Star"){
+            let star=  new Star({
+                width: 100,
+                height: 100,
+                corners: Number(subType),
+                stroke:stroke,
+                strokeWidth:2,
+                x:defaultOption.x,
+                y:defaultOption.y,
+                editable:true,
+                id,
+                name:'Star',
+                zIndex,
+                cornerRadius: 5,
+                cursor:'pointer',
+                fill:  '#ffffff'
+            })
+
+            return star
+        }
+
         return new Rect({
             id,
             name:"Rect",
             zIndex,
             cursor:'pointer',
             stroke:stroke,
-            strokeWidth:useBorderWidth.value,
+            strokeWidth:2,
             cornerRadius: 8,
             height,
             ...defaultOption

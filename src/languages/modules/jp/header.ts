@@ -6,7 +6,5 @@
  * @LastEditTime: 2024-05-19 05:15:09
  */
 export default {
-  logout: '_退出登录',
-  save: '_保存',
-  download: '_下载作品',
+
 }

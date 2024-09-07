@@ -1,31 +1,43 @@
 <script setup lang="ts">
 
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 
-import { ElButton,ElDropdown,ElDropdownItem,ElUpload,ElMessage  } from 'element-plus'
+import { ElButton,ElDropdown,ElDropdownItem,ElUpload,ElMessage,ElDropdownMenu } from 'element-plus'
 
-
-
-import Lang from './lang/index.vue'
 
 import type { UploadProps } from 'element-plus'
 
 import { Plus,Minus  } from '@element-plus/icons-vue'
+
+import { useI18n } from "vue-i18n"
+const { t } = useI18n()
 
 import { 
   ZoomItemList,
   ZoomItem,
   PageSizeList,
   PageSizeItem,
-  TextTypeList,
-  TextTypeItem,
   ArrowTypeList,
   ArrowTypeItem,
   MarkTypeItem,
   MarkTypeList,
   BorderWidthItem,
-  BorderWidthList
+  BorderWidthList,
+  SharpTypeList,
+  SharpTypeItem
  } from '@/assets/data/PageSetting'
+
+
+
+
+//翻译
+ArrowTypeList.forEach(m=>m.title=t(m.title))
+MarkTypeList.forEach(m=>m.title=t(m.title))
+ZoomItemList.forEach(m=>m.title=m.title.startsWith("header")?t(m.title):m.title)
+SharpTypeList.forEach(m=>m.title=t(m.title))
+
+
+const SharpTypeListFilter=computed(()=>SharpTypeList.filter(m=>m.type!="Line"))
 
 const imageUrl = ref('')
 
@@ -39,11 +51,12 @@ let pageZoom=ref<ZoomItem>(ZoomItemList[ZoomItemList.length-1]);
 
 let pageSize=ref<PageSizeItem>(PageSizeList[0]);
 
-let  textType = ref<TextTypeItem>(TextTypeList[0])
 
 let  arrowType =ref<ArrowTypeItem>(ArrowTypeList[0])
 
 let  markType =ref<MarkTypeItem>(MarkTypeList[0])
+
+let  sharpType =ref<SharpTypeItem>(SharpTypeList[0])
 
 let  borderWidthType =ref<BorderWidthItem>(BorderWidthList[1])
 
@@ -113,20 +126,25 @@ const handleSharp=(type:string,subtype:string)=>{
 
   editorStore.setUseTool(type,subtype)
 
-  if(["Text","Mark","Arrow"].includes(type)){
+  if(["Mark","Arrow"].includes(type)){
 
-        if(type=="Text"){
+      if(type=="Arrow"){
 
-            textType.value= TextTypeList.find((m:TextTypeItem)=>m.type==subtype)
+          arrowType.value= ArrowTypeList.find((m:ArrowTypeItem)=>m.type==subtype)
 
-        }else if(type=="Arrow"){
+      }else{
 
-            arrowType.value= ArrowTypeList.find((m:ArrowTypeItem)=>m.type==subtype)
+          markType.value= MarkTypeList.find((m:MarkTypeItem)=>m.rotate==subtype)
+      }
 
-        }else{
+  }else  if(["Rect","Ellipse","Polygon","Star"].includes(type)){
+     
+    sharpType.value=SharpTypeList.find((m:SharpTypeItem)=>m.type==type&&m.value==subtype)
+    
+  }else if(['Line'].includes(type)){
 
-            markType.value= MarkTypeList.find((m:MarkTypeItem)=>m.rotate==subtype)
-        }
+    //sharpType.value=SharpTypeList.find((m:SharpTypeItem)=>m.type==type)
+
   }
 
   emit('handleAddSharp');
@@ -181,60 +199,59 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
  <div class="header">
      <div class="action">
          <ul>
-          
-         
-         <li>
-          <el-button @click="handleSharp('Ellipse','')">圆形</el-button>
-         </li>
-         <li>
-          <el-button @click="handleSharp('Rect','')">矩形</el-button>
-         </li>
-    
-        <li style="margin-right: 20px;">&nbsp;&nbsp;</li>
 
-         
-
-         <li>
-            <el-button @click="handleSharp('Text','normal')">文本</el-button>
+          <li>
+            <el-button @click="handleSharp('Text','normal')">
+              <span class="iconfont icon icon-wenzi-L"></span>
+              {{$t('header.text')}}</el-button>
          </li>
-         <li style="margin-right: 20px;">&nbsp;&nbsp;</li>
-         <!-- <li>
-          <el-dropdown split-button  @click="handleSharp('Text',textType.type)">
-                 {{textType.title}}
+          <li style="margin-right: 20px;"></li>
 
+          <li>
+          <el-button @click="handleSharp('Line','')">
+            <span class="iconfont icon icon-xianduan-zhixian"></span>
+            {{$t('header.line')}}
+          </el-button>
+         </li>
+
+        <li>
+          <el-dropdown split-button @click="handleSharp(sharpType.type,sharpType.value)">
+            <span :class="'iconfont icon8 '+ sharpType.icon"></span>  {{sharpType.title}}
                   <template #dropdown>
                     <el-dropdown-menu>
-
-                      <el-dropdown-item @click="handleSharp('Text',item.type)"  
-                      :key="item.id" v-for="item in TextTypeList">{{item.title}}</el-dropdown-item>
-
+                      <el-dropdown-item @click="handleSharp(item.type,item.value)"  
+                      :key="item.id"   v-for="item in SharpTypeListFilter">
+                      <span :class="'iconfont icon8 '+ item.icon"></span>
+                      {{item.title}}</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
               </el-dropdown>
-         </li> -->
-         <li>
-          <el-button @click="handleSharp('Line','')">直线{{$t('home.welcome')}}</el-button>
          </li>
+
+         
          <li>
           <el-dropdown split-button @click="handleSharp('Arrow',arrowType.type)">
-              {{arrowType.title}}
+            <span :class="'iconfont icon8 '+ arrowType.icon"></span>  {{arrowType.title}}
                   <template #dropdown>
                     <el-dropdown-menu>
-
                       <el-dropdown-item @click="handleSharp('Arrow',item.type)"  
-                      :key="item.id" v-for="item in ArrowTypeList">{{item.title}}</el-dropdown-item>
-
+                      :key="item.id" v-for="item in ArrowTypeList">
+                      <span :class="'iconfont icon8 '+ item.icon"></span>
+                      {{item.title}}
+                     </el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
               </el-dropdown>
          </li>
          <li>
           <el-dropdown split-button @click="handleSharp('Mark',markType.rotate)">
-            {{markType.title}}
+            <span :class="'iconfont icon8 '+ markType.icon"></span> {{markType.title}}
                   <template #dropdown>
                     <el-dropdown-menu>
                       <el-dropdown-item @click="handleSharp('Mark',item.rotate)"  
-                      :key="item.id" v-for="item in MarkTypeList">{{item.title}}</el-dropdown-item>
+                      :key="item.id"    v-for="item in MarkTypeList">
+                      <span :class="'iconfont icon8 '+ item.icon"></span>
+                      {{item.title}}</el-dropdown-item>
 
                     </el-dropdown-menu>
                   </template>
@@ -264,18 +281,29 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
               :on-change="handleAvatarSuccess"
             >
               <template #trigger>
-                <el-button type="primary">上传图片</el-button>
+               
+                <el-button type="primary"> 
+                  <span class="iconfont icon icon-shangchuantupian1" style="color: white;"></span> 
+                   {{$t('header.uploadimg')}}
+                  </el-button>
               </template>
             </el-upload>
          </li>
          <li>
-          <el-button @click="handleClearAll">清空画板</el-button>
+          <el-button type="danger" @click="handleClearAll">
+            <span class="iconfont icon icon-shanchu" style="color: white;"></span>
+            {{$t('header.clear')}}
+          </el-button>
          </li>
          <li>
-          <el-button @click="handleDownImg" >下载图片</el-button>
+          <el-button @click="handleDownImg" >
+            <span class="iconfont icon icon-xiazaitupian"></span>
+            {{$t('header.download')}}</el-button>
          </li>
          <li>
-          <el-button type="primary" @click="handleSaveImg">保存设计</el-button>
+          <el-button type="primary" @click="handleSaveImg">
+            <span class="iconfont icon icon-ok" style="color: white;"></span>
+            {{$t('header.save')}}</el-button>
          </li>
          <!-- <li>
               <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">

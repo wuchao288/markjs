@@ -5,32 +5,44 @@
       label-position="top"
       label-width="50px"
     >
-    <el-form-item label="Content">
+    <el-form-item :label="t('stylepanel.content')">
          <el-input  v-model="useTextStyle.text"/>
       </el-form-item>
 
-      <el-form-item label="FontSize">
+      <el-form-item :label="t('stylepanel.fontsize')">
         <el-slider v-model="useTextStyle.fontSize" />
       </el-form-item>
 
-      <el-form-item label="Color">
+      <el-form-item :label="t('stylepanel.color')">
         <el-color-picker v-model="useTextStyle.fill"  :predefine="predefineColors" />
       </el-form-item>
-     
 
-      <el-form-item label="LineStyle">
-           <el-radio-group v-model="useTextStyle.lineStyle">
-               <el-radio value="line" border style="border-width: 2px;">line</el-radio>
-               <el-radio value="dashed" style="border-style: dashed;border-width: 2px;" border>dashed</el-radio>
-            </el-radio-group>
+
+      <el-form-item>
+        <el-card style="width: 100%" shadow="never" class="btn__bar">
+          <el-button text>
+              <i class="iconfont icon-case"></i>
+          </el-button>
+        </el-card>
       </el-form-item>
 
-      <el-form-item label="StrokeWidth">
+      <el-form-item :label="t('stylepanel.strokewidth')">
         <el-slider v-model="useTextStyle.strokeWidth"  :max="10"  :min="0" />
       </el-form-item>
 
-      <el-form-item label="StrokeColor">
+      <el-form-item :label="t('stylepanel.linestyle')" v-if="useTextStyle.strokeWidth>0">
+           <el-radio-group v-model="useTextStyle.lineStyle">
+               <el-radio value="solid" border style="border-width: 2px;">{{$t("stylepanel.solid")}}</el-radio>
+               <el-radio value="dashed" style="border-style: dashed;border-width: 2px;" border>{{$t("stylepanel.dashed")}}</el-radio>
+            </el-radio-group>
+      </el-form-item>
+
+      <el-form-item :label="t('stylepanel.stroke')" v-if="useTextStyle.strokeWidth>0">
         <el-color-picker v-model="useTextStyle.stroke"  :predefine="predefineColors" />
+      </el-form-item>
+
+      <el-form-item :label="t('stylepanel.cornerradius')" v-if="useTextStyle.strokeWidth>0">
+        <el-slider v-model="useTextStyle.cornerRadius"  :max="10"  :min="0" />
       </el-form-item>
 
     </el-form>
@@ -40,7 +52,7 @@
 <script setup lang="ts">
     import { ref,watch} from 'vue'
 
-    import { ElForm,ElFormItem,ElInput,ElSlider,ElColorPicker,ElRadioGroup,ElRadio  } from 'element-plus'
+    import { ElForm,ElFormItem,ElInput,ElSlider,ElColorPicker,ElRadioGroup,ElRadio,ElCard,ElButton  } from 'element-plus'
 
     import useEditStore from "@/stores/useEditStore"
 
@@ -61,28 +73,11 @@
       letterSpacingList: number[]
   }
 
+  import { useI18n } from "vue-i18n"
+  const { t } = useI18n()
 
   const {useTextStyle} = storeToRefs(editorStore)
 
-
-//   let LineStyle=ref("line");
-
-// if(useTextStyle.value.dashPattern&&useTextStyle.value.dashPattern.length==2){
-
-//    LineStyle.value="dashed"
-// }else{
-//    LineStyle.value="line"
-// }
-
-// watch(()=>LineStyle.value,(value,newVal)=>{
-
-//    if(value=="line"){
-//     useTextStyle.value.dashPattern=[]
-     
-//    }else{
-//     useTextStyle.value.dashPattern=[6, 6] 
-//    }
-// })
 
     const predefineColors = ref([
       '#ff4500',
@@ -120,4 +115,7 @@
    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px;
   }
 
+.btn__bar{
+  background-color: #f3f5f7;
+}
 </style>
