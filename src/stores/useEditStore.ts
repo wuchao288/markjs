@@ -17,7 +17,8 @@ export type TTextSetting={
   fontFamily:string,
   letterSpacing:number,
   lineHeight:number,
-  shadow:IShadowEffect
+  isShadow:boolean,
+  shadow:{x: number;y: number; blur: number; color: string;}
 }
 
 export type TSharpSetting={
@@ -84,10 +85,14 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         lineStyle: 'solid',
         cornerRadius:2,
         fontFamily:undefined,
-        letterSpacing:undefined,
-        lineHeight:undefined,
+        letterSpacing:0,
+        lineHeight:1.2,
+        isShadow:true,
         shadow:{
-
+          x: 0,
+          y: 0,
+          blur: 4,
+          color: "#4DCB71AA"
         } 
     } as TTextSetting,
 

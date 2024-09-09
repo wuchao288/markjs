@@ -5,7 +5,7 @@
       label-position="top"
       label-width="50px"
     >
-      <el-form-item label="页面大小">
+      <el-form-item :label="t('stylepanel.pagesize')">
         
         <el-select  v-model="usePageSizeId" placeholder="Select" style="width: 240px">
         <el-option
@@ -17,10 +17,15 @@
         </el-option>
   </el-select>
       </el-form-item>
-      <el-form-item label="背景颜色">
+      <el-form-item :label="t('stylepanel.pagebgcolod')">
         <el-color-picker v-model="usePageBgColor"  :predefine="predefineColors" />
       </el-form-item>
      
+
+      <el-form-item :label="t('stylepanel.bgimg')">
+       
+      </el-form-item>
+
     </el-form>
     </div>
 </template>
@@ -35,6 +40,8 @@
     import useEditStore from "@/stores/useEditStore"
     import { storeToRefs } from 'pinia'
 
+    import { useI18n } from "vue-i18n"
+    const { t } = useI18n()
 
     const editorStore = useEditStore()
 

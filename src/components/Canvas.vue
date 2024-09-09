@@ -412,7 +412,12 @@
     })
 
     watch(()=>usePageBgColor.value,()=>{
-        frame.fill=usePageBgColor.value
+       
+        if(usePageBgColor.value){
+            frame.fill=usePageBgColor.value
+        }else{
+            frame.fill="#ffffff"
+        }
     })
 
 

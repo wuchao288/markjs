@@ -11,6 +11,8 @@ declare module 'vue' {
     ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
+    ElLabel: typeof import('element-plus/es')['ElLabel']
+    ElOption: typeof import('element-plus/es')['ElOption']
     Header: typeof import('./src/components/Header.vue')['default']
     Index: typeof import('./src/components/Index.vue')['default']
     Lang: typeof import('./src/components/lang/index.vue')['default']

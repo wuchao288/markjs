@@ -13,6 +13,7 @@ export default {
     pagebgcolod: '背景颜色',
     content: '文本内容',
     fontsize: '字体大小',
+    fontfamily:'字体',
     color: '文字颜色',
     stroke:'边框颜色',
     strokewidth:'边框宽度',
@@ -22,7 +23,16 @@ export default {
     fill:'填充颜色',
     corners:'角的数量',
     size:'宽*高(px)',
-    cornerradius:'圆角'
+    cornerradius:'圆角',
+    bold:'加粗',
+    italic:'斜体',
+    underline:'下划线',
+    inethrough:'中划线',
+    letterspacing:'字距',
+    linespacing:'行距',
+    shadow:'阴影',
+    bgimg:'背景图片',
+    addmaterial:'导入素材'
   },  
   header:{
     uploadimg: '上传图片',
