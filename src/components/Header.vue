@@ -28,7 +28,7 @@ import {
  } from '@/assets/data/PageSetting'
 
 
- import {TextEffectItem,TextEffectItemList} from '@/assets/data/Material'
+ import {TextEffectItem,TextEffectItemList,ImageEffectItem,ImageEffectList} from '@/assets/data/Material'
 
 //翻译
 ArrowTypeList.forEach(m=>m.title=t(m.title))
@@ -100,7 +100,8 @@ const emit = defineEmits([
 'handleAddImg',
 'handleSaveImg',
 'handleExportJson',
-'handleAddGroup'
+'handleAddGroup',
+'handleAddMateImg'
 ])
 
 
@@ -232,6 +233,11 @@ const handleMateImport=()=>{
 const handleAddGroup=(item:TextEffectItem)=>{
   emit('handleAddGroup',item)
 }
+
+const handleAddMateImg=(item:ImageEffectItem)=>{
+  emit('handleAddMateImg',item)
+}
+
 
 </script>
 
@@ -408,7 +414,23 @@ const handleAddGroup=(item:TextEffectItem)=>{
                   </el-col>
                </el-row>
           </el-tab-pane>
-          <el-tab-pane label="小挂件" name="second">Config</el-tab-pane>
+          <el-tab-pane label="小挂件" name="second">
+
+            <el-row :gutter="16">
+                  <el-col :span="12"   >
+                    <div  v-for="item in  ImageEffectList.filter((m,index)=> { return index%2==0 })" 
+                    :key="item.id" class="mateitem" >
+                      <el-image @click="handleAddMateImg(item)" class="mateitem-img"  :src="item.preview"></el-image>
+                    </div>
+                  </el-col>
+                  <el-col :span="12"   >
+                    <div v-for="item in  ImageEffectList.filter((m,index)=> { return index%2==1 })" :key="item.id" class="mateitem" 
+                     >
+                      <el-image @click="handleAddMateImg(item)" class="mateitem-img"  :src="item.preview"></el-image>
+                    </div>
+                  </el-col>
+               </el-row>
+          </el-tab-pane>
       </el-tabs>
       </div>
     </template>

@@ -50,7 +50,6 @@ type TStoreBaseState = {
   useColor:string
   usePageBgColor:string
   useBorderWidth:number
-  usePageSizeId:number
   useCurrPanel:string,
   dActiveElement:IUI,
   useTextStyle:TTextSetting,
@@ -81,7 +80,6 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     useColor:'rgba(0, 0, 0, 1)',
     useBorderWidth:2,
     usePageBgColor:'rgba(255, 255,255, 1)',
-    usePageSizeId:PageSizeList[0].id,
     useCurrPanel:"PagePanel",
     usePageSetting:{
        pageSizeId:PageSizeList[0].id,

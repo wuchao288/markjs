@@ -14,6 +14,9 @@
              @click="toTop">到最顶层</div>
 
              <div class="contextmenu__item" @click="toBottom">到最底层</div>
+
+             <div class="contextmenu__item" @click="toGroup(true)">编组</div>
+             <div class="contextmenu__item" @click="toGroup(false)">取消编组</div>
        </div>
        
     <keep-alive>
@@ -77,7 +80,9 @@
     import '@leafer-in/state'
     import { storeToRefs } from 'pinia'
     import { InnerEditorEvent ,EditorEvent} from '@leafer-in/editor'
-import { ElMessage } from 'element-plus'
+    import { ElMessage } from 'element-plus'
+import { type } from 'os'
+
 
     let componen = shallowRef(null);
     const PagePanel = defineAsyncComponent(() => import("./PagePanel.vue"));
@@ -94,13 +99,13 @@ import { ElMessage } from 'element-plus'
 
     let menuVisible=ref(false)
 
-    let ctop=ref("0px");
-    let cleft=ref("0px");
+    let ctop=ref("0px")
+    let cleft=ref("0px")
     
 
     const editorStore = useEditStore()
 
-    const {useColor,useBorderWidth,usePageSizeId,
+    const {useColor,useBorderWidth,
         useTool,useToolType,
         usePageBgColor,
         useTextStyle,
@@ -112,7 +117,7 @@ import { ElMessage } from 'element-plus'
 
     let pageWidth=ref(0);
 
-    let pageSize= PageSizeList.find(m=>m.id==usePageSizeId.value);
+    let pageSize= PageSizeList.find(m=>m.id==usePageSetting.value.pageSizeId);
 
     pageHeight.value=pageSize.height;
 
@@ -131,8 +136,8 @@ import { ElMessage } from 'element-plus'
         appWrap.style.height= (window.innerHeight- 60)+"px"
         appWrap.style.marginTop="60px"
 
-        let width=window.innerWidth;
-        let height=window.innerHeight- 60;
+        let width=window.innerWidth
+        let height=window.innerHeight-60;
 
         //getMarkJson {setting:{},imgUrl}
 
@@ -193,7 +198,7 @@ import { ElMessage } from 'element-plus'
         });
 
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
-            if(e.list.length==1){
+            if(e.list.length==1&&e.list[0].tag!="Group"){
 
                if(e.list[0].tag=="Box"&&e.list[0].name.startsWith("Text")){
 
@@ -245,7 +250,6 @@ import { ElMessage } from 'element-plus'
                         useSharpStyle.value.height=sharp.height
                     }
 
-                 
                     useSharpStyle.value.width=sharp.width
                     
 
@@ -526,7 +530,6 @@ import { ElMessage } from 'element-plus'
    const addBgImg=async (imgUrl:any)=>{
 
         let id="image0";
-        let zIndex=0;
 
         if(frame.findId(id)){
             id=nanoid()
@@ -563,38 +566,49 @@ import { ElMessage } from 'element-plus'
 
    const handleExportJson=()=>{
 
-      if( canvasApp.editor.list.length==0){
-            ElMessage.warning("请选择一个元素！")
-            return
-      }
-      
+        if(canvasApp.editor.list.length!=1){
+                ElMessage.warning("只能选择一个编组元素导出，多个元素请右键-编组后导出！")
+                return
+        }
 
-        const group = new Group()
-        group.children=canvasApp.editor.list;
-        const text = group.toString();
+        if(canvasApp.editor.list[0].tag!="Group"){
+            ElMessage.warning("只能选择一个编组元素导出，多个元素请右键-编组后导出！")
+            return
+        }
+
+        let text=canvasApp.editor.list[0].toString();
+        
+        // let group = new Group()
+        // group.children=canvasApp.editor.list;
+
+        // group.editable= true
+        // group.hitChildren= false
+        // group.around= 'center'
+
+        // frame.add(group)
+
+        // text = group.toString()
+
+        // canvasApp.editor.ungroup()
+
         const blob = new Blob([text], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         
         const link = document.createElement("a");
         link.href = url;
-        link.download =new Date().getTime() +".text";
+        link.download =new Date().getTime() +".txt";
         link.click();
         
         URL.revokeObjectURL(url);
-
+     
+       
    }
 
 
    const handleAddGroup=(item)=>{
-    
-       let  group =new Group();
-
-       group.set(item.data)
-      //delete item.data.children[0].parent
-      
-     // alert(JSON.stringify(item.data.children[0]));
-
-      frame.add(group)
+    debugger
+        const group = new Group(item.data)
+        frame.add(group)
    }
 
    const locked=(flag:boolean)=>{
@@ -634,6 +648,15 @@ import { ElMessage } from 'element-plus'
    }
    
 
+   const  toGroup=(flag)=>{
+        if(flag==true){
+            canvasApp.editor.group()
+        }else{
+            canvasApp.editor.ungroup()
+        }
+        menuVisible.value=false
+   }
+
     type TDefaultOption = {
         id:string,
         type:string,
@@ -649,7 +672,7 @@ import { ElMessage } from 'element-plus'
    }
 
 
-    let shapeId = null;
+    let shapeId = ""
 
     const onStart = () => {
 
@@ -670,6 +693,9 @@ import { ElMessage } from 'element-plus'
             strokeWidth: useBorderWidth.value,
             fill:'',
             text:'',
+            width:100,
+            height:100,
+            points:[],
             zIndex:editorStore.shapes.size + 1
         } as TDefaultOption;
         return newShape;
@@ -677,7 +703,7 @@ import { ElMessage } from 'element-plus'
 
 
    const addSharp=(model:TDefaultOption)=>{
-    
+    debugger
     let {id,type,subType,width,height,zIndex,points,stroke,strokeWidth}=model
 
     let defaultOption={
@@ -715,7 +741,6 @@ import { ElMessage } from 'element-plus'
             return new Arrow({
                 id,
                 name:"Arrow-"+subType,
-                points,
                 zIndex,
                 stroke,
                 strokeWidth,
@@ -740,7 +765,6 @@ import { ElMessage } from 'element-plus'
             return new Arrow({
                 id,
                 name:"Mark",
-                points,
                 zIndex,
                 stroke,
                 strokeWidth,
@@ -754,16 +778,15 @@ import { ElMessage } from 'element-plus'
 
         if (type === 'Line') {
         
+            debugger
             Object.assign(defaultOption,{strokeWidth:2,height:20})
 
             return new Line({
                 id,
                 name:"Line",
-                points,
                 zIndex,
                 stroke,
                 strokeWidth,
-                curve: true,
                 cursor:'pointer',
                 ...defaultOption
             });
@@ -878,6 +901,13 @@ import { ElMessage } from 'element-plus'
    const handleAddImg=(img:any)=>{
       addBgImg(img)
    }
+   const handleAddMateImg=(img:any)=>{
+      if(img.type=="img"){
+        addBgImg(img.url)
+      }
+   }
+
+   
 
     const handleAddSharp=()=>{
 
@@ -937,7 +967,8 @@ import { ElMessage } from 'element-plus'
         handleAddImg,
         handleSaveImg,
         handleExportJson,
-        handleAddGroup
+        handleAddGroup,
+        handleAddMateImg 
     })
 </script>
 

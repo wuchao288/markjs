@@ -9,6 +9,7 @@
       @handleSaveImg="saveImg"
       @handleExportJson="exportJson"
       @handleAddGroup="addGroup"
+      @handleAddMateImg="addMateImg"
       @handlePageSizeTo="pageSizeTo" />
      <Canvas ref="childRef"   />
 
@@ -67,6 +68,12 @@ const exportJson=()=>{
 const addGroup=(item)=>{
   childRef.value.handleAddGroup(item);
 }
+
+const addMateImg=(item)=>{
+  childRef.value.handleAddMateImg(item);
+}
+
+
 
 
 onMounted(()=>{
