@@ -51,7 +51,7 @@
 
     import {onMounted,ref,watch,shallowRef,defineAsyncComponent,nextTick} from 'vue'
 
-    import { App, Box ,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,ImageEvent} from 'leafer-ui'
+    import { App, Box ,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,ImageEvent,Group} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
     import '@leafer-in/view'
@@ -77,6 +77,7 @@
     import '@leafer-in/state'
     import { storeToRefs } from 'pinia'
     import { InnerEditorEvent ,EditorEvent} from '@leafer-in/editor'
+import { ElMessage } from 'element-plus'
 
     let componen = shallowRef(null);
     const PagePanel = defineAsyncComponent(() => import("./PagePanel.vue"));
@@ -103,7 +104,7 @@
         useTool,useToolType,
         usePageBgColor,
         useTextStyle,
-        useSharpStyle
+        useSharpStyle,usePageSetting
     } = storeToRefs(editorStore)
 
 
@@ -398,8 +399,10 @@
         
     })
 
-    watch(()=>usePageSizeId.value,()=>{
-        let newSize= PageSizeList.find(m=>m.id==usePageSizeId.value);
+    watch(()=>usePageSetting.value.pageSizeId,(value)=>{
+        
+        let newSize= PageSizeList.find(m=>m.id==value);
+
         pageHeight.value=newSize.height
         pageWidth.value=newSize.width
 
@@ -408,9 +411,38 @@
 
         canvasApp.tree.zoom("fit", 100)
 
-        
     })
 
+
+    watch([()=>usePageSetting.value.pageBgClass,()=>usePageSetting.value.pageBgSet],(newValues, oldValues)=>{
+        
+        if(newValues[0]=="backgroundColor"){
+
+            if(newValues[1].backgroundColor){
+
+                frame.fill=newValues[1].backgroundColor
+
+            }else{
+
+                frame.fill="#ffffff"
+            }
+        }else{
+
+           if(newValues[1].backgroundImage){
+
+                frame.fill={
+                    type: 'image',
+                    url: newValues[1].backgroundImage,
+                    mode: 'strench'
+                }
+           }else{
+              frame.fill= frame.fill=newValues[1].backgroundColor
+            }
+        }
+
+    },{deep:true})
+
+  //弃用
     watch(()=>usePageBgColor.value,()=>{
        
         if(usePageBgColor.value){
@@ -529,7 +561,38 @@
         canvasApp.editor.updateEditBox()
    }
 
-   
+   const handleExportJson=()=>{
+
+      if( canvasApp.editor.list.length==0){
+            ElMessage.warning("请选择一个元素！")
+            return
+      }
+      
+
+        const group = new Group()
+        group.children=canvasApp.editor.list;
+        const text = group.toString();
+        const blob = new Blob([text], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement("a");
+        link.href = url;
+        link.download =new Date().getTime() +".text";
+        link.click();
+        
+        URL.revokeObjectURL(url);
+
+   }
+
+
+   const handleAddGroup=(item)=>{
+    
+
+      delete item.data.children[0].parent
+
+
+      frame.add(item.data.children[0])
+   }
 
    const locked=(flag:boolean)=>{
       canvasApp.editor.list.forEach((elem)=>{ elem.locked=flag  })
@@ -869,7 +932,9 @@
         zoomTo,
         pageSizeTo,
         handleAddImg,
-        handleSaveImg
+        handleSaveImg,
+        handleExportJson,
+        handleAddGroup
     })
 </script>
 

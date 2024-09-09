@@ -9,7 +9,11 @@ import header from './header'
 export default {
   stylepanel: {
     pagesize:'页面大小',
-    pagebgcolod:'背景颜色',
+    pagebgset:'背景设置',
+    pagebgimg:'图片',
+    pagebgcolor:'颜色',
+    uploadbgimg:'上传背景图片',
+    systembgimg:'系统背景图',
     content:'文本内容',
     fontsize:'字体大小',
     fontfamily:'字体',
@@ -29,11 +33,11 @@ export default {
     inethrough:'中划线',
     letterspacing:'字距',
     linespacing:'行距',
-    shadow:'阴影',
-    bgimg:'背景图片',
-    addmaterial:'导入素材'
-  },  
+    shadow:'阴影'
+  }, 
   header:{
+    addmaterial:'导入素材',
+    text:'文本',
     uploadimg: '上传图片',
     save: '保存设计',
     clear:'清空画板',

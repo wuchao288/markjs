@@ -5,6 +5,13 @@ import { Store, defineStore } from 'pinia'
 
 import {IPointData,IUI,IShadowEffect}  from '@leafer-ui/interface'
 
+export type TPageSetting={
+  pageSizeId:number,
+  pageBgClass:string,
+  pageBgSet:{backgroundImage:string,backgroundColor:string}
+}
+
+
 export type TTextSetting={
   text:string,
   fontSize:number,
@@ -47,7 +54,8 @@ type TStoreBaseState = {
   useCurrPanel:string,
   dActiveElement:IUI,
   useTextStyle:TTextSetting,
-  useSharpStyle:TSharpSetting
+  useSharpStyle:TSharpSetting,
+  usePageSetting:TPageSetting
 }
 
 type TSotreAction = {
@@ -75,6 +83,15 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     usePageBgColor:'rgba(255, 255,255, 1)',
     usePageSizeId:PageSizeList[0].id,
     useCurrPanel:"PagePanel",
+    usePageSetting:{
+       pageSizeId:PageSizeList[0].id,
+       pageBgClass:"backgroundColor",
+       pageBgSet:{
+         backgroundColor:'rgba(255, 255,255, 1)',
+         backgroundImage:''
+       }
+    } as TPageSetting,
+
     useTextStyle:{
         text:'10cm',
         fill:'#000000',

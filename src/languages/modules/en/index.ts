@@ -1,20 +1,23 @@
 /*
  * @Author: ShawnPhang
- * @Date: 2024-05-19 04:14:31
+ * @Date: 2024-05-19 04:14:35
  * @Description:  
  * @LastEditors: ShawnPhang <https://m.palxp.cn>
- * @LastEditTime: 2024-05-19 05:17:29
+ * @LastEditTime: 2024-05-19 05:17:16
  */
-
-import header from "./header"
+import header from './header'
 export default {
   stylepanel: {
-    pagesize: '页面大小',
-    pagebgcolod: '背景颜色',
-    content: '文本内容',
-    fontsize: '字体大小',
+    pagesize:'页面大小',
+    pagebgset:'背景设置',
+    pagebgimg:'图片',
+    pagebgcolor:'颜色',
+    uploadbgimg:'上传背景图片',
+    systembgimg:'系统背景图',
+    content:'文本内容',
+    fontsize:'字体大小',
     fontfamily:'字体',
-    color: '文字颜色',
+    color:'文字颜色',
     stroke:'边框颜色',
     strokewidth:'边框宽度',
     linestyle:'边框样式',
@@ -26,15 +29,15 @@ export default {
     cornerradius:'圆角',
     bold:'加粗',
     italic:'斜体',
-    underline:'下划线',
+    underline :'下划线',
     inethrough:'中划线',
     letterspacing:'字距',
     linespacing:'行距',
-    shadow:'阴影',
-    bgimg:'背景图片',
-    addmaterial:'导入素材'
+    shadow:'阴影'
   },  
   header:{
+    addmaterial:'导入素材',
+    text:'文本',
     uploadimg: '上传图片',
     save: '保存设计',
     clear:'清空画板',
@@ -43,7 +46,6 @@ export default {
     sharp:'图形',
     rect:'矩形',
     ellipse:'圆形',
-    text:'文本',
     line:'直线',
     triangle:'三角形',
     pentagon:'五边形',

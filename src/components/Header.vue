@@ -2,7 +2,7 @@
 
 import {computed, ref} from 'vue'
 
-import { ElButton,ElDropdown,ElDropdownItem,ElUpload,ElMessage,ElDropdownMenu } from 'element-plus'
+import { ElButton,ElDropdown,ElDropdownItem,ElUpload,ElMessage,ElDropdownMenu,ElMessageBox,ElRow,ElCol } from 'element-plus'
 
 
 import type { UploadProps } from 'element-plus'
@@ -28,13 +28,16 @@ import {
  } from '@/assets/data/PageSetting'
 
 
-
+ import {TextEffectItem,TextEffectItemList} from '@/assets/data/Material'
 
 //翻译
 ArrowTypeList.forEach(m=>m.title=t(m.title))
 MarkTypeList.forEach(m=>m.title=t(m.title))
 ZoomItemList.forEach(m=>m.title=m.title.startsWith("header")?t(m.title):m.title)
 SharpTypeList.forEach(m=>m.title=t(m.title))
+
+
+//let TextEffectItemList0=TextEffectItemList.map((m,index)=> index%2==1? );
 
 
 const SharpTypeListFilter=computed(()=>SharpTypeList.filter(m=>m.type!="Line"))
@@ -62,6 +65,10 @@ let  borderWidthType =ref<BorderWidthItem>(BorderWidthList[1])
 
 
 const {useColor,useBorderWidth} = storeToRefs(editorStore)
+
+let drawermate=ref<boolean>(false)
+
+let activeName=ref<string>('texteff')
 
 const predefineColors = ref([
   '#ff4500',
@@ -91,7 +98,9 @@ const emit = defineEmits([
 'handleClearAll',
 'handleDownImg',
 'handleAddImg',
-'handleSaveImg'
+'handleSaveImg',
+'handleExportJson',
+'handleAddGroup'
 ])
 
 
@@ -161,9 +170,30 @@ const handleSaveImg=()=>{
 }
 
 
+const handleExportJson=()=>{
+  emit('handleExportJson')
+}
+
 
 const handleClearAll = () => {
-  emit('handleClearAll')
+
+  ElMessageBox.confirm(
+    t("header.clearmsg"),
+    'Warning',
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      emit('handleClearAll')
+    })
+    .catch(() => {
+      
+    })
+
+
 }
 
 //处理放大缩小
@@ -193,13 +223,27 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
 }
 
 
+//导入素材
+const handleMateImport=()=>{
+  drawermate.value=true
+}
+
+
+const handleAddGroup=(item:TextEffectItem)=>{
+  emit('handleAddGroup',item)
+}
+
 </script>
 
 <template>
  <div class="header">
      <div class="action">
          <ul>
-
+          <li>
+            <el-button @click="handleMateImport">
+              <span class="iconfont icon icon-daorutupian"></span>
+              {{$t('header.addmaterial')}}</el-button>
+         </li>
           <li>
             <el-button @click="handleSharp('Text','normal')">
               <span class="iconfont icon icon-wenzi-L"></span>
@@ -274,8 +318,6 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
          <li>&nbsp;&nbsp;</li>
          <li>
             <el-upload
-              ref="uploadRef"
-              class="upload-demo"
               :show-file-list="false"
               :auto-upload="false"
               :on-change="handleAvatarSuccess"
@@ -305,6 +347,13 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
             <span class="iconfont icon icon-ok" style="color: white;"></span>
             {{$t('header.save')}}</el-button>
          </li>
+
+         <li>
+          <el-button @click="handleExportJson">
+              导出JSON  
+          </el-button>
+         </li>
+
          <!-- <li>
               <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">
                 <span>{{pageSize.title}}</span>
@@ -337,6 +386,33 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
     <el-button size="large" round  :icon="Minus" />
   </el-button-group>
  </div>
+
+
+  <el-drawer size="400" v-model="drawermate" :title="t('header.addmaterial')" direction="ltr">
+    <template #default>
+      <div>
+        <el-tabs  class="" v-model="activeName" >
+          <el-tab-pane label="文字效果" name="texteff">
+               <el-row :gutter="16">
+                  <el-col :span="12"   >
+                    <div  v-for="item in  TextEffectItemList.filter((m,index)=> { return index%2==0 })" 
+                    :key="item.id" class="mateitem" >
+                      <el-image @click="handleAddGroup(item)" class="mateitem-img"  :src="item.preview"></el-image>
+                    </div>
+                  </el-col>
+                  <el-col :span="12"   >
+                    <div v-for="item in  TextEffectItemList.filter((m,index)=> { return index%2==1 })" :key="item.id" class="mateitem" 
+                     >
+                      <el-image @click="handleAddGroup(item)" class="mateitem-img"  :src="item.preview"></el-image>
+                    </div>
+                  </el-col>
+               </el-row>
+          </el-tab-pane>
+          <el-tab-pane label="小挂件" name="second">Config</el-tab-pane>
+      </el-tabs>
+      </div>
+    </template>
+  </el-drawer>
 </template>
 
 <style scoped>
@@ -375,5 +451,24 @@ const  handleBrorderWidthCommand=(command:BorderWidthItem) => {
   bottom: 40px;
   right: 300px;
   z-index: 20008;
+}
+.mateitem{
+  margin-bottom: 10px;
+  cursor: pointer;
+  border:1px solid #ccc;
+  box-shadow: var(--el-box-shadow-light);
+  border-radius: 5px;
+}
+
+.mateitem:hover{
+  box-shadow: var(--el-box-shadow);
+}
+.mateitem-img{
+  width: 100%;
+}
+
+::v-deep .mateitem-img img{
+   display: block;
+   object-fit: fill;
 }
 </style>

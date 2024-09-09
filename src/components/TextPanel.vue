@@ -19,7 +19,7 @@
           style="width: 100%"
         >
             <el-option 
-              v-for="item in fontsList"
+              v-for="item in StyleFontList"
               :key="item.value"
               :label="item.alias"
               :value="item.value"
@@ -151,7 +151,7 @@
         <el-card style="width: 100%;" shadow="never" :body-style="{padding:'10px'}">
             <el-row :gutter="10">
                <el-col :span="8">
-                  <el-checkbox label="阴影" v-model="useTextStyle.isShadow"  />
+                  <el-checkbox :label="t('stylepanel.shadow')" v-model="useTextStyle.isShadow"  />
                </el-col>
 
                <el-col :span="4">
@@ -234,19 +234,8 @@
       letterSpacingList: number[]
   }
 
-  type TFont={
-    preview:string,
-    alias:string,//显示名称
-    value:string,//字体
-    url:string//字体路径
-  }
-
-  type TFontSize={
-    value:number,//字体
-    title:string
-  }
-
-
+  import { StyleFontList }  from "@/assets/data/Material"
+  
   import { useI18n } from "vue-i18n"
   const { t } = useI18n()
 
@@ -274,19 +263,7 @@
       'rgba(0,0,0,0)'
    ])
 // new URL('../assets/img/login-bg.jpg', import.meta.url).href;
-  const fontsList=ref<TFont[]>([ 
-    { 
-    "alias":"アプリ明朝",
-    "preview":new URL("@/assets/fonts/473404317567549440.png",import.meta.url).href,
-    "url":new URL("@/assets/fonts/473404317567549440.otf",import.meta.url).href,
-    "value":"アプリ明朝"
-    },
-    { 
-    "alias":"karakaze",
-    "preview":new URL("@/assets/fonts/475486472288337920.png",import.meta.url).href,
-    "url":new URL("@/assets/fonts/475486472288337920.otf",import.meta.url).href,
-    "value":"karakaze"
-    }])
+  
 
   const fontsizeList=[12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,60,80,100,200,300].map(m=>{return {value:m,title:m+"px"}})
 

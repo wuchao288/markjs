@@ -7,6 +7,8 @@
       @handleAddImg="addImg"
       @handleDownImg="downImg"
       @handleSaveImg="saveImg"
+      @handleExportJson="exportJson"
+      @handleAddGroup="addGroup"
       @handlePageSizeTo="pageSizeTo" />
      <Canvas ref="childRef"   />
 
@@ -57,6 +59,15 @@ const  saveImg=()=>{
 const pageSizeTo=(m:PageSizeItem)=>{
   childRef.value.pageSizeTo(m);
 }
+
+const exportJson=()=>{
+  childRef.value.handleExportJson();
+}
+
+const addGroup=(item)=>{
+  childRef.value.handleAddGroup(item);
+}
+
 
 onMounted(()=>{
    
