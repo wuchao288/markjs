@@ -587,11 +587,14 @@ import { ElMessage } from 'element-plus'
 
    const handleAddGroup=(item)=>{
     
+       let  group =new Group();
 
-      delete item.data.children[0].parent
+       group.set(item.data)
+      //delete item.data.children[0].parent
+      
+     // alert(JSON.stringify(item.data.children[0]));
 
-
-      frame.add(item.data.children[0])
+      frame.add(group)
    }
 
    const locked=(flag:boolean)=>{
