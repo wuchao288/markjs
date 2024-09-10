@@ -38,9 +38,6 @@
                    {{$t('stylepanel.uploadbgimg')}}
                   </el-button>
               </template>
-
-
-
             </el-upload>
 
 
@@ -168,8 +165,8 @@ const  changeActiveName=(activeName)=>{
         if (rawFile.type !== 'image/jpeg'&&rawFile.type !== 'image/png') {
           ElMessage.error('Avatar picture must be JPG/PNG format!')
           return false
-        } else if (rawFile.size / 1024 / 1024 > 1) {
-          ElMessage.error('Avatar picture size can not exceed 1MB!')
+        } else if (rawFile.size / 1024 / 1024 > 2) {
+          ElMessage.error('Avatar picture size can not exceed 2MB!')
           return false
         }
 

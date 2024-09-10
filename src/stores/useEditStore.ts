@@ -16,6 +16,7 @@ export type TTextSetting={
   text:string,
   fontSize:number,
   fill:string,
+  bgcolor:string,
   fontWeight:string,
   strokeWidth:number,
   stroke:string,
@@ -41,6 +42,19 @@ export type TSharpSetting={
 }
 
 
+export type TImageSetting={
+  fill:{ type:string, url: string,mode: string}, //图片
+  zIndex:number,
+  corners:number,
+  opacity:number, //最大1
+  width:number,
+  height:number,
+  x:number,
+  y:number
+}
+
+
+
 type TStoreBaseState = {
   scale: number| IPointData
   editor:App|null
@@ -54,7 +68,8 @@ type TStoreBaseState = {
   dActiveElement:IUI,
   useTextStyle:TTextSetting,
   useSharpStyle:TSharpSetting,
-  usePageSetting:TPageSetting
+  usePageSetting:TPageSetting,
+  useImageStyle:TImageSetting
 }
 
 type TSotreAction = {
@@ -93,6 +108,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     useTextStyle:{
         text:'10cm',
         fill:'#000000',
+        bgcolor:'#ffffff',
         fontSize:14,
         fontWeight:'normal',
         strokeWidth:2,
@@ -121,7 +137,19 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
       corners:5,
       width:100,
       height:100
-  } as TSharpSetting,
+    } as TSharpSetting,
+
+    useImageStyle:{
+      fill:{ type:"image", url: "",mode: "fit"}, 
+      zIndex:0,
+      corners:0,
+      opacity:1, //最大1
+      width:100,
+      height:100,
+      x:100,
+      y:100
+    } as TImageSetting,
+
     dActiveElement:null
   }),
   actions: {

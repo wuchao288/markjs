@@ -120,8 +120,8 @@ const handleAvatarSuccess: UploadProps['onChange'] = (
   if (rawFile.type !== 'image/jpeg'&&rawFile.type !== 'image/png') {
     ElMessage.error('Avatar picture must be JPG/PNG format!')
     return false
-  } else if (rawFile.size / 1024 / 1024 > 1) {
-    ElMessage.error('Avatar picture size can not exceed 1MB!')
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('Avatar picture size can not exceed 2MB!')
     return false
   }
 
@@ -398,7 +398,7 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
     <template #default>
       <div>
         <el-tabs  class="" v-model="activeName" >
-          <el-tab-pane label="文字效果" name="texteff">
+          <el-tab-pane :label="t('header.texteffect')" name="texteff">
                <el-row :gutter="16">
                   <el-col :span="12"   >
                     <div  v-for="item in  TextEffectItemList.filter((m,index)=> { return index%2==0 })" 
@@ -414,7 +414,7 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
                   </el-col>
                </el-row>
           </el-tab-pane>
-          <el-tab-pane label="小挂件" name="second">
+          <el-tab-pane :label="t('header.imageeffect')" name="second">
 
             <el-row :gutter="16">
                   <el-col :span="12"   >

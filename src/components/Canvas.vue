@@ -6,17 +6,19 @@
     <div id="contextmenu" @mouseleave ="menuVisible=false"  :style="{top:ctop,left:cleft}"
            v-show="menuVisible"
            class="menu">
-        <div class="contextmenu__item"
-             @click="locked(false)">锁定</div>
-        <div class="contextmenu__item"
-             @click="locked(true)">解锁</div>
-           <div class="contextmenu__item"
-             @click="toTop">到最顶层</div>
+             <div class="contextmenu__item" @click="locked(false)">{{$t("header.lock")}}</div>
+             <div class="contextmenu__item" @click="locked(true)">{{$t("header.unlock")}}</div>
 
-             <div class="contextmenu__item" @click="toBottom">到最底层</div>
+             <div class="contextmenu__item" @click="toTop">{{$t("header.totop")}}</div>
 
-             <div class="contextmenu__item" @click="toGroup(true)">编组</div>
-             <div class="contextmenu__item" @click="toGroup(false)">取消编组</div>
+             <div class="contextmenu__item" @click="toBottom">{{$t("header.tobottom")}}</div>
+
+             <div class="contextmenu__item" v-if="isGroup" @click="toGroup(true)">{{$t("header.group")}}</div>
+
+             <div class="contextmenu__item" v-if="isGroup" @click="toGroup(false)">{{$t("header.cancel")}}</div>
+
+             <div class="contextmenu__item" @click="doDel">{{$t("header.del")}}</div>
+             
        </div>
        
     <keep-alive>
@@ -70,8 +72,6 @@
 
     import { PageSizeItem, PageSizeList } from '@/assets/data/PageSetting'
 
-
-    import delPng from '@/assets/images/del.png'
     import rotatePng from '@/assets/images/rotate.png'
 
     import useEditStore from "@/stores/useEditStore"
@@ -79,25 +79,29 @@
     import  {nanoid} from  'nanoid'
     import '@leafer-in/state'
     import { storeToRefs } from 'pinia'
-    import { InnerEditorEvent ,EditorEvent} from '@leafer-in/editor'
+    import { InnerEditorEvent ,EditorEvent,EditorScaleEvent} from '@leafer-in/editor'
     import { ElMessage } from 'element-plus'
-import { type } from 'os'
 
+    
 
     let componen = shallowRef(null);
-    const PagePanel = defineAsyncComponent(() => import("./PagePanel.vue"));
-    const TextPanel = defineAsyncComponent(() => import("./TextPanel.vue"));
-    const SharpPanel = defineAsyncComponent(() => import("./SharpPanel.vue"));
+    const PagePanel = defineAsyncComponent(() => import("./panel/PagePanel.vue"));
+    const TextPanel = defineAsyncComponent(() => import("./panel/TextPanel.vue"));
+    const SharpPanel = defineAsyncComponent(() => import("./panel/SharpPanel.vue"));
+    const ImagePanel = defineAsyncComponent(() => import("./panel/ImagePanel.vue"));
     let objcomponen = shallowRef({
         PagePanel,
         TextPanel,
-        SharpPanel
+        SharpPanel,
+        ImagePanel
     });
 
 
     componen.value = objcomponen.value.PagePanel
 
     let menuVisible=ref(false)
+
+    let isGroup=ref(false)
 
     let ctop=ref("0px")
     let cleft=ref("0px")
@@ -109,7 +113,9 @@ import { type } from 'os'
         useTool,useToolType,
         usePageBgColor,
         useTextStyle,
-        useSharpStyle,usePageSetting
+        useSharpStyle,
+        usePageSetting,
+        useImageStyle
     } = storeToRefs(editorStore)
 
 
@@ -198,6 +204,7 @@ import { type } from 'os'
         });
 
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
+
             if(e.list.length==1&&e.list[0].tag!="Group"){
 
                if(e.list[0].tag=="Box"&&e.list[0].name.startsWith("Text")){
@@ -218,6 +225,8 @@ import { type } from 'os'
 
                     useTextStyle.value.strokeWidth=Number(box.strokeWidth.toString())
 
+
+                    useTextStyle.value.bgcolor= box.fill.toString()
                     
                     if(box.dashPattern&&box.dashPattern.length==2){
 
@@ -268,7 +277,28 @@ import { type } from 'os'
 
                    
 
+               }else if(e.list[0].name.startsWith("image")){
+
+                    
+                    let image=e.list[0]
+
+                    useImageStyle.value.fill=image.fill
+                   
+                    useImageStyle.value.corners=Number(image.cornerRadius.toString())
+                   
+                    useImageStyle.value.height=image.height
+                    
+                    useImageStyle.value.width=image.width
+
+                    useImageStyle.value.opacity=image.opacity
+
+                    useImageStyle.value.x=image.x
+
+                    useImageStyle.value.y=image.y
+
+                    componen.value = objcomponen.value.ImagePanel
                }
+
             }else{
                 componen.value = objcomponen.value.PagePanel
             }
@@ -293,34 +323,50 @@ import { type } from 'os'
             
         })
 
+        canvasApp.editor.on(EditorScaleEvent.SCALE, function (e:EditorScaleEvent) {
+               
+        })
 
         canvasApp.editor.on(PointerEvent.MENU,function(e){
+
             menuVisible.value=true
             cleft.value=e.x+"px"
             ctop.value=e.y+"px"
+
+            if(canvasApp.editor.list.length>1){
+               isGroup.value=true
+               return
+            }
+            if(canvasApp.editor.list.length==1){
+                if(canvasApp.editor.list[0].tag=="Group"){
+                    isGroup.value=true
+                    return
+                }
+            }
+            isGroup.value=false
         })
 
        
-        const button = Box.one({// 添加移除按钮
-            around: 'center',
-            fill: {
-                type: 'image',
-                url: delPng,
-            },
-            cornerRadius: 20,
-            cursor: 'pointer'
+        // const button = Box.one({// 添加移除按钮
+        //     around: 'center',
+        //     fill: {
+        //         type: 'image',
+        //         url: delPng,
+        //     },
+        //     cornerRadius: 20,
+        //     cursor: 'pointer'
             
-        })
+        // })
 
-        canvasApp.editor.buttons.add(button)
+        // canvasApp.editor.buttons.add(button)
 
-        button.on(PointerEvent.TAP, () => { // 点击删除元素，并取消选择
-            canvasApp.editor.list.forEach(rect => {
-                editorStore.delShape(rect.id as string)
-                rect.remove()
-            })
-            canvasApp.editor.target = undefined
-        })
+        // button.on(PointerEvent.TAP, () => { // 点击删除元素，并取消选择
+        //     canvasApp.editor.list.forEach(rect => {
+        //         editorStore.delShape(rect.id as string)
+        //         rect.remove()
+        //     })
+        //     canvasApp.editor.target = undefined
+        // })
 
         if(settingJson&&settingJson.setting.initData){
 
@@ -355,6 +401,13 @@ import { type } from 'os'
 
 
         canvasApp.tree.zoom('fit', 100) 
+
+        window.onresize=function(){
+
+            canvasApp.tree.zoom('fit', 100) 
+
+        }
+        
     })
 
     watch(()=>useColor.value,(newVal)=>{
@@ -446,6 +499,36 @@ import { type } from 'os'
 
     },{deep:true})
 
+
+    watch(()=>useImageStyle.value.corners,(value0)=>{
+
+        canvasApp.editor.list.forEach(async (elem)=>{
+            elem.cornerRadius=value0
+        })
+
+    })
+
+    
+    watch(()=>useImageStyle.value.opacity,(value0)=>{
+
+        canvasApp.editor.list.forEach(async (elem)=>{
+            elem.opacity=value0
+        })
+
+    })
+
+
+    watch(()=>useImageStyle.value.fill.url,(newValue, oldValue)=>{
+ 
+        if(oldValue!=newValue){
+            canvasApp.editor.list.forEach(async (elem)=>{
+                let img=await getImage(newValue)
+                elem.width=img.width
+                elem.height=img.height
+            })
+        }
+    })
+
   //弃用
     watch(()=>usePageBgColor.value,()=>{
        
@@ -473,8 +556,14 @@ import { type } from 'os'
                 text.fontSize=value.fontSize
                 text.fontWeight=value.fontWeight as IFontWeight
                 text.text=value.text
-
                 
+
+                if(value.bgcolor){
+                    elem.fill=value.bgcolor
+                }else{
+                    elem.fill="rgba(0,0,0,0)"
+                }
+               
                 elem.cornerRadius=value.cornerRadius
                 elem.stroke=value.stroke
                 elem.strokeWidth=value.strokeWidth
@@ -529,12 +618,14 @@ import { type } from 'os'
 
    const addBgImg=async (imgUrl:any)=>{
 
-        let id="image0";
-
+        let  id=nanoid();
+         
         if(frame.findId(id)){
-            id=nanoid()
-            zIndex=editorStore.shapes.size + 1
+           return;
         }
+
+        let img=await getImage(imgUrl)
+ 
         const rectImg = new Rect({
                 id:id,
                 name:'image',
@@ -547,8 +638,8 @@ import { type } from 'os'
                 zIndex:editorStore.shapes.size + 1,
                 editable: true,
                 locked:false,
-                // width:img.width<editorStore.pageWidth*0.9?img.width:editorStore.pageWidth*0.9,
-                // height:img.height<editorStore.pageHeight*0.9?img.width:editorStore.pageHeight*0.9,
+                width:img.width,
+                height:img.height,
                 x: pageWidth.value/2,
                 y: pageHeight.value/2
         }) 
@@ -606,8 +697,9 @@ import { type } from 'os'
 
 
    const handleAddGroup=(item)=>{
-    debugger
+    
         const group = new Group(item.data)
+        group.zIndex=editorStore.shapes.size + 1
         frame.add(group)
    }
 
@@ -657,6 +749,30 @@ import { type } from 'os'
         menuVisible.value=false
    }
 
+    const  doDel=()=>{
+        menuVisible.value=false
+        canvasApp.editor.list.forEach(rect => {
+            editorStore.delShape(rect.id as string)
+            rect.remove()
+        })
+        canvasApp.editor.target = undefined
+    }
+   
+    document.addEventListener('keydown', function(event) {
+
+        const key = event.key || event.keyCode;
+    
+        // 判断按下的是否是Backspace键
+        if (key === 'Backspace' || key === 8) {
+            doDel()
+        }
+    
+        // 判断按下的是否是Delete键
+        if (key === 'Delete' || key === 46) {
+            doDel()
+        }
+    });
+
     type TDefaultOption = {
         id:string,
         type:string,
@@ -703,7 +819,7 @@ import { type } from 'os'
 
 
    const addSharp=(model:TDefaultOption)=>{
-    debugger
+    
     let {id,type,subType,width,height,zIndex,points,stroke,strokeWidth}=model
 
     let defaultOption={
@@ -795,7 +911,7 @@ import { type } from 'os'
             
             //normal,rect,radius
             
-            Object.assign(defaultOption,{width:undefined,height:undefined})
+            Object.assign(defaultOption,{width:undefined,height:undefined,fill:'rgba(0,0,0,0)'})
         
             let box= new Box({
                     id,

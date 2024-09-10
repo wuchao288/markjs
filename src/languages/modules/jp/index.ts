@@ -14,10 +14,12 @@ export default {
     pagebgcolor:'颜色',
     uploadbgimg:'上传背景图片',
     systembgimg:'系统背景图',
+    set:'设置',
     content:'文本内容',
     fontsize:'字体大小',
     fontfamily:'字体',
     color:'文字颜色',
+    bgcolor:'文本框背景色',
     stroke:'边框颜色',
     strokewidth:'边框宽度',
     linestyle:'边框样式',
@@ -33,7 +35,9 @@ export default {
     inethrough:'中划线',
     letterspacing:'字距',
     linespacing:'行距',
-    shadow:'阴影'
+    shadow:'阴影',
+    opacity:'不透明',
+    replaceimg:'替换图片'
   }, 
   header:{
     addmaterial:'导入素材',
@@ -62,6 +66,9 @@ export default {
     verticalmark:'垂直标注',
     anglemark45:'45度标注',
     group:'编组',
-    cancel:'取消编组'
+    cancel:'取消编组',
+    texteffect:'文字效果',
+    imageeffect:'小部件',
+    del:'删除'
   }
 }

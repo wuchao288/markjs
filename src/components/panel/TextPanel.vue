@@ -53,9 +53,21 @@
   </el-row>
 
 
-      <el-form-item :label="t('stylepanel.color')">
-        <el-color-picker v-model="useTextStyle.fill"  :predefine="predefineColors" />
-      </el-form-item>
+
+       <el-row>
+          <el-col :span="12">
+            <el-form-item :label="t('stylepanel.color')">
+              <el-color-picker v-model="useTextStyle.fill"  :predefine="predefineColors" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="t('stylepanel.bgcolor')">
+              <el-color-picker v-model="useTextStyle.bgcolor" show-alpha  :predefine="predefineColors" />
+            </el-form-item>
+          </el-col>
+       </el-row>
+
+    
      
 
       <el-form-item>
@@ -259,7 +271,7 @@
       '#c7158577',
       '#D0021B', '#F5A623', '#F8E71C', '#8B572A', '#7ED321',
       '#417505', '#BD10E0', '#9013FE', '#4A90E2', '#50E3C2',
-      '#B8E986', '#000000', '#4A4A4A', '#9B9B9B', '#FFFFFF',
+      '#B8E986', '#4A4A4A', '#9B9B9B', '#FFFFFF',
       'rgba(0,0,0,0)'
    ])
 // new URL('../assets/img/login-bg.jpg', import.meta.url).href;
