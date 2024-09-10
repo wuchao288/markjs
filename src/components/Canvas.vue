@@ -22,8 +22,31 @@
        </div>
        
     <keep-alive>
-      <component  :is="componen"> </component>
+      <component  :is="componen" @handleCutOut="cutOutImg" @handleCropImg="cropImg"> </component>
     </keep-alive>
+
+    
+    <el-dialog v-model="dialogFormVisible"  title="AI Cut Out" width="800" @opened="openedCutout">
+
+        <div>
+        <h3 style="margin-bottom: 10px;">正在处理请等待...</h3>
+        <div>
+            <el-progress :percentage="100" :format="format" :indeterminate="true" />
+        </div>
+        <div style="height: 600px;" v-loading="loading">
+            <img :src='imgCutImg' style="width: 100%;" />
+        </div>
+        </div>
+
+        <template #footer>
+        <div class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="dialogFormVisible = false">
+            Confirm
+            </el-button>
+        </div>
+        </template>
+    </el-dialog>
 
 </template>
 
@@ -103,6 +126,12 @@
 
     let isGroup=ref(false)
 
+    let dialogFormVisible=ref(false)
+
+    let loading=ref(true)
+
+    let imgCutImg=ref('')
+
     let ctop=ref("0px")
     let cleft=ref("0px")
     
@@ -142,11 +171,6 @@
         appWrap.style.height= (window.innerHeight- 60)+"px"
         appWrap.style.marginTop="60px"
 
-        let width=window.innerWidth
-        let height=window.innerHeight-60;
-
-        //getMarkJson {setting:{},imgUrl}
-
         var settingJson=window.parent.getMarkJson?window.parent.getMarkJson():undefined;
 
         canvasApp = new App({
@@ -157,6 +181,8 @@
                 skewable: false,
                 hover: true,
                 flipable:false,
+                resizeable:true,
+                mask:false,
                 rotateGap:15,
                 middlePoint: { cornerRadius: 100, width: 20, height: 6 },
                 rotatePoint: {
@@ -373,6 +399,10 @@
             let setting=JSON.parse(settingJson.setting.initData)
 
             frame=new Frame(setting)
+
+            frame.x=0,
+
+            frame.y=0,
             
             usePageBgColor.value=frame.fill.toString()
 
@@ -383,9 +413,9 @@
 
 
             frame = new Frame({
-            x:width/2,
+            x:0,
             fill:usePageBgColor.value,
-            y:height/2,
+            y:0,
             width: pageWidth.value,
             height: pageHeight.value
             })
@@ -653,6 +683,9 @@
         frame.add(rectImg)
 
         canvasApp.editor.updateEditBox()
+
+        canvasApp.editor.target=rectImg
+
    }
 
    const handleExportJson=()=>{
@@ -772,6 +805,11 @@
             doDel()
         }
     });
+
+
+    const  cropImage=()=>{
+        canvasApp.editor.openInnerEditor()
+    }
 
     type TDefaultOption = {
         id:string,
@@ -894,7 +932,7 @@
 
         if (type === 'Line') {
         
-            debugger
+            
             Object.assign(defaultOption,{strokeWidth:2,height:20})
 
             return new Line({
@@ -1071,8 +1109,66 @@
         frame.width=m.width;
         frame.height=m.height;
     }
-    
 
+    const cutOutImg=()=>{
+        dialogFormVisible.value=true
+    }
+
+
+
+    const cropImg=()=>{
+        console.info("cropImg");
+        canvasApp.editor.openInnerEditor()
+    }
+
+
+    const  format=()=>{
+        return ""
+    }
+
+
+    const openedCutout=()=>{
+        //上传图片
+        fetch(useImageStyle.value.fill.url)
+        .then(response => response.blob()) // 将文件作为二进制对象（Blob）获取
+        .then(blob => {
+            //上传
+            debugger
+            let formData=new FormData()
+
+            formData.append('file', blob, 'blob')
+
+            fetch('/BLL/TempHandler.ashx?action=UploadMarkImage', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.info(data)
+                
+                uploadCutOutImg(data)
+            })
+            .catch(error => console.error(error));
+
+        })
+        .catch(error => {
+            console.error('读取文件出错:', error);
+        });
+    }
+
+    const  uploadCutOutImg=(json)=>{
+        let formData=new FormData()
+        formData.append("fileUrl",json.data.fileUrl)
+        fetch('/BLL/TempHandler.ashx?action=CutOutImg', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => 
+               imgCutImg.value=data.data[0]
+            )
+            .catch(error => console.error(error));
+    }
 
     defineExpose({
         handleClearAll,
@@ -1084,7 +1180,8 @@
         handleSaveImg,
         handleExportJson,
         handleAddGroup,
-        handleAddMateImg 
+        handleAddMateImg
+
     })
 </script>
 

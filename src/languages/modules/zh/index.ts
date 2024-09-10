@@ -37,7 +37,10 @@ export default {
     linespacing:'行距',
     shadow:'阴影',
     opacity:'不透明',
-    replaceimg:'替换图片'
+    replaceimg:'替换图片',
+    crop:'裁剪',
+    cutout:'抠图',
+    filter:'美化',
   },  
   header:{
     addmaterial:'导入素材',

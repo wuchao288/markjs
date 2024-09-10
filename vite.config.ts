@@ -50,6 +50,18 @@ export default defineConfig(
         '@': resolve('src'),
         '~data': resolve('src/assets/data')
       }
-    }
+    },
+    server: {
+      hmr: { overlay: false },
+      host: 'localhost',
+      port: 5173,
+      proxy: {
+        '/BLL': {
+          target: 'http://localhost:9290',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(new RegExp('^'), '')
+        }
+      }
+    },
   }
 )

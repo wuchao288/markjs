@@ -35,19 +35,22 @@
       <el-form-item>
          <el-row :gutter="10">
             <el-col :span="8">
-                <el-button>
+                <el-button @click="handleCrop">
                     <i class="iconfont icon icon-crop-full"></i>
-                    裁剪</el-button>
+                    {{$t("stylepanel.crop")}}
+                </el-button>
             </el-col>
             <el-col :span="8"> 
-                <el-button>
+                <el-button @click="handleCutout">
                     <i class="iconfont icon icon-AIkoutu"></i>
-                    抠图</el-button>
+                    {{$t("stylepanel.cutout")}}
+                    </el-button>
             </el-col>
             <el-col :span="8">
-                <el-button>
+                <el-button @click="handleFilter">
                     <i class="iconfont icon icon-koutu"></i>
-                    美化</el-button>
+                    {{$t("stylepanel.filter")}}
+                  </el-button>
             </el-col>
          </el-row>
       </el-form-item>
@@ -87,13 +90,14 @@
       </el-form-item>
     </el-form>
     </div>
+
 </template>
 
 <script setup lang="ts">
 
     import { ref} from 'vue'
 
-    import {ElUpload,ElCard,ElMessage,ElRow,ElCol, ElForm,ElFormItem,ElButton,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
+    import {ElProgress,ElDialog,ElUpload,ElCard,ElMessage,ElRow,ElCol, ElForm,ElFormItem,ElButton,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
 
     import useEditStore from "@/stores/useEditStore"
 
@@ -104,6 +108,16 @@
     const { t } = useI18n()
     import type { UploadProps } from 'element-plus'
     const editorStore = useEditStore()
+
+    const emit = defineEmits([
+        'handleCutOut','handleCropImg'
+    ])
+
+
+
+    const format=()=>{return ""}
+
+
 
     type TState = {
       activeNames: string[],
@@ -164,6 +178,21 @@
       '#B8E986', '#000000', '#4A4A4A', '#9B9B9B', '#FFFFFF',
       'rgba(0,0,0,0)'
    ])
+
+
+   const  handleCrop=()=>{
+      emit("handleCropImg")
+   }
+
+   const  handleCutout=()=>{
+     emit("handleCutOut")
+
+   }
+
+   const  handleFilter=()=>{
+    
+  }
+
 
 </script>
 
