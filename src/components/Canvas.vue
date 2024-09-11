@@ -22,26 +22,28 @@
        </div>
        
     <keep-alive>
-      <component  :is="componen" @handleCutOut="cutOutImg" @handleCropImg="cropImg"> </component>
+      <component  :is="componen" @handleCutOut="cutOutImg" @handleCropImg="cropImg"      @handleExportImg="exportImg"> </component>
     </keep-alive>
 
     
-    <el-dialog v-model="dialogFormVisible"  title="AI Cut Out" width="800" @opened="openedCutout">
+    <el-dialog v-model="dialogFormVisible" close-on-click-modal="false" destroy-on-close="true" title="AI Cut Out" width="800" height="600" @opened="openedCutout">
 
-        <div>
-        <h3 style="margin-bottom: 10px;">正在处理请等待...</h3>
-        <div>
-            <el-progress :percentage="100" :format="format" :indeterminate="true" />
-        </div>
-        <div style="height: 600px;" v-loading="loading">
-            <img :src='imgCutImg' style="width: 100%;" />
-        </div>
+        <div :class="loading?'':'cutimg'" style="height: 560px;">
+            <div v-if="loading" >
+                <h3 style="margin-bottom: 10px;">正在处理请等待...</h3>
+                <div>
+                    <el-progress :percentage="100" :format="format" :indeterminate="true" />
+                </div>
+            </div>
+            <div  v-loading="loading"> 
+                 <img :src='imgCutImg'   /> 
+            </div>
         </div>
 
         <template #footer>
         <div class="dialog-footer">
             <el-button @click="dialogFormVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false">
+            <el-button type="primary" @click="enterCutout">
             Confirm
             </el-button>
         </div>
@@ -53,6 +55,8 @@
 <script lang="ts">
       export const getImage = (imgItem: string | File): Promise<HTMLImageElement> => {
     // 创建对象
+
+        debugger
         const img = new Image()
         // 改变图片的src
         const url = window.URL || window.webkitURL
@@ -92,6 +96,7 @@
 
     import {  IFontWeight,IFrameInputData} from '@leafer-ui/interface'
    
+    import { mixins } from "@/mixin/index";
 
     import { PageSizeItem, PageSizeList } from '@/assets/data/PageSetting'
 
@@ -103,8 +108,7 @@
     import '@leafer-in/state'
     import { storeToRefs } from 'pinia'
     import { InnerEditorEvent ,EditorEvent,EditorScaleEvent} from '@leafer-in/editor'
-    import { ElMessage } from 'element-plus'
-
+    import { ElMessage, ElMessageBox } from 'element-plus'
     
 
     let componen = shallowRef(null);
@@ -229,13 +233,33 @@
 
         });
 
+        canvasApp.editor.on(EditorScaleEvent.SCALE,mixins.debounce(function(e:EditorScaleEvent){
+                
+              if(e.target.tag=="Text"){
+
+                  useTextStyle.value.fontSize=parseInt(e.target.fontSize.toString())
+
+              }else if(['Arrow','Ellipse','Rect','Polygon','Star','Line'].includes(e.target.tag)&&e.target.name!="image"){
+
+                   useSharpStyle.value.width=parseInt(e.target.width.toString())
+                   useSharpStyle.value.height=parseInt(e.target.height.toString())
+
+              }else if(e.target.name=="image"){
+                   
+                     useImageStyle.value.width=parseInt(e.target.width.toString())
+                     useImageStyle.value.height=parseInt(e.target.height.toString())
+              }
+               
+        },300,false))
+
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
 
             if(e.list.length==1&&e.list[0].tag!="Group"){
 
-               if(e.list[0].tag=="Box"&&e.list[0].name.startsWith("Text")){
+            
+               if(e.list[0].name==("Text")){
 
-                    let text=e.list[0].children[0] as Text
+                    let text=e.list[0] as Text
 
                     useTextStyle.value.fill=text.fill.toString()
 
@@ -245,16 +269,11 @@
 
                     useTextStyle.value.text=text.text
 
-                    let box=e.list[0]
+                    useTextStyle.value.stroke=text.stroke.toString()
 
-                    useTextStyle.value.stroke=box.stroke.toString()
-
-                    useTextStyle.value.strokeWidth=Number(box.strokeWidth.toString())
-
-
-                    useTextStyle.value.bgcolor= box.fill.toString()
+                    useTextStyle.value.strokeWidth=Number(text.strokeWidth.toString())
                     
-                    if(box.dashPattern&&box.dashPattern.length==2){
+                    if(text.dashPattern&&text.dashPattern.length==2){
 
                         useSharpStyle.value.lineStyle="dashed"
                         
@@ -266,9 +285,9 @@
                     componen.value = objcomponen.value.TextPanel
 
 
-               }else if(e.list[0].tag!="Text"&&!e.list[0].name.startsWith("image")){
+               }else if(['Arrow','Ellipse','Rect','Polygon','Star','Line'].includes(e.list[0].tag)&&!e.list[0].name.startsWith("image")){
 
-                 
+                 //e.list[0].tag!="Text"&&!e.list[0].name.startsWith("image")
                    let sharp=e.list[0]
 
                     useSharpStyle.value.fill=sharp.fill.toString()
@@ -303,18 +322,18 @@
 
                    
 
-               }else if(e.list[0].name.startsWith("image")){
+               }else if(e.list[0].name==("image")){
 
-                    
+                  
                     let image=e.list[0]
 
                     useImageStyle.value.fill=image.fill
                    
                     useImageStyle.value.corners=Number(image.cornerRadius.toString())
                    
-                    useImageStyle.value.height=image.height
+                    useImageStyle.value.height=parseInt(image.height.toString())
                     
-                    useImageStyle.value.width=image.width
+                    useImageStyle.value.width=parseInt(image.width.toString())
 
                     useImageStyle.value.opacity=image.opacity
 
@@ -331,14 +350,14 @@
         })
 
 
-        canvasApp.editor.on(PointerEvent.DOUBLE_TAP,  (e:PointerEvent)=> {
-            //debugger
-            if(canvasApp.editor.editing==false){ return }
+        // canvasApp.editor.on(PointerEvent.DOUBLE_TAP,  (e:PointerEvent)=> {
+        //     //debugger
+        //     if(canvasApp.editor.editing==false){ return }
 
-            if(e.current.target.tag=="Box"&&e.current.target.name.startsWith("Text")){
-               canvasApp.editor.openInnerEditor(e.current.target.children[0])
-            }
-        }, true)
+        //     if(e.current.target.tag=="Box"&&e.current.target.name.startsWith("Text")){
+        //        canvasApp.editor.openInnerEditor(e.current.target.children[0])
+        //     }
+        // }, true)
 
 
         canvasApp.editor.on(InnerEditorEvent.CLOSE, function (e:InnerEditorEvent) {
@@ -349,9 +368,9 @@
             
         })
 
-        canvasApp.editor.on(EditorScaleEvent.SCALE, function (e:EditorScaleEvent) {
+        // canvasApp.editor.on(EditorScaleEvent.SCALE, function (e:EditorScaleEvent) {
                
-        })
+        // })
 
         canvasApp.editor.on(PointerEvent.MENU,function(e){
 
@@ -400,9 +419,11 @@
 
             frame=new Frame(setting)
 
-            frame.x=0,
+            frame.x=0
 
-            frame.y=0,
+            frame.y=0
+
+            frame.disabled=true
             
             usePageBgColor.value=frame.fill.toString()
 
@@ -548,15 +569,22 @@
     })
 
 
-    watch(()=>useImageStyle.value.fill.url,(newValue, oldValue)=>{
- 
-        if(oldValue!=newValue){
-            canvasApp.editor.list.forEach(async (elem)=>{
-                let img=await getImage(newValue)
-                elem.width=img.width
-                elem.height=img.height
-            })
+    watch(()=>useImageStyle.value.fill.url,async (newValue, oldValue)=>{
+
+         if(oldValue!=newValue&&oldValue!=""){
+            let img=await getImage(newValue)
+            canvasApp.editor.width=img.width
+            canvasApp.editor.height=img.height
+
+            canvasApp.editor.target.fill={
+            type: 'image',
+            url: newValue,
+            mode: 'fit'
         }
+
+         }else{
+
+         }
     })
 
   //弃用
@@ -574,34 +602,41 @@
      
         canvasApp.editor.list.forEach(async (elem)=>{
 
-            if(elem.tag=="Box"&&elem.name.startsWith("Text")){
+            if(elem.name.startsWith("Text")){
 
 
                 await  nextTick()
 
-
-                let text= elem.children[0] as Text
+                let text= elem as Text
 
                 text.fill=value.fill
                 text.fontSize=value.fontSize
                 text.fontWeight=value.fontWeight as IFontWeight
                 text.text=value.text
-                
+                text.stroke=value.stroke
+                text.strokeWidth=value.strokeWidth
+                text.letterSpacing=value.letterSpacing
+                text.lineHeight=value.lineHeight
+                text.fontFamily=value.fontFamily
+                text.fontWeight=value.bold?"bold":""
 
-                if(value.bgcolor){
-                    elem.fill=value.bgcolor
+                //'none' | 'under' | 'delete';
+                text.italic=value.italic
+
+                if(value.underline==true){
+                    text.textDecoration="under"
+                }else if(value.inethrough==true){
+                    text.textDecoration="delete"
                 }else{
-                    elem.fill="rgba(0,0,0,0)"
+                    text.textDecoration="none"
                 }
+
+
                
-                elem.cornerRadius=value.cornerRadius
-                elem.stroke=value.stroke
-                elem.strokeWidth=value.strokeWidth
-            
                 if(value.lineStyle=="dashed"){
-                   elem.dashPattern=[6,6];
+                    text.dashPattern=[6,6];
                 }else{
-                    elem.dashPattern=[];
+                    text.dashPattern=[];
                 }
             }
         })
@@ -611,7 +646,7 @@
     watch(()=>useSharpStyle.value,async (value)=>{
      
      canvasApp.editor.list.forEach(async (elem)=>{
-         if(elem.tag=="Box"&&elem.name.startsWith("Text")){
+         if(elem.name.startsWith("Text")){
              
          }else{
             
@@ -654,6 +689,7 @@
            return;
         }
 
+        debugger
         let img=await getImage(imgUrl)
  
         const rectImg = new Rect({
@@ -663,7 +699,7 @@
                 fill: {
                     type: 'image',
                     url: imgUrl,
-                    mode: 'fit'
+                    mode: 'strench'
                 },
                 zIndex:editorStore.shapes.size + 1,
                 editable: true,
@@ -681,9 +717,6 @@
         })
 
         frame.add(rectImg)
-
-        canvasApp.editor.updateEditBox()
-
         canvasApp.editor.target=rectImg
 
    }
@@ -949,36 +982,44 @@
             
             //normal,rect,radius
             
-            Object.assign(defaultOption,{width:undefined,height:undefined,fill:'rgba(0,0,0,0)'})
+            Object.assign(defaultOption,{width:undefined,height:undefined,fill:'#000000'})
         
-            let box= new Box({
-                    id,
-                    name:"Text",
-                    zIndex,
-                    cornerRadius:4,
-                    cursor:'pointer',
-                    stroke:useColor.value,
-                    strokeWidth:0,
-                    children: [],
-                    ...defaultOption
-            })
+            // let box= new Box({
+            //         id,
+            //         name:"Text",
+            //         zIndex,
+            //         cornerRadius:4,
+            //         cursor:'pointer',
+            //         around:'center',
+            //         stroke:useColor.value,
+            //         strokeWidth:0,
+            //         children: [],
+            //         ...defaultOption
+            // })
 
 
             let text=Text.one({
+                name:'Text',
                 text: '100cm',
-                editable: false,
-                fontSize: 14,
+                editable: true,
+                fontSize: 24,
                 selected:true,
                 resizeFontSize: true,
                 padding: [4, 8],
                 fill:'#000000',
+                hitFill:'all',
+                stroke:'rgba(0,0,0,0)',
+                strokeWidth:0,
                 shadow: {
                     x: 0,
                     y: 0,
-                    blur: 4,
-                    color: "#4DCB71AA"
-                }
+                    blur: 0,
+                    color: "#000000"
+                },
+                ...defaultOption
             })
+
+            return text
 
             // text.on(InnerEditorEvent.CLOSE, function (e) {
             //     canvasApp.editor.openInnerEditor(e.target)
@@ -993,7 +1034,7 @@
             return box
             
         }
-
+      
         if(type === 'Polygon'){
             
 
@@ -1088,14 +1129,14 @@
 
     const handleDownImg=()=>{
         
-        frame.export(new Date().getTime()+'.png',{ pixelRatio: 1 }) 
+        frame.export(new Date().getTime()+'.jpg',{ pixelRatio: 1 }) 
     }
 
     const  handleSaveImg=async ()=>{
         
         const json = frame.toJSON() 
 
-        const result = await frame.export('png', { blob: true })
+        const result = await frame.export('jpg', { blob: true })
 
         window.parent.saveMakeImg?window.parent.saveMakeImg({json:JSON.stringify(json),file:result}):null
     }
@@ -1110,6 +1151,12 @@
         frame.height=m.height;
     }
 
+
+    const  exportImg=()=>{
+        canvasApp.editor.export("Img_"+new Date().getTime()+'.png',{ pixelRatio: 1 }) 
+    }
+
+
     const cutOutImg=()=>{
         dialogFormVisible.value=true
     }
@@ -1117,43 +1164,71 @@
 
 
     const cropImg=()=>{
-        console.info("cropImg");
+      
         canvasApp.editor.openInnerEditor()
     }
 
+
+    
 
     const  format=()=>{
         return ""
     }
 
+    const  enterCutout=async ()=>{
+        useImageStyle.value.fill.url=imgCutImg.value
+        dialogFormVisible.value=false
+        imgCutImg.value=""
+    }
 
-    const openedCutout=()=>{
-        //上传图片
-        fetch(useImageStyle.value.fill.url)
-        .then(response => response.blob()) // 将文件作为二进制对象（Blob）获取
-        .then(blob => {
-            //上传
-            debugger
-            let formData=new FormData()
+    const openedCutout=async ()=>{
 
-            formData.append('file', blob, 'blob')
+        loading.value=true
 
-            fetch('/BLL/TempHandler.ashx?action=UploadMarkImage', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.info(data)
-                
-                uploadCutOutImg(data)
-            })
-            .catch(error => console.error(error));
+        let blob= await canvasApp.editor.target.export('png', { blob: true })
 
+        let formData=new FormData()
+
+        formData.append('file', blob.data, 'blob')
+
+        fetch('/BLL/TempHandler.ashx?action=UploadMarkImage', {
+            method: 'POST',
+            body: formData
         })
-        .catch(error => {
-            console.error('读取文件出错:', error);
-        });
+        .then(response => response.json())
+        .then(data => {
+            console.info(data)
+            
+            uploadCutOutImg(data)
+        })
+        .catch(error => console.error(error));
+
+        //上传图片
+        // fetch(useImageStyle.value.fill.url)
+        // .then(response => response.blob()) // 将文件作为二进制对象（Blob）获取
+        // .then(blob => {
+        //     //上传
+            
+        //     let formData=new FormData()
+
+        //     formData.append('file', blob, 'blob')
+
+        //     fetch('/BLL/TempHandler.ashx?action=UploadMarkImage', {
+        //         method: 'POST',
+        //         body: formData
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.info(data)
+                
+        //         uploadCutOutImg(data)
+        //     })
+        //     .catch(error => console.error(error));
+
+        // })
+        // .catch(error => {
+        //     console.error('读取文件出错:', error);
+        // });
     }
 
     const  uploadCutOutImg=(json)=>{
@@ -1164,10 +1239,21 @@
                 body: formData
             })
             .then(response => response.json())
-            .then(data => 
+            .then(data => {
+              
                imgCutImg.value=data.data[0]
+               loading.value=false
+              }
             )
-            .catch(error => console.error(error));
+            .catch(error => 
+            {
+                
+                console.info(error)
+
+                ElMessage.error("Cut Out Error!")
+                console.error(error)
+           }
+        );
     }
 
     defineExpose({
@@ -1181,7 +1267,7 @@
         handleExportJson,
         handleAddGroup,
         handleAddMateImg
-
+        
     })
 </script>
 
@@ -1228,5 +1314,12 @@
         background: #66b1ff;
         border-color: #66b1ff;
         color: #fff;
+        }
+        .cutimg{
+            background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%), linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%);
+            background-position: 0 0, 14px 14px;
+            background-size: 28px 28px;
+            width: 100%;
+            height: 100%;
         }
 </style>

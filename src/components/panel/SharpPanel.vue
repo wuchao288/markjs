@@ -37,6 +37,10 @@
       </el-form-item>
       
       
+      <!-- <el-form-item :label="t('stylepanel.cornerradius')" v-if="useTextStyle.strokeWidth>0">
+        <el-slider v-model="useTextStyle.cornerRadius"  :max="10"  :min="0" />
+      </el-form-item> -->
+
 
     </el-form>
     </div>
@@ -44,7 +48,7 @@
 
 <script setup lang="ts">
 
-    import { ref,watch} from 'vue'
+    import { ref} from 'vue'
 
     import { ElForm,ElFormItem,ElRadioGroup,ElRadio,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
 

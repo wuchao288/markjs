@@ -14,21 +14,32 @@
       </el-form-item>
 
       <el-form-item  :label="t('stylepanel.set')">
-        
-         <el-upload style="width: 100%;"
-              ref="uploadRef" 
-              class="upload-demo"
-              :show-file-list="false"
-              :auto-upload="false"
-              :on-change="handleAvatarSuccess"
-            >
-              <template #trigger>
-                <el-button> 
-                  <span class="iconfont icon icon-tupianshangchuan"></span> 
-                   {{$t('stylepanel.replaceimg')}}
+      
+
+          <el-row :gutter="10">
+                <el-col :span="12">
+                  <el-upload style="width: 100%;"
+                    ref="uploadRef" 
+                    class="upload-demo"
+                    :show-file-list="false"
+                    :auto-upload="false"
+                    :on-change="handleAvatarSuccess"
+                  >
+                    <template #trigger>
+                      <el-button> 
+                        <span class="iconfont icon icon-tupianshangchuan"></span> 
+                        {{$t('stylepanel.replaceimg')}}
+                        </el-button>
+                    </template>
+              </el-upload>
+            </el-col>
+              <el-col :span="12"> 
+                  <el-button @click="handleExportImg">
+                    <i class="iconfont icon icon-xiazaitupian"></i>
+                    {{$t('stylepanel.exportimg')}}
                   </el-button>
-              </template>
-            </el-upload>
+              </el-col>
+          </el-row>
 
       </el-form-item>
 
@@ -110,7 +121,7 @@
     const editorStore = useEditStore()
 
     const emit = defineEmits([
-        'handleCutOut','handleCropImg'
+        'handleCutOut','handleCropImg','handleExportImg'
     ])
 
 
@@ -179,6 +190,12 @@
       'rgba(0,0,0,0)'
    ])
 
+
+   
+
+   const  handleExportImg=()=>{
+      emit("handleExportImg")
+   }
 
    const  handleCrop=()=>{
       emit("handleCropImg")

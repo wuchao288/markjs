@@ -26,6 +26,10 @@ export type TTextSetting={
   letterSpacing:number,
   lineHeight:number,
   isShadow:boolean,
+  bold:boolean,
+  italic:boolean,
+  underline:boolean,
+  inethrough:boolean,
   shadow:{x: number;y: number; blur: number; color: string;}
 }
 
@@ -118,7 +122,11 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         fontFamily:undefined,
         letterSpacing:0,
         lineHeight:1.2,
-        isShadow:true,
+        isShadow:false,
+        bold:false,
+        italic:false,
+        underline:false,
+        inethrough:false,
         shadow:{
           x: 0,
           y: 0,

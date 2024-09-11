@@ -10,7 +10,8 @@
       @handleExportJson="exportJson"
       @handleAddGroup="addGroup"
       @handleAddMateImg="addMateImg"
-      @handlePageSizeTo="pageSizeTo" />
+      @handlePageSizeTo="pageSizeTo"
+      />
      <Canvas ref="childRef"   />
 
  

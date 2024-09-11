@@ -13,7 +13,7 @@
   <el-row :gutter="10">
     <el-col :span="12">
        <el-form-item :label="t('stylepanel.fontfamily')">
-        <el-select
+        <el-select 
           v-model="useTextStyle.fontFamily"
           placeholder="Select FontFamily"
           style="width: 100%"
@@ -60,11 +60,7 @@
               <el-color-picker v-model="useTextStyle.fill"  :predefine="predefineColors" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item :label="t('stylepanel.bgcolor')">
-              <el-color-picker v-model="useTextStyle.bgcolor" show-alpha  :predefine="predefineColors" />
-            </el-form-item>
-          </el-col>
+          
        </el-row>
 
     
@@ -79,7 +75,7 @@
                   :content="t('stylepanel.bold')"
                   placement="top-start"
                 >
-                  <el-button text class="btn-active">
+                  <el-button  @click="useTextStyle.bold=!useTextStyle.bold" :class="useTextStyle.bold?'btn-active':''">
                     <i class="iconfont icon-jiacu"></i>
                   </el-button>
               </el-tooltip>
@@ -91,7 +87,7 @@
                   :content="t('stylepanel.italic')"
                   placement="top-start"
                 >
-                <el-button text>
+                <el-button  @click="useTextStyle.italic=!useTextStyle.italic" :class="useTextStyle.italic?'btn-active':''">
                   <i class="iconfont icon-xieti"></i>
                 </el-button>
 
@@ -104,7 +100,7 @@
                   :content="t('stylepanel.underline')"
                   placement="top-start"
                 >
-                <el-button text>
+                <el-button  @click="useTextStyle.underline=!useTextStyle.underline" :class="useTextStyle.underline?'btn-active':''">
                   <i class="iconfont icon-fuhao-xiahuaxian"></i>
                 </el-button>
               </el-tooltip>
@@ -117,7 +113,7 @@
                   :content="t('stylepanel.inethrough')"
                   placement="top-start"
                 >
-                <el-button text>
+                <el-button  @click="useTextStyle.inethrough=!useTextStyle.inethrough" :class="useTextStyle.inethrough?'btn-active':''">
                   <i class="iconfont icon-shanchuxian"></i>
                 </el-button>
 
@@ -205,10 +201,6 @@
 
       <el-form-item :label="t('stylepanel.stroke')" v-if="useTextStyle.strokeWidth>0">
         <el-color-picker v-model="useTextStyle.stroke"  :predefine="predefineColors" />
-      </el-form-item>
-
-      <el-form-item :label="t('stylepanel.cornerradius')" v-if="useTextStyle.strokeWidth>0">
-        <el-slider v-model="useTextStyle.cornerRadius"  :max="10"  :min="0" />
       </el-form-item>
 
 

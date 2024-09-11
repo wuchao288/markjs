@@ -99,4 +99,9 @@ export const ImageEffectList=[{
   url:new URL("@/assets/images/mate/imageeffect/p2.png",import.meta.url).href,
   id:"2",
   type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/p3.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/p3.png",import.meta.url).href,
+  id:"3",
+  type:"img"
 }] as ImageEffectItem[]
