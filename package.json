@@ -36,7 +36,8 @@
     "pinia": "^2.2.2",
     "style-loader": "^4.0.0",
     "vue": "^3.4.37",
-    "vue-i18n": "^9.14.0"
+    "vue-i18n": "^9.14.0",
+    "vue3-colorpicker": "^2.3.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.25.4",

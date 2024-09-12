@@ -6,7 +6,7 @@ import '@/assets/styles/iconfont/iconfont.css'
 import App from './App.vue'
 import I18n from './languages/index'
 
-
+import "vue3-colorpicker/style.css";
 
 import { createPinia } from 'pinia'
 

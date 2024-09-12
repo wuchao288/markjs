@@ -76,8 +76,9 @@ export default {
     del:'删除'
   },
   canvas:{
-    'loading':'正在处理请等待...',
-    'confirm':'确定',
-    'cancel':'取消'
+    loading:'正在处理请等待...',
+    confirm:'确定',
+    cancel:'取消',
+    fontload:'字体加载中...'
   }
 }

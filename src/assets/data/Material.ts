@@ -19,6 +19,29 @@ export type PageBgImageItem={
     {
       name: 'bg4.jpeg',
       url: new URL('@/assets/images/bg/bg4.jpeg',import.meta.url).href
+    },
+    {
+      name: 'p10.jpg',
+      url: new URL('@/assets/images/bg/p10.jpg',import.meta.url).href
+    },
+    {
+      name: 'p11.jpg',
+      url: new URL('@/assets/images/bg/p11.jpg',import.meta.url).href
+    },
+    {
+      name: 'p12.jpg',
+      url: new URL('@/assets/images/bg/p12.jpg',import.meta.url).href
+    },
+    {
+      name: 'p13.jpg',
+      url: new URL('@/assets/images/bg/p13.jpg',import.meta.url).href
+    },{
+      name: 'p14.jpg',
+      url: new URL('@/assets/images/bg/p14.jpg',import.meta.url).href
+    }
+    ,{
+      name: 'p15.png',
+      url: new URL('@/assets/images/bg/p15.png',import.meta.url).href
     }
   ] as PageBgImageItem[]
 

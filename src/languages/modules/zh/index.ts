@@ -41,7 +41,7 @@ export default {
     exportimg:'导出图片',
     crop:'裁剪',
     cutout:'抠图',
-    filter:'美化',
+    filter:'美化'
   },  
   header:{
     addmaterial:'导入素材',
@@ -74,5 +74,11 @@ export default {
     texteffect:'文字效果',
     imageeffect:'小部件',
     del:'删除'
+  },
+  canvas:{
+    loading:'正在处理请等待...',
+    confirm:'确定',
+    cancel:'取消',
+    fontload:'字体加载中...'
   }
 }

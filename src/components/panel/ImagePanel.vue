@@ -147,17 +147,17 @@
       ) => {
 
         if(uploadFile.raw==undefined){
-          ElMessage.error('Avatar picture must be JPG format!')
+          ElMessage.error('Picture must be JPG/PNG format!')
           return false
         }
 
         let rawFile=(uploadFile.raw);
         
         if (rawFile.type !== 'image/jpeg'&&rawFile.type !== 'image/png') {
-          ElMessage.error('Avatar picture must be JPG/PNG format!')
+          ElMessage.error('Picture must be JPG/PNG format!')
           return false
         } else if (rawFile.size / 1024 / 1024 > 2) {
-          ElMessage.error('Avatar picture size can not exceed 2MB!')
+          ElMessage.error('Picture size can not exceed 2MB!')
           return false
         }
 
@@ -223,6 +223,7 @@
     padding: 20px;
     bottom: 0px;
     width: 280px;
+    overflow: auto;
    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px;
   }
 

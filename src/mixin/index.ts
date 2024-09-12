@@ -27,7 +27,38 @@ function throttle(func, wait) {
     };
 }
 
+if (!(window as any)._hasLoadFonts) {
+    (window as any)._hasLoadFonts = {};
+}
+ async function loadFont(fontFamily: string, url: string) {
+    if ((window as any)._hasLoadFonts[fontFamily]) {
+      console.log('该字体已加载', fontFamily);
+      return true;
+    }
+    (window as any)._hasLoadFonts[fontFamily] = true;
+  
+    console.log('url', url);
+
+    if (url) {
+      const prefont = new FontFace(fontFamily, `url("${url}")`);
+      try {
+        const res = await prefont.load();
+        document.fonts.add(res);
+
+        console.log('该字体加载完成', fontFamily);
+        return true;
+      } catch (err) {
+        console.error('字体资源加载异常', url);
+      }
+    } else {
+      console.error('字体资源文件不存在');
+    }
+    return false;
+}
+  
+
 export const mixins ={
     debounce,
-    throttle
+    throttle,
+    loadFont
 }

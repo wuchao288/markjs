@@ -74,5 +74,11 @@ export default {
     texteffect:'文字效果',
     imageeffect:'小部件',
     del:'删除'
+  },
+  canvas:{
+    loading:'正在处理请等待...',
+    confirm:'确定',
+    cancel:'取消',
+    fontload:'字体加载中...'
   }
 }

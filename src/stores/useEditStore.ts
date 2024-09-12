@@ -41,7 +41,10 @@ export type TSharpSetting={
   sharpname:string,
   corners:number,
   width:number,
-  height:number
+  height:number,
+  pureColor:string,
+  activeColorKey:string,
+  gradientColor:string
 }
 
 
@@ -112,15 +115,15 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         text:'10cm',
         fill:'#000000',
         bgcolor:'#ffffff',
-        fontSize:14,
+        fontSize:16,
         fontWeight:'normal',
         strokeWidth:2,
         stroke:"#000000",
         lineStyle: 'solid',
         cornerRadius:2,
-        fontFamily:undefined,
+        fontFamily:'アプリ明朝',
         letterSpacing:0,
-        lineHeight:1.2,
+        lineHeight:32,
         isShadow:false,
         bold:false,
         italic:false,
@@ -142,7 +145,10 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
       sharpname:'',
       corners:5,
       width:100,
-      height:100
+      height:100,
+      pureColor:"#FFFFFF",
+      activeColorKey:"pure",//gradient//pure
+      gradientColor:"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 100%)"
     } as TSharpSetting,
 
     useImageStyle:{

@@ -98,7 +98,9 @@
    
     import { mixins } from "@/mixin/index";
 
-    import { PageSizeItem, PageSizeList } from '@/assets/data/PageSetting'
+    import { PageSizeItem, PageSizeList, } from '@/assets/data/PageSetting'
+    import { StyleFontList} from '@/assets/data/Material'
+    
 
     import rotatePng from '@/assets/images/rotate.png'
 
@@ -108,8 +110,10 @@
     import '@leafer-in/state'
     import { storeToRefs } from 'pinia'
     import { InnerEditorEvent ,EditorEvent,EditorScaleEvent} from '@leafer-in/editor'
-    import { ElMessage, ElMessageBox } from 'element-plus'
+    import { ElMessage } from 'element-plus'
     
+    import { useI18n } from "vue-i18n"
+    const { t } = useI18n()
 
     let componen = shallowRef(null);
     const PagePanel = defineAsyncComponent(() => import("./panel/PagePanel.vue"));
@@ -219,17 +223,17 @@
 
         editorStore.setApp(canvasApp);
 
-        canvasApp.tree.on(ZoomEvent.ZOOM, () => {
+         canvasApp.tree.on(ZoomEvent.ZOOM, () => {
 
-            if(canvasApp.tree.scale){
-                editorStore.setScale(canvasApp.tree.scale);
+             if(canvasApp.tree.scale){
+                 editorStore.setScale(canvasApp.tree.scale);
             }
         });
-        canvasApp.tree.on(ResizeEvent.RESIZE, () => {
+         canvasApp.tree.on(ResizeEvent.RESIZE, () => {
 
             if(canvasApp.tree.scale){
-                editorStore.setScale(canvasApp.tree.scale);
-            }
+             editorStore.setScale(canvasApp.tree.scale);
+             }
 
         });
 
@@ -256,10 +260,12 @@
 
             if(e.list.length==0){
                 canvasApp.editor.target=null
+                componen.value = objcomponen.value.PagePanel
                return;
             }
             if(e.list[0].tag=="Frame"){
                 canvasApp.editor.target=null
+                componen.value = objcomponen.value.PagePanel
                return;
             }
 
@@ -636,7 +642,18 @@
 
 
     watch(()=>useTextStyle.value,async (value)=>{
-     
+
+        let msg= ElMessage({
+                showClose: true,
+                duration:0,
+                type: 'success',
+                message: t("canvas.fontload"),
+            })
+         let font= StyleFontList.find(m=>m.value==value.fontFamily) 
+         await mixins.loadFont(font.value,font.url)
+         msg.close()
+
+       
         canvasApp.editor.list.forEach(async (elem)=>{
 
             if(elem.name.startsWith("Text")){
@@ -677,16 +694,71 @@
 
 
     watch(()=>useSharpStyle.value,async (value)=>{
-     
+
      canvasApp.editor.list.forEach(async (elem)=>{
          if(elem.name.startsWith("Text")){
              
          }else{
-            
-
+        
             await  nextTick()
 
-            elem.fill=value.fill
+            if(value.activeColorKey=="pure"){
+
+                elem.fill=[{type:'solid',color:value.pureColor}]
+
+            }else if(value.activeColorKey=="gradient"){
+               
+                if(value.gradientColor){
+                    //linear-gradient(351deg, rgba(0,0,0,1) 0%, rgba(235,29,78,1) 91%)
+                 
+                    if(value.gradientColor.startsWith("linear")){
+
+                        const regex = /linear-gradient\((\d+deg), ([^%]+) (\d+%)?, ([^%]+) (\d+%)?\)/
+
+                        const match = value.gradientColor.match(regex)
+
+                        if(match){
+                           try{
+                             elem.fill=[{type:'linear',stops: [{ offset: 0, color: match[2] }, { offset: 1, color: match[4] }]}]
+                           }catch{
+                             elem.fill="#ffffff"
+                           }
+                        }else{
+                            elem.fill="#ffffff"
+                        }
+                    }else {
+
+                        //radial-gradient(circle, rgba(31, 135, 232, 1) 0%, rgba(0, 0, 0, 1) 100%)
+
+                        const regex = /radial-gradient\((circle), ([^%]+) (\d+%)?, ([^%]+) (\d+%)?\)/
+
+                        const match = value.gradientColor.match(regex)
+
+                        if(match){
+
+                           try{
+
+                             elem.fill=[{type:'radial',stops: [{ offset: 0, color: match[2] }, { offset: 1, color: match[4] }]}]
+
+                           }catch{
+
+                             elem.fill="#ffffff"
+
+                           }
+                        }else{
+                            elem.fill="#ffffff"
+                        }
+                    }
+                    
+                }else{
+                    elem.fill="#ffffff"
+                }
+
+            }else{
+                elem.fill="#ffffff"
+            }
+
+           
             elem.stroke=value.stroke
             elem.strokeWidth=value.strokeWidth
 
@@ -799,10 +871,12 @@
     
         const group = new Group(item.data)
         group.zIndex=editorStore.shapes.size + 1
+        group.around='center'
         frame.add(group)
    }
 
    const locked=(flag:boolean)=>{
+      canvasApp.editor.target.locked=flag
       canvasApp.editor.list.forEach((elem)=>{ elem.locked=flag  })
       menuVisible.value=false
    }
@@ -1058,11 +1132,13 @@
                 editable: true,
                 selected:true,
                 fontSize: 24,
-                stroke: 'red',
-                strokeWidth: 2,
+                around:'center',
+                letterSpacing:0,
+                lineHeight:32,
                 resizeFontSize: true,
                 stroke:'rgba(0,0,0,0)',
                 strokeWidth:0,
+                fontFamily:'アプリ明朝',
                 fill:'#000000',
                 padding: [4, 8],
                 x:defaultOption.x,
@@ -1191,6 +1267,10 @@
     const  handleSaveImg=async ()=>{
         
         const json = frame.toJSON() 
+
+        console.info(json)
+
+        console.info(canvasApp.tree.toJSON())
 
         const result = await frame.export('jpg', { blob: true })
 

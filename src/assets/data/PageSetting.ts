@@ -49,6 +49,12 @@ export type  PageSizeItem={
 }
 
 export const PageSizeList=[
+  {
+    title: "1200px*1920px",
+    width: 1200,
+    height: 1920,
+    id:3
+  },
    {
     title: "600px*600px",
     width: 600,
@@ -61,6 +67,7 @@ export const PageSizeList=[
     height: 800,
     id:2
   }
+  
 ] as PageSizeItem[]
 
 

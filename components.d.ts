@@ -18,7 +18,6 @@ declare module 'vue' {
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     Header: typeof import('./src/components/Header.vue')['default']
-    ImageCompar: typeof import('./src/components/ImageCompar.vue')['default']
     ImagePanel: typeof import('./src/components/panel/ImagePanel.vue')['default']
     Index: typeof import('./src/components/Index.vue')['default']
     Lang: typeof import('./src/components/lang/index.vue')['default']

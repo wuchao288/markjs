@@ -132,7 +132,7 @@
                </el-col>
 
                <el-col :span="12">
-                <el-slider v-model="useTextStyle.letterSpacing"  :max="10"  :min="0" />
+                <el-slider v-model="useTextStyle.letterSpacing"  :max="10"  :min="-10" />
               </el-col>
               <el-col :span="6">
                  <el-input size="small" v-model="useTextStyle.letterSpacing"></el-input>
@@ -145,7 +145,7 @@
                </el-col>
 
                <el-col :span="12">
-                <el-slider v-model="useTextStyle.lineHeight"  :max="10"  :min="0" />
+                <el-slider v-model="useTextStyle.lineHeight"  :max="200"  :min="0" />
               </el-col>
               <el-col :span="6">
                  <el-input size="small" v-model="useTextStyle.lineHeight"></el-input>
@@ -210,7 +210,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref,watch} from 'vue'
+    import { ref,watch,reactive} from 'vue'
 
     import { ElForm,ElFormItem,ElInput,ElSlider,ElColorPicker,
       ElRadioGroup,ElRadio,ElCard,
@@ -249,6 +249,16 @@
     useTextStyle.value.textDecoration=useTextStyle.value.textDecoration!=setValue?setValue:'none'
   }
 
+  const state = reactive({
+  loading: false,
+  editable: false,
+  loadFontDone: '',
+})
+
+
+
+
+
     const predefineColors = ref([
       '#ff4500',
       '#ff8c00',
@@ -286,6 +296,7 @@
     padding: 20px;
     bottom: 0px;
     width: 280px;
+    overflow: auto;
    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px;
   }
 
