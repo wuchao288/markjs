@@ -239,7 +239,7 @@ const  changeActiveName=(activeName)=>{
 }
 
 
-::v-deep .el-upload-list--picture-card{
+:deep(.el-upload-list--picture-card){
   display:block;
 
 }

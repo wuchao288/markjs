@@ -100,7 +100,7 @@
                   :content="t('stylepanel.underline')"
                   placement="top-start"
                 >
-                <el-button  @click="useTextStyle.underline=!useTextStyle.underline" :class="useTextStyle.underline?'btn-active':''">
+                <el-button  @click="setTextDecoration('under')" :class="useTextStyle.textDecoration=='under'?'btn-active':''">
                   <i class="iconfont icon-fuhao-xiahuaxian"></i>
                 </el-button>
               </el-tooltip>
@@ -113,7 +113,7 @@
                   :content="t('stylepanel.inethrough')"
                   placement="top-start"
                 >
-                <el-button  @click="useTextStyle.inethrough=!useTextStyle.inethrough" :class="useTextStyle.inethrough?'btn-active':''">
+                <el-button  @click="setTextDecoration('delete')" :class="useTextStyle.textDecoration=='delete'?'btn-active':''">
                   <i class="iconfont icon-shanchuxian"></i>
                 </el-button>
 
@@ -245,6 +245,9 @@
 
   const {useTextStyle} = storeToRefs(editorStore)
 
+  const setTextDecoration=(setValue)=>{
+    useTextStyle.value.textDecoration=useTextStyle.value.textDecoration!=setValue?setValue:'none'
+  }
 
     const predefineColors = ref([
       '#ff4500',
@@ -287,6 +290,6 @@
   }
 
   .btn-active{
-     background-color: #f5f5f5;
+     background-color: #ededed;
   }
 </style>

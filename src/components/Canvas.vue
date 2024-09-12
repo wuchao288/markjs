@@ -26,11 +26,11 @@
     </keep-alive>
 
     
-    <el-dialog v-model="dialogFormVisible" close-on-click-modal="false" destroy-on-close="true" title="AI Cut Out" width="800" height="600" @opened="openedCutout">
+    <el-dialog v-model="dialogFormVisible" :close-on-click-modal="false" :destroy-on-close="true" title="AI Cut Out" width="800" height="600" @opened="openedCutout">
 
         <div :class="loading?'':'cutimg'" style="height: 560px;">
             <div v-if="loading" >
-                <h3 style="margin-bottom: 10px;">正在处理请等待...</h3>
+                <h3 style="margin-bottom: 10px;">{{$t("canvas.loading")}} </h3>
                 <div>
                     <el-progress :percentage="100" :format="format" :indeterminate="true" />
                 </div>
@@ -42,9 +42,9 @@
 
         <template #footer>
         <div class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">Cancel</el-button>
+            <el-button @click="dialogFormVisible = false"> {{$t("canvas.cancel")}} </el-button>
             <el-button type="primary" @click="enterCutout">
-            Confirm
+            {{$t("canvas.confirm")}} 
             </el-button>
         </div>
         </template>
@@ -254,6 +254,15 @@
 
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
 
+            if(e.list.length==0){
+                canvasApp.editor.target=null
+               return;
+            }
+            if(e.list[0].tag=="Frame"){
+                canvasApp.editor.target=null
+               return;
+            }
+
             if(e.list.length==1&&e.list[0].tag!="Group"){
 
             
@@ -275,12 +284,33 @@
                     
                     if(text.dashPattern&&text.dashPattern.length==2){
 
-                        useSharpStyle.value.lineStyle="dashed"
+                        useTextStyle.value.lineStyle="dashed"
                         
                     }else{
 
-                        useSharpStyle.value.lineStyle="solid"
+                        useTextStyle.value.lineStyle="solid"
                     }
+                   
+                    if(text.shadow.blur==0){
+
+                        useTextStyle.value.isShadow=false
+
+                        useTextStyle.value.shadow={
+                            x:0,
+                            y:0,
+                            blur:4,
+                            color:'#000000',
+                        }
+
+                    }else{
+                        useTextStyle.value.shadow={
+                            x:text.shadow.x,
+                            y:text.shadow.y,
+                            blur:text.shadow.blur,
+                            color:text.shadow.color,
+                        }
+                    }
+
 
                     componen.value = objcomponen.value.TextPanel
 
@@ -424,6 +454,10 @@
             frame.y=0
 
             frame.disabled=true
+
+            frame.editable=false
+
+            frame.hitSelf=false
             
             usePageBgColor.value=frame.fill.toString()
 
@@ -434,11 +468,14 @@
 
 
             frame = new Frame({
-            x:0,
-            fill:usePageBgColor.value,
-            y:0,
-            width: pageWidth.value,
-            height: pageHeight.value
+                editable:false,
+                disabled:false,
+                hitSelf:false,
+                x:0,
+                fill:usePageBgColor.value,
+                y:0,
+                width: pageWidth.value,
+                height: pageHeight.value
             })
 
             
@@ -618,25 +655,21 @@
                 text.letterSpacing=value.letterSpacing
                 text.lineHeight=value.lineHeight
                 text.fontFamily=value.fontFamily
-                text.fontWeight=value.bold?"bold":""
-
+                text.fontWeight=value.bold?"bold":"normal"
+                text.textDecoration=value.textDecoration
                 //'none' | 'under' | 'delete';
                 text.italic=value.italic
 
-                if(value.underline==true){
-                    text.textDecoration="under"
-                }else if(value.inethrough==true){
-                    text.textDecoration="delete"
-                }else{
-                    text.textDecoration="none"
-                }
-
-
-               
                 if(value.lineStyle=="dashed"){
                     text.dashPattern=[6,6];
                 }else{
                     text.dashPattern=[];
+                }
+
+                if(value.isShadow){
+                    text.shadow=value.shadow
+                }else{
+                    text.shadow=""
                 }
             }
         })
@@ -689,7 +722,7 @@
            return;
         }
 
-        debugger
+        
         let img=await getImage(imgUrl)
  
         const rectImg = new Rect({
@@ -828,10 +861,7 @@
 
         const key = event.key || event.keyCode;
     
-        // 判断按下的是否是Backspace键
-        if (key === 'Backspace' || key === 8) {
-            doDel()
-        }
+
     
         // 判断按下的是否是Delete键
         if (key === 'Delete' || key === 46) {
@@ -998,25 +1028,51 @@
             // })
 
 
+            // let text=Text.one({
+            //     name:'Text',
+            //     text: '100cm',
+            //     editable: true,
+            //     fontSize: 24,
+            //     selected:true,
+            //     // around: 'top-left',
+            //     resizeFontSize: true,
+            //     padding: [4, 8],
+            //     fill:'#000000',
+            //     //hitFill:'all',
+            //     stroke:'rgba(0,0,0,0)',
+            //     strokeWidth:0,
+            //     shadow: {
+            //         x: 0,
+            //         y: 0,
+            //         blur: 0,
+            //         color: "#000000"
+            //     },
+            //     ...defaultOption
+            // })
+
             let text=Text.one({
+                id:id,
+                zIndex:zIndex,
                 name:'Text',
                 text: '100cm',
                 editable: true,
-                fontSize: 24,
                 selected:true,
+                fontSize: 24,
+                stroke: 'red',
+                strokeWidth: 2,
                 resizeFontSize: true,
-                padding: [4, 8],
-                fill:'#000000',
-                hitFill:'all',
                 stroke:'rgba(0,0,0,0)',
                 strokeWidth:0,
+                fill:'#000000',
+                padding: [4, 8],
+                x:defaultOption.x,
+                y:defaultOption.y,
                 shadow: {
-                    x: 0,
-                    y: 0,
-                    blur: 0,
-                    color: "#000000"
-                },
-                ...defaultOption
+                     x: 0,
+                     y: 0,
+                     blur: 0,
+                     color: "#000000"
+                 }
             })
 
             return text
@@ -1197,8 +1253,6 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.info(data)
-            
             uploadCutOutImg(data)
         })
         .catch(error => console.error(error));
@@ -1247,9 +1301,6 @@
             )
             .catch(error => 
             {
-                
-                console.info(error)
-
                 ElMessage.error("Cut Out Error!")
                 console.error(error)
            }

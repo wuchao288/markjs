@@ -28,8 +28,7 @@ export type TTextSetting={
   isShadow:boolean,
   bold:boolean,
   italic:boolean,
-  underline:boolean,
-  inethrough:boolean,
+  textDecoration:'none' | 'under' | 'delete'
   shadow:{x: number;y: number; blur: number; color: string;}
 }
 
@@ -125,8 +124,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         isShadow:false,
         bold:false,
         italic:false,
-        underline:false,
-        inethrough:false,
+        textDecoration:'none',
         shadow:{
           x: 0,
           y: 0,

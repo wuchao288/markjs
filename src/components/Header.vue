@@ -489,7 +489,7 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
   width: 100%;
 }
 
-::v-deep .mateitem-img img{
+:deep(.mateitem-img img){
    display: block;
    object-fit: fill;
 }
