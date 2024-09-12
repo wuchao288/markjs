@@ -55,8 +55,7 @@
 <script lang="ts">
       export const getImage = (imgItem: string | File): Promise<HTMLImageElement> => {
     // 创建对象
-
-        debugger
+    //https://image.rakuten.co.jp/daydaybuy/cabinet//////488984753224024064.jpg
         const img = new Image()
         // 改变图片的src
         const url = window.URL || window.webkitURL
@@ -65,15 +64,13 @@
         return new Promise((resolve) => {
             // 判断是否有缓存
             if (img.complete) {
-            
-            resolve(img)
+                resolve(img)
             } else {
             // 加载完成执行
             img.onload = function () {
-                
                 resolve(img)
             }
-            }
+          }
         })
     }
 </script>
