@@ -1058,7 +1058,11 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         if(flag==true){
             canvasApp.editor.group()
         }else{
+           
             canvasApp.editor.ungroup()
+
+            canvasApp.editor.list.forEach((elem)=>{ console.info(elem.toString())  })
+            //elem.editable=true
         }
         menuVisible.value=false
    }
@@ -1274,16 +1278,16 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 //selected:true,
                 fontSize: 24,
                 //around:'center',
-                //letterSpacing:0,
+                letterSpacing:0,
                 lineHeight:{
                     type: 'percent',
                     value: 1.5, // 150%
                 },
                 resizeFontSize: true,
-                //stroke:'rgba(0,0,0,0)',
-                //strokeWidth:0,
-                //fontFamily:'07LogoTypeGothic7',
-                //fill:'#000000',
+                stroke:'rgba(0,0,0,0)',
+                strokeWidth:0,
+                fontFamily:'07LogoTypeGothic7',
+                fill:'#000000',
                 padding: [4, 8],
                 x:defaultOption.x,
                 y:defaultOption.y,
