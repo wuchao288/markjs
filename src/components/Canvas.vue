@@ -114,6 +114,8 @@
 
 
     import { useI18n } from "vue-i18n"
+import { copyFileSync } from 'fs'
+import { config } from 'process'
     const { t } = useI18n()
 
     let componen = shallowRef(null);
@@ -205,7 +207,8 @@
                 }
             }
         })
-
+        
+        canvasApp.config.move.drag='auto'
 
         const ruler = new Ruler(canvasApp)
 
@@ -243,7 +246,14 @@
                 
               if(e.target.tag=="Text"){
 
+                
                   useTextStyle.value.fontSize=parseInt(e.target.fontSize.toString())
+
+                  if(e.target.lineHeight){
+
+                    useTextStyle.value.lineHeight.value=(e.target.lineHeight.value*1).toFixed(2)
+                  }
+                 
 
               }else if(['Arrow','Ellipse','Rect','Polygon','Star','Line'].includes(e.target.tag)&&e.target.name!="image"){
 
@@ -278,17 +288,17 @@
 
                     let text=e.list[0] as Text
 
-                    useTextStyle.value.fill=text.fill.toString()
+                    useTextStyle.value.fill=text.fill?.toString()
 
                     useTextStyle.value.fontSize= parseInt(text.fontSize.toString())
 
-                    useTextStyle.value.fontWeight=text.fontWeight.toString()
+                    useTextStyle.value.fontWeight=text.fontWeight?.toString()
 
                     useTextStyle.value.text=text.text
 
-                    useTextStyle.value.stroke=text.stroke.toString()
+                    useTextStyle.value.stroke=text.stroke?.toString()
 
-                    useTextStyle.value.strokeWidth=Number(text.strokeWidth.toString())
+                    useTextStyle.value.strokeWidth=Number(text.strokeWidth?.toString())
                     
                     if(text.dashPattern&&text.dashPattern.length==2){
 
@@ -299,7 +309,7 @@
                         useTextStyle.value.lineStyle="solid"
                     }
                    
-                    if(text.shadow.blur==0){
+                    if(text.shadow?.blur==0){
 
                         useTextStyle.value.isShadow=false
 
@@ -312,10 +322,10 @@
 
                     }else{
                         useTextStyle.value.shadow={
-                            x:text.shadow.x,
-                            y:text.shadow.y,
-                            blur:text.shadow.blur,
-                            color:text.shadow.color,
+                            x:text.shadow?.x,
+                            y:text.shadow?.y,
+                            blur:text.shadow?.blur,
+                            color:text.shadow?.color,
                         }
                     }
 
@@ -632,67 +642,196 @@
          }
     })
 
-  //弃用
-    watch(()=>usePageBgColor.value,()=>{
-       
-        if(usePageBgColor.value){
-            frame.fill=usePageBgColor.value
-        }else{
-            frame.fill="#ffffff"
-        }
-    })
+    watch(()=>useTextStyle.value.fontFamily,async (newValue, oldValue)=>{
 
-
-    watch(()=>useTextStyle.value,async (value)=>{
-
-        let msg= ElMessage({
+        if(oldValue!=newValue&&oldValue!=""){
+            let msg= ElMessage({
                 showClose: true,
                 duration:0,
                 type: 'success',
                 message: t("canvas.fontload"),
             })
-         let font= StyleFontList.find(m=>m.value==value.fontFamily) 
-         await mixins.loadFont(font.value,font.url)
-         msg.close()
+            let font= StyleFontList.find(m=>m.value==newValue) 
+            await mixins.loadFont(font.value,font.url)
+            msg.close()
+        }
 
-       
-        canvasApp.editor.list.forEach(async (elem)=>{
+        let text= canvasApp.editor.target as Text
+        text.fontFamily=newValue
+    })
 
-            if(elem.name.startsWith("Text")){
+
+    watch(()=>useTextStyle.value.fill, (newValue, oldValue)=>{
+
+        if(oldValue!=newValue&&oldValue!=""){
+            let text= canvasApp.editor.target as Text
+            text.fill=newValue
+        }
+   })
+
+   watch(()=>useTextStyle.value.fontSize, (newValue, oldValue)=>{
+ 
+    if(oldValue!=newValue&&oldValue!=""){
+        let text= canvasApp.editor.target as Text
+        text.fontSize=newValue
+    }
+ })
 
 
-                await  nextTick()
 
-                let text= elem as Text
+ watch(()=>useTextStyle.value.text, (newValue, oldValue)=>{
+ 
+ if(oldValue!=newValue&&oldValue!=""){
+     let text= canvasApp.editor.target as Text
+     text.text=newValue
+ }
+})
 
-                text.fill=value.fill
-                text.fontSize=value.fontSize
-                text.fontWeight=value.fontWeight as IFontWeight
-                text.text=value.text
-                text.stroke=value.stroke
-                text.strokeWidth=value.strokeWidth
-                text.letterSpacing=value.letterSpacing
-                text.lineHeight=value.lineHeight
-                text.fontFamily=value.fontFamily
-                text.fontWeight=value.bold?"bold":"normal"
-                text.textDecoration=value.textDecoration
-                //'none' | 'under' | 'delete';
-                text.italic=value.italic
+watch(()=>useTextStyle.value.stroke, (newValue, oldValue)=>{
+ 
+ if(oldValue!=newValue&&oldValue!=""){
+     let text= canvasApp.editor.target as Text
+     text.stroke=newValue
+ }
+})
 
-                if(value.lineStyle=="dashed"){
+watch(()=>useTextStyle.value.strokeWidth, (newValue, oldValue)=>{
+ 
+ if(oldValue!=newValue&&oldValue!=""){
+     let text= canvasApp.editor.target as Text
+     text.strokeWidth=newValue
+ }
+})
+watch(()=>useTextStyle.value.letterSpacing, (newValue, oldValue)=>{
+ 
+ if(oldValue!=newValue&&oldValue!=""){
+     let text= canvasApp.editor.target as Text
+     text.letterSpacing=newValue
+ }
+})
+
+watch(()=>useTextStyle.value.lineHeight.value, (newValue, oldValue)=>{
+ 
+    let text= canvasApp.editor.target as Text
+    text.lineHeight={
+        type:"percent",
+        value:newValue
+    }
+
+})
+
+watch(()=>useTextStyle.value.textDecoration, (newValue, oldValue)=>{
+ debugger
+ if(oldValue!=newValue&&oldValue!=""){
+     let text= canvasApp.editor.target as Text
+     text.textDecoration=newValue
+ }
+})
+
+watch(()=>useTextStyle.value.bold, (newValue, oldValue)=>{
+
+let text= canvasApp.editor.target as Text
+text.fontWeight= newValue?"bold":"normal"
+
+})
+
+watch(()=>useTextStyle.value.italic, (newValue, oldValue)=>{
+
+     let text= canvasApp.editor.target as Text
+     text.italic=newValue
+})
+
+watch(()=>useTextStyle.value.lineStyle, (newValue, oldValue)=>{
+ 
+
+     let text= canvasApp.editor.target as Text
+           if(newValue.lineStyle=="dashed"){
                     text.dashPattern=[6,6];
                 }else{
                     text.dashPattern=[];
                 }
+ 
+})
 
-                if(value.isShadow){
-                    text.shadow=value.shadow
-                }else{
-                    text.shadow=""
-                }
-            }
-        })
-    },{ deep: true })
+watch(()=>useTextStyle.value.isShadow, (newValue, oldValue)=>{
+ 
+    let text= canvasApp.editor.target as Text
+
+    if(newValue){
+        text.shadow=useTextStyle.value.shadow
+    }else{
+        text.shadow=""
+    }
+})
+
+watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
+ 
+ let text= canvasApp.editor.target as Text
+
+ if(useTextStyle.value.isShadow){
+     text.shadow=newValue
+ }else{
+     text.shadow=""
+ }
+},{deep:true})
+
+
+
+
+    // watch(()=>useTextStyle.value,async (value)=>{
+
+    //     let msg= ElMessage({
+    //             showClose: true,
+    //             duration:0,
+    //             type: 'success',
+    //             message: t("canvas.fontload"),
+    //         })
+    //      let font= StyleFontList.find(m=>m.value==value.fontFamily) 
+    //      await mixins.loadFont(font.value,font.url)
+    //      msg.close()
+
+
+       
+
+
+
+               
+    //             let text= canvasApp.editor.target as Text
+
+    //              text.fill=value.fill
+    //              text.fontSize=value.fontSize
+    //              text.fontWeight=value.fontWeight as IFontWeight
+    //              text.text=value.text
+    //               text.stroke=value.stroke
+    //               text.strokeWidth=value.strokeWidth
+
+
+    //              text.letterSpacing=value.letterSpacing
+
+            
+    //              text.lineHeight=value.lineHeight
+
+    //              text.fontFamily=value.fontFamily
+
+
+    //              text.textDecoration=value.textDecoration
+    //             // //'none' | 'under' | 'delete';
+    //              text.italic=value.italic
+
+    //             if(value.lineStyle=="dashed"){
+    //                 text.dashPattern=[6,6];
+    //             }else{
+    //                 text.dashPattern=[];
+    //             }
+
+    //             if(value.isShadow){
+    //                 text.shadow=value.shadow
+    //             }else{
+    //                 text.shadow=""
+    //             }
+            
+
+    // },{ deep: true })
 
 
     watch(()=>useSharpStyle.value,async (value)=>{
@@ -1132,16 +1271,19 @@
                 name:'Text',
                 text: '100cm',
                 editable: true,
-                selected:true,
+                //selected:true,
                 fontSize: 24,
-                around:'center',
-                letterSpacing:0,
-                lineHeight:32,
+                //around:'center',
+                //letterSpacing:0,
+                lineHeight:{
+                    type: 'percent',
+                    value: 1.5, // 150%
+                },
                 resizeFontSize: true,
-                stroke:'rgba(0,0,0,0)',
-                strokeWidth:0,
-                fontFamily:'07LogoTypeGothic7',
-                fill:'#000000',
+                //stroke:'rgba(0,0,0,0)',
+                //strokeWidth:0,
+                //fontFamily:'07LogoTypeGothic7',
+                //fill:'#000000',
                 padding: [4, 8],
                 x:defaultOption.x,
                 y:defaultOption.y,

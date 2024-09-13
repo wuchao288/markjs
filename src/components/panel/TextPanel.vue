@@ -145,10 +145,10 @@
                </el-col>
 
                <el-col :span="12">
-                <el-slider v-model="useTextStyle.lineHeight"  :max="200"  :min="0" />
+                <el-slider v-model="useTextStyle.lineHeight.value"  :max="3" :step="0.01"  :min="-3" />
               </el-col>
               <el-col :span="6">
-                 <el-input size="small" v-model="useTextStyle.lineHeight"></el-input>
+                 <el-input size="small" v-model="useTextStyle.lineHeight.value"></el-input>
               </el-col>
             </el-row>
         </el-card>

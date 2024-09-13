@@ -24,7 +24,7 @@ export type TTextSetting={
   cornerRadius:number,
   fontFamily:string,
   letterSpacing:number,
-  lineHeight:number,
+  lineHeight:any,
   isShadow:boolean,
   bold:boolean,
   italic:boolean,
@@ -123,7 +123,10 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         cornerRadius:2,
         fontFamily:'07LogoTypeGothic7',
         letterSpacing:0,
-        lineHeight:32,
+        lineHeight:{
+          type: 'percent',
+          value: 1.5, // 150%
+      },
         isShadow:false,
         bold:false,
         italic:false,
