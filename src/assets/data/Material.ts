@@ -55,10 +55,16 @@ export type StyleFontItem={
 
 export const StyleFontList=[ 
 { 
-    "alias":"アプリ明朝",
+    "alias":"アプリ明朝",  
     "preview":new URL("@/assets/fonts/473404317567549440.png",import.meta.url).href,
     "url":new URL("@/assets/fonts/473404317567549440.otf",import.meta.url).href,
     "value":"アプリ明朝"
+},
+{ 
+  "alias":"07LogoTypeGothic7",
+  "preview":new URL("@/assets/fonts/07LogoTypeGothic7.png",import.meta.url).href,
+  "url":new URL("@/assets/fonts/07LogoTypeGothic7.ttf",import.meta.url).href,
+  "value":"07LogoTypeGothic7"
 },
 { 
     "alias":"karakaze",

@@ -147,17 +147,17 @@
       ) => {
 
         if(uploadFile.raw==undefined){
-          ElMessage.error('Picture must be JPG/PNG format!')
+          ElMessage.error(t("stylepanel.formatmsg"))//Picture must be JPG/PNG format!
           return false
         }
 
         let rawFile=(uploadFile.raw);
         
         if (rawFile.type !== 'image/jpeg'&&rawFile.type !== 'image/png') {
-          ElMessage.error('Picture must be JPG/PNG format!')
+          ElMessage.error(t("stylepanel.formatmsg"))//'Picture must be JPG/PNG format!'
           return false
-        } else if (rawFile.size / 1024 / 1024 > 2) {
-          ElMessage.error('Picture size can not exceed 2MB!')
+        } else if (rawFile.size / 1024 / 1024 > 3) {
+          ElMessage.error(t("stylepanel.imgsizemsg",3))//'Picture size can not exceed 3MB!'
           return false
         }
 

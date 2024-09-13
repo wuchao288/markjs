@@ -121,7 +121,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         stroke:"#000000",
         lineStyle: 'solid',
         cornerRadius:2,
-        fontFamily:'アプリ明朝',
+        fontFamily:'07LogoTypeGothic7',
         letterSpacing:0,
         lineHeight:32,
         isShadow:false,

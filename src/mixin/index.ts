@@ -30,7 +30,28 @@ function throttle(func, wait) {
 if (!(window as any)._hasLoadFonts) {
     (window as any)._hasLoadFonts = {};
 }
- async function loadFont(fontFamily: string, url: string) {
+
+function isCrossDomain(url) {
+  try {
+      // 创建新的URL对象
+      const newUrl = new URL(url);
+      const currentUrl = new URL(window.location.href);
+
+      // 获取当前页面和目标URL的协议、主机和端口
+      const currentOrigin = `${currentUrl.protocol}//${currentUrl.hostname}:${currentUrl.port}`;
+      const newOrigin = `${newUrl.protocol}//${newUrl.hostname}:${newUrl.port}`;
+
+      // 比较两者的origin是否相同
+      return currentOrigin !== newOrigin;
+  } catch (error) {
+      // 如果URL无效，则返回true表示跨域
+      console.error('Invalid URL', error);
+      return true;
+  }
+}
+
+
+async function loadFont(fontFamily: string, url: string) {
     if ((window as any)._hasLoadFonts[fontFamily]) {
       console.log('该字体已加载', fontFamily);
       return true;
@@ -56,9 +77,27 @@ if (!(window as any)._hasLoadFonts) {
     return false;
 }
   
+async function loadImg(url:string) {
+    if(isCrossDomain(url)==false){
+        return url
+    }else{
+
+      let myHeaders = new Headers({
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'text/plain'
+    });
+
+      return  fetch(url,{
+        method: 'GET',
+        mode: 'cors',
+        cache: 'default'
+    }).then(async res=>await res.blob())
+    }
+}
 
 export const mixins ={
     debounce,
     throttle,
-    loadFont
+    loadFont,
+    loadImg
 }

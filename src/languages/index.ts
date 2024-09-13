@@ -42,7 +42,7 @@ export function getDefaultLang() {
 
   } else {
 
-    defaultLang = (defaultLang=="ja_jp"?"jp":(defaultLang=="zh_cn"?"zh":"en"));
+    defaultLang = (owlang=="ja_jp"?"jp":(owlang=="zh_cn"?"zh":"en"));
 
   }
   return defaultLang

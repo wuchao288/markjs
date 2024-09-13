@@ -21,13 +21,13 @@ export default defineConfig(
     base: '/editor',
     plugins: [
       vue(),
-      viteCompression({
-        verbose: true,
-        disable: false,
-        threshold: 10240,
-        algorithm: 'gzip',
-        ext: '.gz',
-      }),
+      // viteCompression({
+      //   verbose: true,
+      //   disable: false,
+      //   threshold: 10240,
+      //   //algorithm: 'gzip',
+      //   //ext: '.gz',
+      // }),
       
       AutoImport({
         resolvers: [ElementPlusResolver()],
@@ -40,8 +40,8 @@ export default defineConfig(
       minify: 'terser',
       terserOptions: {
         compress: {
-          drop_console: false,
-          drop_debugger: false
+          drop_console: true,
+          drop_debugger: true
         },
       },
     },
@@ -56,11 +56,11 @@ export default defineConfig(
       host: 'localhost',
       port: 5173,
       proxy: {
-        '/BLL': {
-          target: 'http://localhost:9290',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(new RegExp('^'), '')
-        },
+         '/BLL': {
+           target: 'http://localhost:9290',
+           changeOrigin: true,
+           rewrite: (path) => path.replace(new RegExp('^'), '')
+         },
         '/file': {
           target: 'http://localhost:9290',
           changeOrigin: true,

@@ -1,11 +1,6 @@
 /*
- * @Author: ShawnPhang
- * @Date: 2024-05-19 04:14:35
- * @Description:  
- * @LastEditors: ShawnPhang <https://m.palxp.cn>
- * @LastEditTime: 2024-05-19 05:17:16
+中文
  */
-import header from './header'
 export default {
   stylepanel: {
     pagesize:'页面大小',
@@ -41,7 +36,9 @@ export default {
     exportimg:'导出图片',
     crop:'裁剪',
     cutout:'抠图',
-    filter:'美化'
+    filter:'美化',
+    formatmsg:'Picture must be JPG/PNG format!',
+    imgsizemsg:'Picture size can not exceed {0}MB'
   },  
   header:{
     addmaterial:'导入素材',
@@ -79,6 +76,7 @@ export default {
     loading:'正在处理请等待...',
     confirm:'确定',
     cancel:'取消',
-    fontload:'字体加载中...'
+    fontload:'字体加载中...',
+
   }
 }

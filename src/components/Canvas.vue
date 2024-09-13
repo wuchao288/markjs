@@ -98,6 +98,7 @@
     import { PageSizeItem, PageSizeList, } from '@/assets/data/PageSetting'
     import { StyleFontList} from '@/assets/data/Material'
     
+    //import Cookies from 'js-cookie'
 
     import rotatePng from '@/assets/images/rotate.png'
 
@@ -109,6 +110,9 @@
     import { InnerEditorEvent ,EditorEvent,EditorScaleEvent} from '@leafer-in/editor'
     import { ElMessage } from 'element-plus'
     
+    //import axios from 'axios';
+
+
     import { useI18n } from "vue-i18n"
     const { t } = useI18n()
 
@@ -123,6 +127,7 @@
         SharpPanel,
         ImagePanel
     });
+
 
 
     componen.value = objcomponen.value.PagePanel
@@ -1135,7 +1140,7 @@
                 resizeFontSize: true,
                 stroke:'rgba(0,0,0,0)',
                 strokeWidth:0,
-                fontFamily:'アプリ明朝',
+                fontFamily:'07LogoTypeGothic7',
                 fill:'#000000',
                 padding: [4, 8],
                 x:defaultOption.x,
@@ -1324,7 +1329,24 @@
 
         formData.append('file', blob.data, 'blob')
 
-        fetch('/BLL/TempHandler.ashx?action=UploadMarkImage', {
+        
+        // axios.defaults.withCredentials=false
+        // axios.defaults.responseType='json'
+        // axios.defaults.responseEncoding="utf8"
+
+        // axios.post((window.parent as any).sploadImgToTempdes||'http://localhost:9290/BLL/TempHandler.ashx?action=UploadMarkImage', formData)
+        // .then(response => {
+        //     // 处理上传成功的响应
+        //     console.log(response.data);
+        //     uploadCutOutImg(response.data)
+        // })
+        // .catch(error => {
+        //     // 处理上传失败的错误
+        //     console.info(error.stack);
+        // });
+
+
+        fetch((window.parent as any).sploadImgToTempdes||'/BLL/TempHandler.ashx?action=UploadMarkImage', {
             method: 'POST',
             body: formData
         })
@@ -1364,24 +1386,46 @@
 
     const  uploadCutOutImg=(json)=>{
         let formData=new FormData()
-        formData.append("fileUrl",json.data.fileUrl)
-        fetch('/BLL/TempHandler.ashx?action=CutOutImg', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-              
-               imgCutImg.value=data.data[0]
-               loading.value=false
-              }
-            )
-            .catch(error => 
-            {
-                ElMessage.error("Cut Out Error!")
-                console.error(error)
-           }
-        );
+        if((window.parent as any).cutOutImg){
+           // formData.append("loginToken",Cookies.get("token"))
+        }
+       
+        formData.append("fileUrl",(window.parent as any).cutOutImg?json.response.ImgPath:json.data.fileUrl)
+        // axios.defaults.withCredentials=false
+        // axios.defaults.responseType='json'
+        // axios.defaults.responseEncoding="utf8"
+        // axios.post((window.parent as any).cutOutImg||'http://localhost:9290/BLL/TempHandler.ashx?action=CutOutImg', formData)
+        // .then(response => {
+        //     // 处理上传成功的响应
+        //     console.log(response.data);
+            
+        // })
+        // .catch(error => {
+        //     // 处理上传失败的错误
+        //     console.info(error.stack);
+        // });
+
+         fetch((window.parent as any).cutOutImg||'/BLL/TempHandler.ashx?action=CutOutImg', {
+                 method: 'POST',
+                 body: formData,
+                 //credentials: 'include'
+             })
+             .then(response => response.json())
+             .then(data => {
+                loading.value=false
+                if(data.code!=0){
+                    imgCutImg.value=data.data[0]
+                }else{
+                    ElMessage.error(data.msg)
+                }
+               }
+             )
+             .catch(error => 
+             {
+                 ElMessage.error("Cut Out Error!")
+                 console.info(error)
+            }
+         );
     }
 
     defineExpose({

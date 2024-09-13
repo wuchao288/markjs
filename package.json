@@ -20,7 +20,6 @@
     "@leafer-in/state": "^1.0.2",
     "@leafer-in/text-editor": "^1.0.2",
     "@leafer-in/view": "^1.0.2",
-    "axios": "^1.7.7",
     "css-loader": "^7.1.2",
     "element-plus": "^2.8.1",
     "js-cookie": "^3.0.5",
