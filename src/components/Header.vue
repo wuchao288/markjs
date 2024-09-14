@@ -42,11 +42,11 @@ SharpTypeList.forEach(m=>m.title=t(m.title))
 
 const SharpTypeListFilter=computed(()=>SharpTypeList.filter(m=>m.type!="Line"))
 
-const imageUrl = ref('')
 
 import useEditStore from "@/stores/useEditStore"
 import { storeToRefs } from 'pinia'
 
+import { mixins } from "@/mixin/index";
 
 const editorStore = useEditStore()
 
@@ -65,6 +65,8 @@ let  borderWidthType =ref<BorderWidthItem>(BorderWidthList[1])
 
 
 const {useColor,useBorderWidth} = storeToRefs(editorStore)
+
+let actionUrl=ref<string>((window.parent as any).sploadImgToTempdes||'/BLL/TempHandler.ashx?action=UploadMarkImage')
 
 let drawermate=ref<boolean>(false)
 
@@ -125,12 +127,20 @@ const handleAvatarSuccess: UploadProps['onChange'] = (
     return false
   }
 
-  imageUrl.value = URL.createObjectURL(uploadFile.raw!)
-
-  emit('handleAddImg',imageUrl.value)
-
-  return true
+  mixins.uploadFile(rawFile,{}).then((data)=>{
+      
+      if((data as any).code==0){
+        emit('handleAddImg',(window.parent as any).sploadImgToTempdes?(data as any).response.ImgPath:(data as any).data.fileUrl)
+      }else{
+        ElMessage.error((data as any).msg)
+      }
+  }).catch((error)=>{
+    console.info(error)
+    ElMessage.error("Upload error")
+  })
 }
+
+
 
 const handleSharp=(type:string,subtype:string)=>{
 
@@ -326,6 +336,10 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
             <el-upload
               :show-file-list="false"
               :auto-upload="false"
+              :on-success="handleUploadSuccess"
+              :action="actionUrl"
+              :data="{FileName:'blob'}"
+               name="blob"
               :on-change="handleAvatarSuccess"
             >
               <template #trigger>

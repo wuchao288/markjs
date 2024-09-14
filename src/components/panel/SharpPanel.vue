@@ -34,7 +34,7 @@
         <color-picker
          v-model:pureColor="useSharpStyle.pureColor"  
          v-model:active-key="useSharpStyle.activeColorKey"
-         @activeKeyChange="activeKeyChange" format="hex6" shape="circle" useType="both"
+         @activeKeyChange="activeKeyChange" format="hex6" lang="En" shape="circle" useType="both"
          v-model:gradientColor="useSharpStyle.gradientColor" />
 
       </el-form-item>

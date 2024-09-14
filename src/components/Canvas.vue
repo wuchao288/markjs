@@ -26,7 +26,9 @@
     </keep-alive>
 
     
-    <el-dialog v-model="dialogFormVisible" :close-on-click-modal="false" :destroy-on-close="true" title="AI Cut Out" width="800" height="600" @opened="openedCutout">
+    <el-dialog v-model="dialogFormVisible" :close-on-click-modal="false"
+     :destroy-on-close="true" title="AI Cut Out" :width="windowHeight<800?windowHeight:800"
+      height="600" @opened="openedCutout">
 
         <div :class="loading?'':'cutimg'" style="height: 560px;">
             <div v-if="loading" >
@@ -36,7 +38,7 @@
                 </div>
             </div>
             <div  v-loading="loading"> 
-                 <img :src='imgCutImg'   /> 
+                 <el-image style="width: 500px; height: 500px" :src="imgCutImg" fit="contain" />
             </div>
         </div>
 
@@ -50,12 +52,13 @@
         </template>
     </el-dialog>
 
+    <cropper-img :imageSrc="imageCropSrc" :sizeData="sizeData" :cropData="cropData"  v-model="dialogCropVisible" @updateImageSrc="updateCropImageSrc" />
+
 </template>
 
 <script lang="ts">
       export const getImage = (imgItem: string | File): Promise<HTMLImageElement> => {
-    // 创建对象
-    //https://image.rakuten.co.jp/daydaybuy/cabinet//////488984753224024064.jpg
+   
         const img = new Image()
         // 改变图片的src
         const url = window.URL || window.webkitURL
@@ -108,15 +111,19 @@
     import '@leafer-in/state'
     import { storeToRefs } from 'pinia'
     import { InnerEditorEvent ,EditorEvent,EditorScaleEvent} from '@leafer-in/editor'
-    import { ElMessage } from 'element-plus'
+    import { ElMessage, ElMessageBox } from 'element-plus'
     
-    //import axios from 'axios';
-
-
     import { useI18n } from "vue-i18n"
-import { copyFileSync } from 'fs'
-import { config } from 'process'
+
     const { t } = useI18n()
+    //import axios from 'axios';
+    import CropperImg from "@/components/widgets/CropperImg.vue";
+
+   
+
+
+
+
 
     let componen = shallowRef(null);
     const PagePanel = defineAsyncComponent(() => import("./panel/PagePanel.vue"));
@@ -144,6 +151,14 @@ import { config } from 'process'
 
     let imgCutImg=ref('')
 
+    let dialogCropVisible=ref(false)
+
+    let sizeData=ref()
+    let cropData=ref()
+
+   //定义一个imageNew变量来接收裁剪之后的图片
+    const imageCropSrc = ref()
+   
     let ctop=ref("0px")
     let cleft=ref("0px")
     
@@ -174,7 +189,7 @@ import { config } from 'process'
 
     let frame:Frame
 
-
+    let windowHeight=ref(0)
 
     onMounted(() => {
         
@@ -184,6 +199,8 @@ import { config } from 'process'
         appWrap.style.marginTop="60px"
 
         var settingJson=window.parent.getMarkJson?window.parent.getMarkJson():undefined;
+
+        windowHeight.value=window.innerHeight*0.9;
 
         canvasApp = new App({
             view: 'main-canvas',
@@ -246,7 +263,7 @@ import { config } from 'process'
                 
               if(e.target.tag=="Text"){
 
-                
+               
                   useTextStyle.value.fontSize=parseInt(e.target.fontSize.toString())
 
                   if(e.target.lineHeight){
@@ -257,11 +274,12 @@ import { config } from 'process'
 
               }else if(['Arrow','Ellipse','Rect','Polygon','Star','Line'].includes(e.target.tag)&&e.target.name!="image"){
 
+   
                    useSharpStyle.value.width=parseInt(e.target.width.toString())
                    useSharpStyle.value.height=parseInt(e.target.height.toString())
 
               }else if(e.target.name=="image"){
-                   
+                console.info(e.target.image)
                      useImageStyle.value.width=parseInt(e.target.width.toString())
                      useImageStyle.value.height=parseInt(e.target.height.toString())
               }
@@ -627,14 +645,15 @@ import { config } from 'process'
     watch(()=>useImageStyle.value.fill.url,async (newValue, oldValue)=>{
 
          if(oldValue!=newValue&&oldValue!=""){
+
             let img=await getImage(newValue)
             canvasApp.editor.width=img.width
             canvasApp.editor.height=img.height
-
+          
             canvasApp.editor.target.fill={
             type: 'image',
             url: newValue,
-            mode: 'fit'
+            mode: 'strench'
         }
 
          }else{
@@ -721,7 +740,7 @@ watch(()=>useTextStyle.value.lineHeight.value, (newValue, oldValue)=>{
 })
 
 watch(()=>useTextStyle.value.textDecoration, (newValue, oldValue)=>{
- debugger
+ 
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.textDecoration=newValue
@@ -942,6 +961,11 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 id:id,
                 name:'image',
                 around: 'center',
+                data:{
+                    original:imgUrl,
+                    sizeData:null,
+                    cropData:null
+                },
                 fill: {
                     type: 'image',
                     url: imgUrl,
@@ -950,8 +974,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 zIndex:editorStore.shapes.size + 1,
                 editable: true,
                 locked:false,
-                width:img.width,
-                height:img.height,
+                //width:img.width,
+                //height:img.height,
                 x: pageWidth.value/2,
                 y: pageHeight.value/2
         }) 
@@ -1089,9 +1113,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
     });
 
 
-    const  cropImage=()=>{
-        canvasApp.editor.openInnerEditor()
-    }
 
     type TDefaultOption = {
         id:string,
@@ -1286,7 +1307,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 resizeFontSize: true,
                 stroke:'rgba(0,0,0,0)',
                 strokeWidth:0,
-                fontFamily:'07LogoTypeGothic7',
+                fontFamily:'アプリ明朝',
                 fill:'#000000',
                 padding: [4, 8],
                 x:defaultOption.x,
@@ -1416,10 +1437,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         
         const json = frame.toJSON() 
 
-        console.info(json)
-
-        console.info(canvasApp.tree.toJSON())
-
         const result = await frame.export('jpg', { blob: true })
 
         window.parent.saveMakeImg?window.parent.saveMakeImg({json:JSON.stringify(json),file:result}):null
@@ -1437,23 +1454,13 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
 
     const  exportImg=()=>{
-        canvasApp.editor.export("Img_"+new Date().getTime()+'.png',{ pixelRatio: 1 }) 
+        canvasApp.editor.target.export("Img_"+new Date().getTime()+'.png',{ pixelRatio: 1 }) 
     }
 
 
     const cutOutImg=()=>{
         dialogFormVisible.value=true
     }
-
-
-
-    const cropImg=()=>{
-      
-        canvasApp.editor.openInnerEditor()
-    }
-
-
-    
 
     const  format=()=>{
         return ""
@@ -1558,20 +1565,61 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
              })
              .then(response => response.json())
              .then(data => {
+
                 loading.value=false
-                if(data.code!=0){
+
+                if(data.code==0){
                     imgCutImg.value=data.data[0]
                 }else{
-                    ElMessage.error(data.msg)
+                    ElMessageBox.alert(data.msg)
                 }
                }
              )
              .catch(error => 
-             {
+             { 
                  ElMessage.error("Cut Out Error!")
-                 console.info(error)
+
             }
          );
+    }
+
+    
+    const cropImg=()=>{
+      dialogCropVisible.value=true
+      imageCropSrc.value=canvasApp.editor.target.data.original
+
+      sizeData.value= canvasApp.editor.target.data.sizeData
+      cropData.value= canvasApp.editor.target.data.cropData
+    }
+
+
+     //点击裁剪按钮
+     const updateCropImageSrc = (updateImageData) => {
+    
+        //const { x, y, width, height } = updateImageData.size;
+
+  
+        canvasApp.editor.target.data.sizeData=updateImageData.sizeData
+        canvasApp.editor.target.data.cropData=updateImageData.cropData
+     
+        // 因为裁剪数据不能超过原始尺寸，这里向下取整确保不会超过原始尺寸
+        // elementData.cropSize = {
+        //     x: ~~x,
+        //     y: ~~y,
+        //     width: ~~width,
+        //     height: ~~height,
+        // };
+        // const scalex = elementData.width / elementData.cropSize.width;
+        // const scaley = elementData.height / elementData.cropSize.height;
+        // const scale = Math.min(scalex, scaley);
+
+        // // 设置新的宽高
+        // elementData.width = ~~(elementData.cropSize.width * scale);
+        // elementData.height = ~~(elementData.cropSize.height * scale);
+
+        dialogCropVisible.value=false
+        useImageStyle.value.fill.url=updateImageData.croppedImage
+        imageCropSrc.value=""
     }
 
     defineExpose({

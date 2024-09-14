@@ -121,7 +121,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         stroke:"#000000",
         lineStyle: 'solid',
         cornerRadius:2,
-        fontFamily:'07LogoTypeGothic7',
+        fontFamily:'アプリ明朝',
         letterSpacing:0,
         lineHeight:{
           type: 'percent',
@@ -155,14 +155,15 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     } as TSharpSetting,
 
     useImageStyle:{
-      fill:{ type:"image", url: "",mode: "fit"}, 
+      fill:{ type:"image", url: "",mode: "strench"}, 
       zIndex:0,
       corners:0,
       opacity:1, //最大1
       width:100,
       height:100,
       x:100,
-      y:100
+      y:100,
+
     } as TImageSetting,
 
     dActiveElement:null

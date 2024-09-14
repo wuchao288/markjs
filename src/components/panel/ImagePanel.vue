@@ -120,6 +120,8 @@
     import type { UploadProps } from 'element-plus'
     const editorStore = useEditStore()
 
+    import { mixins } from "@/mixin/index";
+    
     const emit = defineEmits([
         'handleCutOut','handleCropImg','handleExportImg'
     ])
@@ -161,7 +163,17 @@
           return false
         }
 
-        useImageStyle.value.fill.url = URL.createObjectURL(uploadFile.raw!)
+        
+
+        mixins.uploadFile(rawFile,{}).then((data)=>{
+          if((data as any).code==0){
+            useImageStyle.value.fill.url = (window.parent as any).sploadImgToTempdes?(data as any).response.ImgPath:(data as any).data.fileUrl
+          }else{
+            ElMessage.error((data as any).msg)
+          }
+        }).catch((error)=>{
+          ElMessage.error("Upload error")
+        })
 
         return true
    }

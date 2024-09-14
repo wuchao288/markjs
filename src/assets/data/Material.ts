@@ -3,47 +3,79 @@ export type PageBgImageItem={
     url:string
 }
   //背景
-  export const PageBgImageList=[
-    {
-      name: 'bg1.jpeg',
-      url: new URL('@/assets/images/bg/bg1.jpeg',import.meta.url).href,
-    },
-    {
-      name: 'bg2.jpeg',
-      url: new URL('@/assets/images/bg/bg2.jpeg',import.meta.url).href,
-    },
-    {
-      name: 'bg3.jpeg',
-      url: new URL('@/assets/images/bg/bg3.jpeg',import.meta.url).href,
-    },
-    {
-      name: 'bg4.jpeg',
-      url: new URL('@/assets/images/bg/bg4.jpeg',import.meta.url).href
-    },
-    {
-      name: 'p10.jpg',
-      url: new URL('@/assets/images/bg/p10.jpg',import.meta.url).href
-    },
-    {
-      name: 'p11.jpg',
-      url: new URL('@/assets/images/bg/p11.jpg',import.meta.url).href
-    },
-    {
-      name: 'p12.jpg',
-      url: new URL('@/assets/images/bg/p12.jpg',import.meta.url).href
-    },
-    {
-      name: 'p13.jpg',
-      url: new URL('@/assets/images/bg/p13.jpg',import.meta.url).href
-    },{
-      name: 'p14.jpg',
-      url: new URL('@/assets/images/bg/p14.jpg',import.meta.url).href
-    }
-    ,{
-      name: 'p15.png',
-      url: new URL('@/assets/images/bg/p15.png',import.meta.url).href
-    }
-  ] as PageBgImageItem[]
+  export const PageBgImageList=[{
+    name: '1.jpg',
+    url: new URL('@/assets/images/bg/bgimg1.jpg',import.meta.url).href
+  },{
+    name: '2.jpg',
+    url: new URL('@/assets/images/bg/bgimg2.jpg',import.meta.url).href
+  },{
+    name: '3.jpg',
+    url: new URL('@/assets/images/bg/bgimg3.jpg',import.meta.url).href
+  },{
+    name: '4.jpg',
+    url: new URL('@/assets/images/bg/bgimg4.jpg',import.meta.url).href
+  },{
+    name: '5.jpg',
+    url: new URL('@/assets/images/bg/bgimg5.jpg',import.meta.url).href
+  },{
+    name: '6.jpg',
+    url: new URL('@/assets/images/bg/bgimg6.jpg',import.meta.url).href
+  },{
+    name: '7.jpg',
+    url: new URL('@/assets/images/bg/bgimg7.jpg',import.meta.url).href
+  },{
+    name: '8.jpg',
+    url: new URL('@/assets/images/bg/bgimg8.jpg',import.meta.url).href
+  },{
+    name: '9.jpg',
+    url: new URL('@/assets/images/bg/bgimg9.jpg',import.meta.url).href
+  },{
+    name: '10.jpg',
+    url: new URL('@/assets/images/bg/bgimg10.jpg',import.meta.url).href
+  },{
+    name: '11.jpg',
+    url: new URL('@/assets/images/bg/bgimg11.jpg',import.meta.url).href
+  },{
+    name: '12.jpg',
+    url: new URL('@/assets/images/bg/bgimg12.jpg',import.meta.url).href
+  },{
+    name: '13.jpg',
+    url: new URL('@/assets/images/bg/bgimg13.jpg',import.meta.url).href
+  },{
+    name: '14.jpg',
+    url: new URL('@/assets/images/bg/bgimg14.jpg',import.meta.url).href
+  },{
+    name: '15.jpg',
+    url: new URL('@/assets/images/bg/bgimg15.jpg',import.meta.url).href
+  },{
+    name: '16.jpg',
+    url: new URL('@/assets/images/bg/bgimg16.jpg',import.meta.url).href
+  },{
+    name: '17.jpg',
+    url: new URL('@/assets/images/bg/bgimg17.jpg',import.meta.url).href
+  },{
+    name: '18.jpg',
+    url: new URL('@/assets/images/bg/bgimg18.jpg',import.meta.url).href
+  },{
+    name: '19.jpg',
+    url: new URL('@/assets/images/bg/bgimg19.jpg',import.meta.url).href
+  },{
+    name: '20.jpg',
+    url: new URL('@/assets/images/bg/bgimg20.jpg',import.meta.url).href
+  },{
+    name: '21.jpg',
+    url: new URL('@/assets/images/bg/bgimg21.jpg',import.meta.url).href
+  },{
+    name: '22.jpg',
+    url: new URL('@/assets/images/bg/bgimg22.jpg',import.meta.url).href
+  },{
+    name: '23.jpg',
+    url: new URL('@/assets/images/bg/bgimg23.jpg',import.meta.url).href
+  },{
+    name: '24.jpg',
+    url: new URL('@/assets/images/bg/bgimg24.jpg',import.meta.url).href
+  }] as PageBgImageItem[]
 
 
 export type StyleFontItem={
@@ -61,10 +93,10 @@ export const StyleFontList=[
     "value":"アプリ明朝"
 },
 { 
-  "alias":"07LogoTypeGothic7",
-  "preview":new URL("@/assets/fonts/07LogoTypeGothic7.png",import.meta.url).href,
-  "url":new URL("@/assets/fonts/07LogoTypeGothic7.ttf",import.meta.url).href,
-  "value":"07LogoTypeGothic7"
+  "alias":"A-OTF-GothicMB101Pr5-Reg",
+  "preview":new URL("@/assets/fonts/A-OTF-GothicMB101Pr5-Reg.png",import.meta.url).href,
+  "url":new URL("@/assets/fonts/A-OTF-GothicMB101Pr5-Reg.otf",import.meta.url).href,
+  "value":"A-OTF-GothicMB101Pr5-Reg"
 },
 { 
     "alias":"karakaze",
@@ -119,18 +151,123 @@ export type ImageEffectItem={
 }
 
 export const ImageEffectList=[{
-  preview:new URL("@/assets/images/mate/imageeffect/p1.png",import.meta.url).href,
-  url:new URL("@/assets/images/mate/imageeffect/p1.png",import.meta.url).href,
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg1.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg1.png",import.meta.url).href,
   id:"1",
   type:"img"
 },{
-  preview:new URL("@/assets/images/mate/imageeffect/p2.png",import.meta.url).href,
-  url:new URL("@/assets/images/mate/imageeffect/p2.png",import.meta.url).href,
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg2.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg2.png",import.meta.url).href,
   id:"2",
   type:"img"
 },{
-  preview:new URL("@/assets/images/mate/imageeffect/p3.png",import.meta.url).href,
-  url:new URL("@/assets/images/mate/imageeffect/p3.png",import.meta.url).href,
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg3.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg3.png",import.meta.url).href,
   id:"3",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg4.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg4.png",import.meta.url).href,
+  id:"4",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg5.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg5.png",import.meta.url).href,
+  id:"5",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg6.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg6.png",import.meta.url).href,
+  id:"6",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg7.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg7.png",import.meta.url).href,
+  id:"7",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg8.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg8.png",import.meta.url).href,
+  id:"8",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg9.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg9.png",import.meta.url).href,
+  id:"9",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg10.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg10.png",import.meta.url).href,
+  id:"10",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg11.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg11.png",import.meta.url).href,
+  id:"11",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg12.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg12.png",import.meta.url).href,
+  id:"12",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg13.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg13.png",import.meta.url).href,
+  id:"13",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg14.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg14.png",import.meta.url).href,
+  id:"14",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg15.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg15.png",import.meta.url).href,
+  id:"15",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg16.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg16.png",import.meta.url).href,
+  id:"16",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg17.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg17.png",import.meta.url).href,
+  id:"17",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg18.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg18.png",import.meta.url).href,
+  id:"18",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg19.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg19.png",import.meta.url).href,
+  id:"19",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg20.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg20.png",import.meta.url).href,
+  id:"20",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg21.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg21.png",import.meta.url).href,
+  id:"21",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg22.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg22.png",import.meta.url).href,
+  id:"22",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg23.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg23.png",import.meta.url).href,
+  id:"23",
+  type:"img"
+},{
+  preview:new URL("@/assets/images/mate/imageeffect/mateimg24.png",import.meta.url).href,
+  url:new URL("@/assets/images/mate/imageeffect/mateimg24.png",import.meta.url).href,
+  id:"24",
   type:"img"
 }] as ImageEffectItem[]

@@ -73,12 +73,22 @@
           
           <div>
             <el-row :gutter="10">
-                <el-col :span="12"  v-for="item in PageBgImageList"
+
+              <el-col :span="12" >
+                <el-image v-for="item in PageBgImageList.filter((m,index)=>index%2==0)"
                   :key="item.url"
                   :label="item.name"
-                  :value="item.url">
-                      <el-image loading="lazy" :class="usePageSetting.pageBgSet.backgroundImage==item.url?'bgselected':''" @click="handleSetImage(item.url)" style="width: 100%; height: auto;border-radius: 5px; cursor: pointer;" :src="item.url" fit="scale-down" />
-                </el-col>
+                  :value="item.url" loading="lazy" :class="usePageSetting.pageBgSet.backgroundImage==item.url?'bgselected':''" @click="handleSetImage(item.url)" style="width: 100%; height: auto;border-radius: 5px; cursor: pointer;" :src="item.url" fit="scale-down" />
+              </el-col>
+
+              <el-col :span="12" >
+                <el-image v-for="item in PageBgImageList.filter((m,index)=>index%2==1)"
+                  :key="item.url"
+                  :label="item.name"
+                  :value="item.url" loading="lazy" :class="usePageSetting.pageBgSet.backgroundImage==item.url?'bgselected':''" @click="handleSetImage(item.url)" style="width: 100%; height: auto;border-radius: 5px; cursor: pointer;" :src="item.url" fit="scale-down" />
+              </el-col>
+
+                
             </el-row>
           </div>
         </el-tab-pane>
@@ -108,6 +118,8 @@
     import { PageBgImageList }  from "@/assets/data/Material"
 
     import type { UploadProps } from 'element-plus'
+
+    import { mixins } from "@/mixin/index"
 
     const { t } = useI18n()
 
@@ -170,7 +182,18 @@ const  changeActiveName=(activeName)=>{
           return false
         }
 
-        usePageSetting.value.pageBgSet.backgroundImage = URL.createObjectURL(uploadFile.raw!)
+        
+
+        mixins.uploadFile(rawFile,{}).then((data)=>{
+          if((data as any).code==0){
+            usePageSetting.value.pageBgSet.backgroundImage = (window.parent as any).sploadImgToTempdes?(data as any).response.ImgPath:(data as any).data.fileUrl
+
+          }else{
+            ElMessage.error((data as any).msg)
+          }
+        }).catch((error)=>{
+          ElMessage.error("Upload error")
+        })
 
         return true
    }

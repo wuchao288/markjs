@@ -49,7 +49,35 @@ function isCrossDomain(url) {
       return true;
   }
 }
+async function uploadFile (file: File | Blob, options,  cb?: any) {
+    
+    
+  const formData = new FormData()
 
+  formData.append('file',file,'blob')
+
+  return new Promise((resolve: any, reject: (err: string) => void) => {
+
+    fetch((window.parent as any).sploadImgToTempdes||'/BLL/TempHandler.ashx?action=UploadMarkImage', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.code==0){
+          cb?.(data)
+          resolve(data)
+        }else{
+          reject(data);
+        }
+    })
+    .catch(error => {
+      console.error(error)
+      reject(error);
+    });
+  })
+
+}
 
 async function loadFont(fontFamily: string, url: string) {
     if ((window as any)._hasLoadFonts[fontFamily]) {
@@ -99,5 +127,6 @@ export const mixins ={
     debounce,
     throttle,
     loadFont,
-    loadImg
+    loadImg,
+    uploadFile
 }
