@@ -96,7 +96,7 @@
 
     import {  IFontWeight,IFrameInputData} from '@leafer-ui/interface'
    
-    import { mixins } from "@/mixin/index";
+    import { mixins,calculatePoints } from "@/mixin/index";
 
     import { PageSizeItem, PageSizeList, } from '@/assets/data/PageSetting'
     import { StyleFontList} from '@/assets/data/Material'
@@ -595,7 +595,7 @@ import { info } from 'console'
 
     })
 
-    function angleToCoordinates(angleInDegrees,width,height) {
+    function angleToCoordinates(angleInDegrees) {
       // 将角度转换为弧度
         const angleInRadians = (angleInDegrees * Math.PI) / 180;
 
@@ -629,15 +629,16 @@ import { info } from 'console'
 
                         const match = newValues[1].backgroundColor.gradientColor.match(regex)
                       
+                        const [to, from] = calculatePoints(match[1]*1+90+180);
+
                         if(match){
                             try{
-                                frame.fill=[{
-                                    type:'linear',
-                                    angle:match[1]*1,
-                                    //from: { x: 0, y: 0 },
-                                     //to: angleToCoordinates(match[1]*1 % 90),
-                                     stops: [{ offset: (match[3]*1)/100, color: match[2] }, { offset: (match[5]*1)/100, color: match[4] }]}]
-                                console.info(frame.fill)
+                                   frame.fill=[{
+                                   type:'linear',
+                                   from: { x: from.x, y: from.y, type: 'percent'},
+                                    to: { x: to.x, y: to.y, type: 'percent'},
+                                    stops: [{ offset: (match[3]*1)/100, color: match[2] }, { offset: (match[5]*1)/100, color: match[4] }]}]
+                                
                             }catch{
                                 frame.fill="#ffffff"
                             }
@@ -951,23 +952,20 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
                         const match = value.gradientColor.match(regex)
                       
-                         console.info(match)
-
-                         console.info(match[1]*1)
+                        const [to, from] = calculatePoints(match[1]*1+90+180);
                          
                         if(match){
                             try{
-                                elem.fill=[{
-                                    type:'linear',
-                                    //angle:match[1]*1,
-                                    //from: { x: 0, y: 0},
-                                     //to: { x: 200, y: 0 },
-                                    from: {  x: 0, y: 0 },
-                                    //to: { x: 0, y: 100 },
-                                     to: angleToCoordinates((match[1]*1)%90,elem.width,elem.height),
-                                     stops: [{ offset: (match[3]*1)/100, color: match[2] }, { offset: (match[5]*1)/100, color: match[4] }]
-                                    }]
+  
                                
+
+                                    elem.fill=[{
+                                   type:'linear',
+                                   from: { x: from.x, y: from.y, type: 'percent'},
+                                    to: { x: to.x, y: to.y, type: 'percent'},
+                                    stops: [{ offset: (match[3]*1)/100, color: match[2] }, { offset: (match[5]*1)/100, color: match[4] }]}]
+                     
+
                             }catch{
                                 elem.fill="#ffffff"
                             }

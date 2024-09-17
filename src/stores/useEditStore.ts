@@ -116,7 +116,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
          backgroundColor:{
             pureColor:"rgba(255, 255,255, 1)",
             activeColorKey:"pure",//gradient//pure
-            gradientColor:"linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)"
+            gradientColor:"linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(0, 0, 0, 1) 100%)"
          },
          backgroundImage:''
        }
@@ -162,7 +162,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
       height:100,
       pureColor:"#FFFFFF",
       activeColorKey:"pure",//gradient//pure
-      gradientColor:"linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)"
+      gradientColor:"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)"
     } as TSharpSetting,
 
     useImageStyle:{
