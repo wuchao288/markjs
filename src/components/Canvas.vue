@@ -114,6 +114,7 @@
     import { ElMessage, ElMessageBox } from 'element-plus'
     
     import { useI18n } from "vue-i18n"
+import { info } from 'console'
 
     const { t } = useI18n()
     //import axios from 'axios';
@@ -594,14 +595,87 @@
 
     })
 
+    function angleToCoordinates(angleInDegrees,width,height) {
+      // 将角度转换为弧度
+        const angleInRadians = (angleInDegrees * Math.PI) / 180;
+
+        // 计算x和y坐标
+        let x = Math.cos(angleInRadians);
+        let y = Math.sin(angleInRadians);
+
+        console.log({ x: x, y: y });
+
+        // 返回坐标对象
+        return {  x: x, y: y };
+    }
 
     watch([()=>usePageSetting.value.pageBgClass,()=>usePageSetting.value.pageBgSet],(newValues, oldValues)=>{
         
         if(newValues[0]=="backgroundColor"){
-
             if(newValues[1].backgroundColor){
 
-                frame.fill=newValues[1].backgroundColor
+                if(newValues[1].backgroundColor.activeColorKey=="pure"){
+
+                frame.fill=[{type:'solid',color:newValues[1].backgroundColor.pureColor}]
+
+                }else if(newValues[1].backgroundColor.activeColorKey=="gradient"){
+
+                if(newValues[1].backgroundColor.gradientColor){
+                    //linear-gradient(351deg, rgba(0,0,0,1) 0%, rgba(235,29,78,1) 91%)
+                
+                    if(newValues[1].backgroundColor.gradientColor.startsWith("linear")){
+
+                        const regex = /linear-gradient\((\d+)deg, ([^%]+) (\d+)%?, ([^%]+) (\d+)%?\)/
+
+                        const match = newValues[1].backgroundColor.gradientColor.match(regex)
+                      
+                        if(match){
+                            try{
+                                frame.fill=[{
+                                    type:'linear',
+                                    angle:match[1]*1,
+                                    //from: { x: 0, y: 0 },
+                                     //to: angleToCoordinates(match[1]*1 % 90),
+                                     stops: [{ offset: (match[3]*1)/100, color: match[2] }, { offset: (match[5]*1)/100, color: match[4] }]}]
+                                console.info(frame.fill)
+                            }catch{
+                                frame.fill="#ffffff"
+                            }
+                            }else{
+                                frame.fill="#ffffff"
+                            }
+                        }else {
+
+                        //radial-gradient(circle, rgba(31, 135, 232, 1) 0%, rgba(0, 0, 0, 1) 100%)
+
+                            const regex = /radial-gradient\((circle), ([^%]+) (\d+%)?, ([^%]+) (\d+%)?\)/
+
+                            const match = newValues[1].backgroundColor.gradientColor.match(regex)
+
+                            if(match){
+
+                            try{
+
+                                frame.fill=[{type:'radial',stops: [{ offset: 0, color: match[2] }, { offset: 1, color: match[4] }]}]
+
+                            }catch{
+
+                                frame.fill="#ffffff"
+
+                            }
+                            }else{
+                                frame.fill="#ffffff"
+                            }
+                        }
+                    
+                }else{
+                    frame.fill="#ffffff"
+                }
+
+                }else{
+                    frame.fill="#ffffff"
+                }
+
 
             }else{
 
@@ -617,7 +691,7 @@
                     mode: 'strench'
                 }
            }else{
-              frame.fill= frame.fill=newValues[1].backgroundColor
+              frame.fill= newValues[1].backgroundColor.pureColor
             }
         }
 
@@ -853,14 +927,14 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
     // },{ deep: true })
 
 
-    watch(()=>useSharpStyle.value,async (value)=>{
+    watch(()=>useSharpStyle.value,(value)=>{
 
-     canvasApp.editor.list.forEach(async (elem)=>{
+     canvasApp.editor.list.forEach((elem)=>{
          if(elem.name.startsWith("Text")){
              
          }else{
         
-            await  nextTick()
+           
 
             if(value.activeColorKey=="pure"){
 
@@ -873,19 +947,33 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                  
                     if(value.gradientColor.startsWith("linear")){
 
-                        const regex = /linear-gradient\((\d+deg), ([^%]+) (\d+%)?, ([^%]+) (\d+%)?\)/
+                        const regex = /linear-gradient\((\d+)deg, ([^%]+) (\d+)%?, ([^%]+) (\d+)%?\)/
 
                         const match = value.gradientColor.match(regex)
+                      
+                         console.info(match)
 
+                         console.info(match[1]*1)
+                         
                         if(match){
-                           try{
-                             elem.fill=[{type:'linear',stops: [{ offset: 0, color: match[2] }, { offset: 1, color: match[4] }]}]
-                           }catch{
-                             elem.fill="#ffffff"
-                           }
-                        }else{
-                            elem.fill="#ffffff"
-                        }
+                            try{
+                                elem.fill=[{
+                                    type:'linear',
+                                    //angle:match[1]*1,
+                                    //from: { x: 0, y: 0},
+                                     //to: { x: 200, y: 0 },
+                                    from: {  x: 0, y: 0 },
+                                    //to: { x: 0, y: 100 },
+                                     to: angleToCoordinates((match[1]*1)%90,elem.width,elem.height),
+                                     stops: [{ offset: (match[3]*1)/100, color: match[2] }, { offset: (match[5]*1)/100, color: match[4] }]
+                                    }]
+                               
+                            }catch{
+                                elem.fill="#ffffff"
+                            }
+                            }else{
+                                elem.fill="#ffffff"
+                            }
                     }else {
 
                         //radial-gradient(circle, rgba(31, 135, 232, 1) 0%, rgba(0, 0, 0, 1) 100%)

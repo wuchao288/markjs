@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 
-    import { ref,watch} from 'vue'
+    import { ref} from 'vue'
 
     import { ElForm,ElFormItem,ElRadioGroup,ElRadio,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
 

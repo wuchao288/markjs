@@ -21,7 +21,18 @@
       <el-form-item :label="t('stylepanel.pagebgset')">
       <el-tabs :stretch="true" v-model="activeName" class="bg-tabs"  @tab-change="changeActiveName">
         <el-tab-pane :label="t('stylepanel.pagebgcolor')" name="backgroundColor">
-          <el-color-picker v-model="usePageSetting.pageBgSet.backgroundColor"  :predefine="predefineColors" />
+
+
+     
+        <!-- <el-color-picker v-model="useSharpStyle.fill"  show-alpha :predefine="predefineColors" /> -->
+
+        <color-picker
+         v-model:pureColor="usePageSetting.pageBgSet.backgroundColor.pureColor"  
+         v-model:active-key="usePageSetting.pageBgSet.backgroundColor.activeColorKey"
+         @activeKeyChange="activeKeyChange" format="hex6" lang="En" shape="circle" useType="both"
+         v-model:gradientColor="usePageSetting.pageBgSet.backgroundColor.gradientColor" />
+
+
         </el-tab-pane>
         <el-tab-pane :label="t('stylepanel.pagebgimg')" name="backgroundImage">
 
@@ -113,6 +124,8 @@
     import useEditStore from "@/stores/useEditStore"
     import { storeToRefs } from 'pinia'
 
+    import {ColorPicker} from "vue3-colorpicker";
+
     import { useI18n } from "vue-i18n"
 
     import { PageBgImageList }  from "@/assets/data/Material"
@@ -157,6 +170,10 @@ const handleSetImage=(url)=>{
   
 }
 
+
+const  activeKeyChange=function(value){
+  usePageSetting.value.pageBgSet.backgroundColor.activeColorKey=value
+  }
 
 const  changeActiveName=(activeName)=>{
   usePageSetting.value.pageBgClass=activeName
