@@ -36,6 +36,7 @@ export default {
     "filter":"美化",
     "formatmsg":"画像はJPGまたはPNG形式でなければなりません！",
     "imgsizemsg":"画像サイズは{0}MBを超えてはいけません。",
+    "shortcut":"ショートカット操作"
   }, 
   header:{
     "addmaterial":"素材のインポート",

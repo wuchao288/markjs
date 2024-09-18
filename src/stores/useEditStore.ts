@@ -7,6 +7,7 @@ import {IPointData,IUI,IShadowEffect}  from '@leafer-ui/interface'
 
 export type TPageSetting={
   pageSizeId:number,
+  pageMove:boolean,
   pageBgClass:string,
   pageBgSet:{
     backgroundImage:string,
@@ -36,7 +37,9 @@ export type TTextSetting={
   bold:boolean,
   italic:boolean,
   textDecoration:'none' | 'under' | 'delete'
-  shadow:{x: number;y: number; blur: number; color: string;}
+  shadow:{x: number;y: number; blur: number; color: string;},
+  locked:boolean,
+  visible:boolean
 }
 
 export type TSharpSetting={
@@ -51,7 +54,9 @@ export type TSharpSetting={
   height:number,
   pureColor:string,
   activeColorKey:string,
-  gradientColor:string
+  gradientColor:string,
+  locked:boolean,
+  visible:boolean
 }
 
 
@@ -63,7 +68,9 @@ export type TImageSetting={
   width:number,
   height:number,
   x:number,
-  y:number
+  y:number,
+  locked:boolean,
+  visible:boolean
 }
 
 
@@ -74,6 +81,7 @@ type TStoreBaseState = {
   useTool:string
   useToolType:string
   shapes:Map<string,object>
+  usePageMove:boolean,
   useColor:string
   usePageBgColor:string
   useBorderWidth:number
@@ -86,6 +94,7 @@ type TStoreBaseState = {
 }
 
 type TSotreAction = {
+    getUseSharpStyle:()=> TSharpSetting
     setScale: (e:number| IPointData) => void
     setPageSize: (e:PageSizeItem) => void
     setApp: (e: App) => void
@@ -107,6 +116,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     shapes:new Map(),
     useColor:'rgba(0, 0, 0, 1)',
     useBorderWidth:2,
+    usePageMove:false,
     usePageBgColor:'rgba(255, 255,255, 1)',
     useCurrPanel:"PagePanel",
     usePageSetting:{
@@ -147,7 +157,9 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
           y: 0,
           blur: 4,
           color: "#4DCB71AA"
-        } 
+        },
+        locked:false,
+        visible:true
     } as TTextSetting,
 
     useSharpStyle:{
@@ -160,6 +172,8 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
       corners:5,
       width:100,
       height:100,
+      locked:false,
+      visible:true,
       pureColor:"#FFFFFF",
       activeColorKey:"pure",//gradient//pure
       gradientColor:"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)"
@@ -174,12 +188,30 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
       height:100,
       x:100,
       y:100,
-
+      locked:false,
+      visible:true
     } as TImageSetting,
 
     dActiveElement:null
   }),
   actions: {
+
+    getUseSharpStyle(){
+       return JSON.parse(JSON.stringify({
+        fill:"#FFFFFF",
+        strokeWidth:2,
+        zIndex:10000,
+        stroke:"#000000",
+        lineStyle:'solid',
+        sharpname:'',
+        corners:5,
+        width:100,
+        height:100,
+        pureColor:"#FFFFFF",
+        activeColorKey:"pure",//gradient//pure
+        gradientColor:"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)"
+      }))
+    },
 
     setUseColor(model:string){
 

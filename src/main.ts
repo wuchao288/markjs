@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp,getCurrentInstance} from 'vue'
 import 'normalize.css/normalize.css'
 import 'element-plus/theme-chalk/index.css'
 import '@/assets/styles/index.less'
@@ -24,7 +24,7 @@ app.directive('aria-hidden', (el, binding) => {
     }
   });
 
-
+  app.config.globalProperties.$canvasApp={}
 
 app.use(pinia)
 

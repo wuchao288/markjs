@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import {computed, ref} from 'vue'
+import {computed, ref,watch} from 'vue'
 
 import { ElButton,ElDropdown,ElDropdownItem,ElUpload,ElMessage,ElDropdownMenu,ElMessageBox,ElRow,ElCol } from 'element-plus'
 
 
 import type { UploadProps } from 'element-plus'
 
-import { Plus,Minus  } from '@element-plus/icons-vue'
+import { Plus,Minus,Pointer  } from '@element-plus/icons-vue'
 
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
@@ -48,6 +48,7 @@ import { storeToRefs } from 'pinia'
 
 import { mixins } from "@/mixin/index";
 
+
 const editorStore = useEditStore()
 
 let pageZoom=ref<ZoomItem>(ZoomItemList[ZoomItemList.length-1]);
@@ -64,13 +65,27 @@ let  sharpType =ref<SharpTypeItem>(SharpTypeList[0])
 let  borderWidthType =ref<BorderWidthItem>(BorderWidthList[1])
 
 
-const {useColor,useBorderWidth} = storeToRefs(editorStore)
+const {useColor,useBorderWidth,usePageMove} = storeToRefs(editorStore)
 
 let actionUrl=ref<string>((window.parent as any).sploadImgToTempdes||'/BLL/TempHandler.ashx?action=UploadMarkImage')
 
 let drawermate=ref<boolean>(false)
 
 let activeName=ref<string>('texteff')
+
+
+
+watch(()=>usePageMove.value,(newVal,oldValue)=>{
+
+  const app=editorStore.editor
+
+   if(newVal==true){
+      app.config.move.drag='auto'
+   }else{
+      app.config.move.drag=false
+   } 
+})
+
 
 const predefineColors = ref([
   '#ff4500',
@@ -143,6 +158,8 @@ const handleAvatarSuccess: UploadProps['onChange'] = (
 
 
 const handleSharp=(type:string,subtype:string)=>{
+
+  
 
   editorStore.setUseTool(type,subtype)
 
@@ -245,6 +262,7 @@ const handleAddGroup=(item:TextEffectItem)=>{
 }
 
 const handleAddMateImg=(item:ImageEffectItem)=>{
+
   emit('handleAddMateImg',item)
 }
 
@@ -316,6 +334,9 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
                     </el-dropdown-menu>
                   </template>
               </el-dropdown>
+         </li>
+         <li>
+          <el-button :icon="Pointer"  plain @click="usePageMove=!usePageMove" circle :type="usePageMove?'primary':''" />
          </li>
          <!-- <li>
           <el-color-picker v-model="useColor" show-alpha :predefine="predefineColors" />
@@ -506,5 +527,9 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
 :deep(.mateitem-img img){
    display: block;
    object-fit: fill;
+}
+
+.active{
+  background-color: aquamarine;
 }
 </style>

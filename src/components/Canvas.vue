@@ -6,8 +6,8 @@
     <div id="contextmenu" @mouseleave ="menuVisible=false"  :style="{top:ctop,left:cleft}"
            v-show="menuVisible"
            class="menu">
-             <div class="contextmenu__item" @click="locked(false)">{{$t("header.lock")}}</div>
-             <div class="contextmenu__item" @click="locked(true)">{{$t("header.unlock")}}</div>
+             <div class="contextmenu__item" @click="locked(true)">{{$t("header.lock")}}</div>
+             <div class="contextmenu__item" @click="locked(false)">{{$t("header.unlock")}}</div>
 
              <div class="contextmenu__item" @click="toTop">{{$t("header.totop")}}</div>
 
@@ -81,7 +81,7 @@
 <script setup lang="ts">
 
 
-    import {onMounted,ref,watch,shallowRef,defineAsyncComponent,nextTick} from 'vue'
+    import {onMounted,ref,watch,shallowRef,defineAsyncComponent,getCurrentInstance} from 'vue'
 
     import { App, Box ,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,ImageEvent,Group} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
@@ -114,17 +114,11 @@
     import { ElMessage, ElMessageBox } from 'element-plus'
     
     import { useI18n } from "vue-i18n"
-import { info } from 'console'
+
 
     const { t } = useI18n()
     //import axios from 'axios';
     import CropperImg from "@/components/widgets/CropperImg.vue";
-
-   
-
-
-
-
 
     let componen = shallowRef(null);
     const PagePanel = defineAsyncComponent(() => import("./panel/PagePanel.vue"));
@@ -226,8 +220,11 @@ import { info } from 'console'
             }
         })
         
-        canvasApp.config.move.drag='auto'
-
+        
+     
+        //canvasApp.config.move.dragEmpty=true
+        
+        
         const ruler = new Ruler(canvasApp)
 
         // 添加自定义主题  
@@ -280,7 +277,7 @@ import { info } from 'console'
                    useSharpStyle.value.height=parseInt(e.target.height.toString())
 
               }else if(e.target.name=="image"){
-                console.info(e.target.image)
+               
                      useImageStyle.value.width=parseInt(e.target.width.toString())
                      useImageStyle.value.height=parseInt(e.target.height.toString())
               }
@@ -289,9 +286,17 @@ import { info } from 'console'
 
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
 
+
+            
+
+            console.info("SELECT");
+
+            
+
             if(e.list.length==0){
                 canvasApp.editor.target=null
                 componen.value = objcomponen.value.PagePanel
+               
                return;
             }
             if(e.list[0].tag=="Frame"){
@@ -357,7 +362,21 @@ import { info } from 'console'
                  //e.list[0].tag!="Text"&&!e.list[0].name.startsWith("image")
                    let sharp=e.list[0]
 
+                   //useSharpStyle.value=editorStore.getUseSharpStyle()
+                
+
+                   if(!sharp.data.fillData){
+                    sharp.data.fillData={}
+                   }
+
+                   
                     useSharpStyle.value.fill=sharp.fill.toString()
+
+                    useSharpStyle.value.activeColorKey=sharp.data.fillData.activeColorKey
+
+                    useSharpStyle.value.pureColor=sharp.data.fillData.pureColor
+
+                    useSharpStyle.value.gradientColor=sharp.data.fillData.gradientColor
 
                     useSharpStyle.value.stroke=sharp.stroke.toString()
 
@@ -929,14 +948,24 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
 
     watch(()=>useSharpStyle.value,(value)=>{
+    
+        console.info(2)
 
      canvasApp.editor.list.forEach((elem)=>{
          if(elem.name.startsWith("Text")){
              
          }else{
-        
-           
 
+          if(!elem.data.fillData){
+            elem.data.fillData={}
+          }
+            elem.data.fillData.activeColorKey=value.activeColorKey
+
+            elem.data.fillData.gradientColor=value.gradientColor
+
+            elem.data.fillData.pureColor=value.pureColor
+
+          debugger
             if(value.activeColorKey=="pure"){
 
                 elem.fill=[{type:'solid',color:value.pureColor}]
@@ -1127,9 +1156,33 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
    }
 
    const locked=(flag:boolean)=>{
+    
+    
       canvasApp.editor.target.locked=flag
       canvasApp.editor.list.forEach((elem)=>{ elem.locked=flag  })
       menuVisible.value=false
+
+      canvasApp.editor.target=canvasApp.editor.target;
+
+      useSharpStyle.value.locked=flag
+
+      if(canvasApp.editor.target.tag=="Text"){
+
+               
+        useTextStyle.value.locked=flag
+
+
+        }else if(['Arrow','Ellipse','Rect','Polygon','Star','Line'].includes(canvasApp.editor.target.target.tag)&&canvasApp.editor.target.target.name!="image"){
+
+
+      
+        useSharpStyle.value.locked=flag
+
+        }else if(canvasApp.editor.target.target.name=="image"){
+
+      
+        useImageStyle.value.locked=flag
+        }
    }
 
    const toTop=()=>{
@@ -1246,6 +1299,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
 
    const addSharp=(model:TDefaultOption)=>{
+
+    let obs=editorStore.getUseSharpStyle()
     
     let {id,type,subType,width,height,zIndex,points,stroke,strokeWidth}=model
 
@@ -1255,6 +1310,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         x: pageWidth.value/2,
         y: pageHeight.value/2,
         fill:"#ffffff",
+        locked:false,
+        visible:true,
     }
 
         if (type === 'Ellipse') {
@@ -1266,6 +1323,13 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 strokeWidth,
                 name:"Ellipse",
                 cursor:'pointer',
+                data:{
+                    fillData:{
+                        activeColorKey:obs.activeColorKey,
+                        gradientColor:obs.gradientColor,
+                        pureColor:obs.pureColor
+                    }
+                },
                 ...defaultOption
             });
         }
@@ -1291,6 +1355,13 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 strokeCap: 'round',
                 strokeJoin: 'round',
                 cursor:'pointer',
+                data:{
+                    fillData:{
+                        activeColorKey:obs.activeColorKey,
+                        gradientColor:obs.gradientColor,
+                        pureColor:obs.pureColor
+                    }
+                },
                 ...defaultOption
             });
         }
@@ -1314,6 +1385,13 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 strokeCap: 'round',
                 strokeJoin: 'round',
                 cursor:'pointer',
+                data:{
+                    fillData:{
+                        activeColorKey:obs.activeColorKey,
+                        gradientColor:obs.gradientColor,
+                        pureColor:obs.pureColor
+                    }
+                },
                 ...defaultOption
             });
         }
@@ -1331,6 +1409,13 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 stroke,
                 strokeWidth,
                 cursor:'pointer',
+                data:{
+                    fillData:{
+                        activeColorKey:obs.activeColorKey,
+                        gradientColor:obs.gradientColor,
+                        pureColor:obs.pureColor
+                    }
+                },
                 ...defaultOption
             });
         }
@@ -1439,7 +1524,14 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 id,
                 name:'Polygon',
                 zIndex,
-                cursor:'pointer'
+                cursor:'pointer',
+                data:{
+                    fillData:{
+                        activeColorKey:obs.activeColorKey,
+                        gradientColor:obs.gradientColor,
+                        pureColor:obs.pureColor
+                    }
+                }
             })
             return polygon
         }
@@ -1460,11 +1552,20 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 zIndex,
                 cornerRadius: 5,
                 cursor:'pointer',
-                fill:  '#ffffff'
+                fill:  '#ffffff',
+                data:{
+                    fillData:{
+                        activeColorKey:obs.activeColorKey,
+                        gradientColor:obs.gradientColor,
+                        pureColor:obs.pureColor
+                    }
+                }
             })
 
             return star
         }
+
+      
 
         return new Rect({
             id,
@@ -1475,6 +1576,13 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
             strokeWidth:2,
             cornerRadius: 8,
             height,
+            data:{
+              fillData:{
+                activeColorKey:obs.activeColorKey,
+                gradientColor:obs.gradientColor,
+                pureColor:obs.pureColor
+              }
+            },
             ...defaultOption
         });
    }
@@ -1493,6 +1601,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
     const handleAddSharp=()=>{
 
+        
+        
         let sharp=onStart();
         if(!sharp){
             return;

@@ -12,7 +12,10 @@
           <el-input-number style="width: 100px;"  v-model="useImageStyle.height"  controls-position="right" />
         </el-space>
       </el-form-item>
-
+      <el-form-item>
+      
+      <ShortCut v-model:visible="useImageStyle.visible" v-model:="useImageStyle.locked"></ShortCut>
+    </el-form-item>
       <el-form-item  :label="t('stylepanel.set')">
       
 
@@ -119,6 +122,8 @@
     const { t } = useI18n()
     import type { UploadProps } from 'element-plus'
     const editorStore = useEditStore()
+
+    import  ShortCut  from '@/components/widgets/ShortCut.vue'
 
     import { mixins } from "@/mixin/index";
     

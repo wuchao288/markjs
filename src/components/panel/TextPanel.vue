@@ -9,7 +9,9 @@
          <el-input  v-model="useTextStyle.text"/>
       </el-form-item>
 
-
+<el-form-item>
+  <ShortCut v-model:visible="useTextStyle.visible" v-model:="useTextStyle.locked"></ShortCut>
+</el-form-item>
   <el-row :gutter="10">
     <el-col :span="12">
        <el-form-item :label="t('stylepanel.fontfamily')">
@@ -224,6 +226,10 @@
     import {TTextSetting} from "@/stores/useEditStore"
     
     import { storeToRefs } from 'pinia'
+
+    
+
+    import  ShortCut  from '@/components/widgets/ShortCut.vue'
 
     const editorStore = useEditStore()
 

@@ -85,9 +85,11 @@
 
    setTimeout(()=>{
     if(sizeData){
+      console.info(sizeData)
       cropper.setData(sizeData)
     }
     if(cropData){
+      console.info(cropData)
       cropper.setCropBoxData(cropData)
     }
    },50)
@@ -110,6 +112,8 @@
   let cropData=  cropper.getCropBoxData()
 
   const sizeData = cropper.getData();
+
+  
 
   const croppedImage = canvas.toDataURL();
     emit('updateImageSrc', {

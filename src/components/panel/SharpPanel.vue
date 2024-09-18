@@ -13,6 +13,12 @@
         </el-space>
       </el-form-item>
 
+
+    <el-form-item>
+      
+      <ShortCut v-model:visible="useSharpStyle.visible" v-model:="useSharpStyle.locked"></ShortCut>
+    </el-form-item>
+
     <el-form-item  :label="t('stylepanel.linestyle')">
            <el-radio-group v-model="useSharpStyle.lineStyle">
             <el-radio value="solid" border style="border-width: 2px;">{{$t("stylepanel.solid")}}</el-radio>
@@ -60,6 +66,8 @@
     import { ElForm,ElFormItem,ElRadioGroup,ElRadio,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
 
     import {ColorPicker} from "vue3-colorpicker";
+
+    import ShortCut from "@/components/widgets/ShortCut.vue";
 
     import useEditStore from "@/stores/useEditStore"
 

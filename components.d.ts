@@ -14,7 +14,9 @@ declare module 'vue' {
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElImage: typeof import('element-plus/es')['ElImage']
+    ElInput: typeof import('element-plus/es')['ElInput']
     ElProgress: typeof import('element-plus/es')['ElProgress']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     Header: typeof import('./src/components/Header.vue')['default']
@@ -23,6 +25,7 @@ declare module 'vue' {
     Lang: typeof import('./src/components/lang/index.vue')['default']
     PagePanel: typeof import('./src/components/panel/PagePanel.vue')['default']
     SharpPanel: typeof import('./src/components/panel/SharpPanel.vue')['default']
+    ShortCut: typeof import('./src/components/widgets/ShortCut.vue')['default']
     TextPanel: typeof import('./src/components/panel/TextPanel.vue')['default']
   }
   export interface ComponentCustomProperties {

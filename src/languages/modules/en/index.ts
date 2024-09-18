@@ -36,7 +36,8 @@ export default {
     "cutout":"Remove background",
     "filter":"Beautify",
     "formatmsg":"Picture must be in JPG or PNG format!",
-    "imgsizemsg":"Picture size cannot exceed {0} MB."
+    "imgsizemsg":"Picture size cannot exceed {0} MB.",
+    "shortcut":"Quick operation"
   },  
   header:{
     "addmaterial":"Import material",
