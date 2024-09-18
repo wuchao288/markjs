@@ -73,7 +73,7 @@ let drawermate=ref<boolean>(false)
 
 let activeName=ref<string>('texteff')
 
-
+let isTest=ref<boolean>(window==window.parent)
 
 watch(()=>usePageMove.value,(newVal,oldValue)=>{
 
@@ -140,6 +140,12 @@ const handleAvatarSuccess: UploadProps['onChange'] = (
   } else if (rawFile.size / 1024 / 1024 > 3) {
     ElMessage.error(t("stylepanel.imgsizemsg",3))//'Picture size can not exceed 3MB!'
     return false
+  }
+
+  if(window==window.parent){
+          let url=URL.createObjectURL(uploadFile.raw!)
+          emit('handleAddImg',url)
+          return false
   }
 
   mixins.uploadFile(rawFile,{}).then((data)=>{
@@ -389,7 +395,7 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
             {{$t('header.save')}}</el-button>
          </li>
 
-         <li>
+         <li v-if="isTest">
           <el-button @click="handleExportJson">
               导出JSON  
           </el-button>

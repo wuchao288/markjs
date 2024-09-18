@@ -1,6 +1,6 @@
 <template>
      <div>
-        <p>{{$t()}}}</p>
+        <p>{{$t("stylepanel.shortcut")}}</p>
     <div>
         <el-tooltip
         class="box-item"

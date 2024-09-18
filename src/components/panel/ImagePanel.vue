@@ -168,7 +168,10 @@
           return false
         }
 
-        
+        if(window==window.parent){
+          useImageStyle.value.fill.url=URL.createObjectURL(uploadFile.raw!)
+          return
+        }
 
         mixins.uploadFile(rawFile,{}).then((data)=>{
           if((data as any).code==0){
