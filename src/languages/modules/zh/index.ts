@@ -39,7 +39,8 @@ export default {
     filter:'美化',
     formatmsg:'Picture must be JPG/PNG format!',
     imgsizemsg:'Picture size can not exceed {0}MB',
-    shortcut:"快捷操作"
+    shortcut:"快捷操作",
+    createbg:"生成背景"
   },  
   header:{
     addmaterial:'导入素材',

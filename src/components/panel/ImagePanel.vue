@@ -17,25 +17,24 @@
       <ShortCut v-model:visible="useImageStyle.visible" v-model:="useImageStyle.locked"></ShortCut>
     </el-form-item>
       <el-form-item  :label="t('stylepanel.set')">
-      
-
+    
           <el-row :gutter="10">
                 <el-col :span="12">
-                  <el-upload style="width: 100%;"
-                    ref="uploadRef" 
-                    class="upload-demo"
-                    :show-file-list="false"
-                    :auto-upload="false"
-                    :on-change="handleAvatarSuccess"
-                  >
-                    <template #trigger>
-                      <el-button> 
-                        <span class="iconfont icon icon-tupianshangchuan"></span> 
-                        {{$t('stylepanel.replaceimg')}}
-                        </el-button>
-                    </template>
-              </el-upload>
-            </el-col>
+                    <el-upload 
+                      ref="uploadRef" 
+                      class="upload-demo"
+                      :show-file-list="false"
+                      :auto-upload="false"
+                      :on-change="handleAvatarSuccess"
+                    >
+                      <template #trigger>
+                        <el-button> 
+                          <span class="iconfont icon icon-tupianshangchuan"></span> 
+                          {{$t('stylepanel.replaceimg')}}
+                          </el-button>
+                      </template>
+                </el-upload>
+              </el-col>
               <el-col :span="12"> 
                   <el-button @click="handleExportImg">
                     <i class="iconfont icon icon-xiazaitupian"></i>
@@ -47,25 +46,25 @@
       </el-form-item>
 
       <el-form-item>
-         <el-row :gutter="10">
-            <el-col :span="8">
+         <el-row :gutter="15">
+            <el-col :span="12">
                 <el-button @click="handleCrop">
                     <i class="iconfont icon icon-crop-full"></i>
                     {{$t("stylepanel.crop")}}
                 </el-button>
             </el-col>
-            <el-col :span="8"> 
+            <el-col :span="12"> 
                 <el-button @click="handleCutout">
                     <i class="iconfont icon icon-AIkoutu"></i>
                     {{$t("stylepanel.cutout")}}
                     </el-button>
             </el-col>
-            <el-col :span="8">
-                <el-button @click="handleFilter">
+               <!-- <el-col :span="12">
+                <el-button @click="handleCreateBg">
                     <i class="iconfont icon icon-koutu"></i>
-                    {{$t("stylepanel.filter")}}
+                    {{$t("stylepanel.createbg")}}
                   </el-button>
-            </el-col>
+            </el-col> -->
          </el-row>
       </el-form-item>
       
@@ -92,7 +91,7 @@
                </el-col>
 
                <el-col :span="12">
-                <el-slider v-model="useImageStyle.corners"  :max="20"  :min="0" />
+                <el-slider v-model="useImageStyle.corners"  :max="200"  :min="0" />
               </el-col>
               <el-col :span="6">
                  <el-input size="small" v-model="useImageStyle.corners"></el-input>
@@ -104,12 +103,12 @@
       </el-form-item>
     </el-form>
     </div>
-
+    <!-- <CreateBg  dialogCreateBgVisible='"createBgVisible" :image-src="imgSrc"  @update-image-src="updateBgImage"/> -->
 </template>
 
 <script setup lang="ts">
 
-    import { ref} from 'vue'
+    import { onMounted, ref} from 'vue'
 
     import {ElProgress,ElDialog,ElUpload,ElCard,ElMessage,ElRow,ElCol, ElForm,ElFormItem,ElButton,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
 
@@ -124,6 +123,8 @@
     const editorStore = useEditStore()
 
     import  ShortCut  from '@/components/widgets/ShortCut.vue'
+    import  CreateBg  from '@/components/widgets/CreateBg.vue'
+    
 
     import { mixins } from "@/mixin/index";
     
@@ -131,10 +132,25 @@
         'handleCutOut','handleCropImg','handleExportImg'
     ])
 
+    let imgSrc=ref("")
 
+    let createBgVisible=ref(false)
+
+
+    const updateBgImage=(obj)=>{
+        console.info(obj)
+    }
+
+    onMounted(()=>{
+      imgSrc.value=editorStore.editor.editor.target?.fill?.url
+    })
 
     const format=()=>{return ""}
 
+    const handleCreateBg=()=>{
+      debugger
+      createBgVisible.value=true
+    }
 
 
     type TState = {
@@ -242,7 +258,7 @@
     background-color: white;
     padding: 20px;
     bottom: 0px;
-    width: 280px;
+    width: 350px;
     overflow: auto;
    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px;
   }

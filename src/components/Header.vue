@@ -213,7 +213,7 @@ const handleClearAll = () => {
 
   ElMessageBox.confirm(
     t("header.clearmsg"),
-    'Warning',
+    '確認',
     {
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancel',
@@ -272,6 +272,26 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
   emit('handleAddMateImg',item)
 }
 
+
+const handleExportPng=()=>{
+
+  let canvasApp=editorStore.editor
+
+  if(canvasApp.editor.list.length!=1){
+                ElMessage.warning("只能选择一个编组元素导出，多个元素请右键-编组后导出！")
+                return
+  }
+
+  if(canvasApp.editor.list[0].tag!="Group"){
+      ElMessage.warning("只能选择一个编组元素导出，多个元素请右键-编组后导出！")
+      return
+  }
+
+  let rect=canvasApp.editor.list[0];
+
+  rect.export(new Date().getTime()+'.png') 
+  
+}
 
 </script>
 
@@ -363,7 +383,6 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
             <el-upload
               :show-file-list="false"
               :auto-upload="false"
-              :on-success="handleUploadSuccess"
               :action="actionUrl"
               :data="{FileName:'blob'}"
                name="blob"
@@ -400,7 +419,11 @@ const handleAddMateImg=(item:ImageEffectItem)=>{
               导出JSON  
           </el-button>
          </li>
-
+         <li v-if="isTest">
+          <el-button @click="handleExportPng">
+              导出效果图
+          </el-button>
+         </li>
          <!-- <li>
               <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">
                 <span>{{pageSize.title}}</span>

@@ -58,18 +58,19 @@ const { t } = useI18n()
 
 const editorStore = useEditStore()
 
-const locked = defineModel("locked")
+const locked3 = defineModel("locked")
 
 
 const copy=()=>{
 
-    var app=computed(()=>editorStore.editor)
+    var app=editorStore.editor
 
     app.editor.list.forEach(rect => {
             var obj= rect.clone()
             obj.id=nanoid()
             obj.x=obj.x+10
             obj.y=obj.y+10
+            obj.data=JSON.parse(JSON.stringify(obj.data))
             editorStore.addShape(obj.id as string)
             app.findOne("Frame").add(obj)
             app.editor.target=obj
@@ -86,7 +87,7 @@ const lockSharp=()=>{
 
 
 const deleteSharp=()=>{
-    var app=computed(()=>editorStore.editor)
+    var app=editorStore.editor
     app.editor.list.forEach(rect => {
             editorStore.delShape(rect.id as string)
             rect.remove()

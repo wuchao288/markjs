@@ -37,7 +37,8 @@ export default {
     "filter":"Beautify",
     "formatmsg":"Picture must be in JPG or PNG format!",
     "imgsizemsg":"Picture size cannot exceed {0} MB.",
-    "shortcut":"Quick operation"
+    "shortcut":"Quick operation",
+    "createbg":"Generate Background"
   },  
   header:{
     "addmaterial":"Import material",

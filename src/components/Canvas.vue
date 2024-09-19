@@ -27,8 +27,10 @@
 
     
     <el-dialog v-model="dialogFormVisible" :close-on-click-modal="false"
-     :destroy-on-close="true" title="AI Cut Out" :width="windowHeight<800?windowHeight:800"
-      height="600" @opened="openedCutout">
+     :destroy-on-close="true" title="AI Cut Out" 
+     :width="windowWidth>800?800:windowWidth*.9" 
+     :height="windowHeight>600?600:windowHeight*.9"
+       @opened="openedCutout">
 
         <div :class="loading?'':'cutimg'" style="height: 560px;">
             <div v-if="loading" >
@@ -52,7 +54,12 @@
         </template>
     </el-dialog>
 
-    <cropper-img :imageSrc="imageCropSrc" :sizeData="sizeData" :cropData="cropData"  v-model="dialogCropVisible" @updateImageSrc="updateCropImageSrc" />
+    <cropper-img
+     :imageSrc="imageCropSrc" 
+     :sizeData="sizeData"
+      :cropData="cropData"
+      v-model="dialogCropVisible" 
+      @updateImageSrc="updateCropImageSrc" />
 
 </template>
 
@@ -186,6 +193,8 @@
 
     let windowHeight=ref(0)
 
+    let windowWidth=ref(0)
+
     onMounted(() => {
         
         let appWrap=  document.getElementById("main-canvas") as HTMLDivElement
@@ -195,7 +204,8 @@
 
         var settingJson=window.parent.getMarkJson?window.parent.getMarkJson():undefined;
 
-        windowHeight.value=window.innerHeight*0.9;
+        windowHeight.value=window.innerHeight;
+        windowWidth.value=window.innerWidth;
 
         canvasApp = new App({
             view: 'main-canvas',
@@ -286,13 +296,6 @@
 
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
 
-
-            
-
-            console.info("SELECT");
-
-            
-
             if(e.list.length==0){
                 canvasApp.editor.target=null
                 componen.value = objcomponen.value.PagePanel
@@ -369,21 +372,22 @@
                     sharp.data.fillData={}
                    }
 
-                   
                     useSharpStyle.value.fill=sharp.fill.toString()
 
-                    useSharpStyle.value.activeColorKey=sharp.data.fillData.activeColorKey
+                    useSharpStyle.value.activeColorKey=sharp.data?.fillData.activeColorKey
 
-                    useSharpStyle.value.pureColor=sharp.data.fillData.pureColor
+                    useSharpStyle.value.pureColor=sharp.data?.fillData.pureColor
 
-                    useSharpStyle.value.gradientColor=sharp.data.fillData.gradientColor
+                    useSharpStyle.value.gradientColor=sharp.data?.fillData.gradientColor
 
-                    useSharpStyle.value.stroke=sharp.stroke.toString()
+                    useSharpStyle.value.stroke=sharp.stroke?.toString()
 
-                    useSharpStyle.value.strokeWidth= Number(sharp.strokeWidth.toString())
+                    useSharpStyle.value.cornerRadius= Number(sharp.cornerRadius?.toString())
+
+                    useSharpStyle.value.strokeWidth= Number(sharp.strokeWidth?.toString())
 
                     if('corners' in sharp){
-                        useSharpStyle.value.corners=Number(sharp.corners.toString())
+                        useSharpStyle.value.corners=Number(sharp.corners?.toString())
                     }
                    
                     if('height' in sharp){
@@ -539,6 +543,7 @@
 
             if(settingJson&&settingJson.imgUrl){
                 addBgImg(settingJson.imgUrl)
+                canvasApp.editor.target=null
             }
            
         }
@@ -722,6 +727,23 @@
 
         canvasApp.editor.list.forEach(async (elem)=>{
             elem.cornerRadius=value0
+        })
+
+    })
+
+
+    watch(()=>useImageStyle.value.height,(value0)=>{
+
+        canvasApp.editor.list.forEach(async (elem)=>{
+            elem.height=value0
+        })
+
+    })
+
+    watch(()=>useImageStyle.value.width,(value0)=>{
+
+        canvasApp.editor.list.forEach(async (elem)=>{
+            elem.width=value0
         })
 
     })
@@ -949,9 +971,10 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
     watch(()=>useSharpStyle.value,(value)=>{
     
-        console.info(2)
+      
 
      canvasApp.editor.list.forEach((elem)=>{
+
          if(elem.name.startsWith("Text")){
              
          }else{
@@ -959,13 +982,16 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
           if(!elem.data.fillData){
             elem.data.fillData={}
           }
+
+          elem.cornerRadius=value.cornerRadius
+
             elem.data.fillData.activeColorKey=value.activeColorKey
 
             elem.data.fillData.gradientColor=value.gradientColor
 
             elem.data.fillData.pureColor=value.pureColor
 
-          debugger
+          
             if(value.activeColorKey=="pure"){
 
                 elem.fill=[{type:'solid',color:value.pureColor}]
@@ -985,16 +1011,13 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                          
                         if(match){
                             try{
-  
-                               
-
-                                    elem.fill=[{
-                                   type:'linear',
-                                   from: { x: from.x, y: from.y, type: 'percent'},
-                                    to: { x: to.x, y: to.y, type: 'percent'},
-                                    stops: [{ offset: (match[3]*1)/100, color: match[2] }, { offset: (match[5]*1)/100, color: match[4] }]}]
-                     
-
+                                elem.fill=[{
+                                type:'linear',
+                                from: { x: from.x, y: from.y, type: 'percent'},
+                                to: { x: to.x, y: to.y, type: 'percent'},
+                                stops: [{
+                                     offset: (match[3]*1)/100, color: match[2] }, 
+                                { offset: (match[5]*1)/100, color: match[4] }]}]
                             }catch{
                                 elem.fill="#ffffff"
                             }
@@ -1071,7 +1094,18 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
         
         let img=await getImage(imgUrl)
+        
  
+      
+
+        let widthx=img.width  
+        let heightx=img.height  
+
+        if(widthx>pageWidth.value){
+            widthx= pageWidth.value*0.8
+            heightx=((pageWidth.value*0.8)*img.height)/img.width
+        }
+
         const rectImg = new Rect({
                 id:id,
                 name:'image',
@@ -1089,8 +1123,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 zIndex:editorStore.shapes.size + 1,
                 editable: true,
                 locked:false,
-                //width:img.width,
-                //height:img.height,
+                width:widthx,
+                height:heightx,
                 x: pageWidth.value/2,
                 y: pageHeight.value/2
         }) 
@@ -1152,6 +1186,11 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         const group = new Group(item.data)
         group.zIndex=editorStore.shapes.size + 1
         group.around='center'
+        group.id=nanoid()
+
+        group.x= pageWidth.value/2
+        group.y= pageHeight.value/2
+        
         frame.add(group)
    }
 
@@ -1162,9 +1201,9 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
       canvasApp.editor.list.forEach((elem)=>{ elem.locked=flag  })
       menuVisible.value=false
 
-      canvasApp.editor.target=canvasApp.editor.target;
+      //canvasApp.editor.target=canvasApp.editor.target;
 
-      useSharpStyle.value.locked=flag
+      
 
       if(canvasApp.editor.target.tag=="Text"){
 
@@ -1307,7 +1346,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
     let defaultOption={
         width: width|100,
         editable:true,
-        x: pageWidth.value/2,
+        x: 50,
         y: pageHeight.value/2,
         fill:"#ffffff",
         locked:false,
@@ -1574,7 +1613,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
             cursor:'pointer',
             stroke:stroke,
             strokeWidth:2,
-            cornerRadius: 8,
+            cornerRadius: 0,
             height,
             data:{
               fillData:{
@@ -1620,6 +1659,18 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
     const handleClearAll=()=>{
         canvasApp.editor.target=undefined;
         frame.removeAll();
+        //usePageSetting.value.pageBgClass=""
+
+        usePageSetting.value.pageBgClass="backgroundColor",
+        usePageSetting.value.pageBgSet={
+            backgroundColor:{
+                pureColor:"rgba(255, 255,255, 1)",
+                activeColorKey:"pure",//gradient//pure
+                gradientColor:"linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(0, 0, 0, 1) 100%)"
+            },
+            backgroundImage:''
+        }
+
         editorStore.clearShape()
     }
 
@@ -1678,23 +1729,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
         formData.append('file', blob.data, 'blob')
 
-        
-        // axios.defaults.withCredentials=false
-        // axios.defaults.responseType='json'
-        // axios.defaults.responseEncoding="utf8"
-
-        // axios.post((window.parent as any).sploadImgToTempdes||'http://localhost:9290/BLL/TempHandler.ashx?action=UploadMarkImage', formData)
-        // .then(response => {
-        //     // 处理上传成功的响应
-        //     console.log(response.data);
-        //     uploadCutOutImg(response.data)
-        // })
-        // .catch(error => {
-        //     // 处理上传失败的错误
-        //     console.info(error.stack);
-        // });
-
-
         fetch((window.parent as any).sploadImgToTempdes||'/BLL/TempHandler.ashx?action=UploadMarkImage', {
             method: 'POST',
             body: formData
@@ -1705,32 +1739,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         })
         .catch(error => console.error(error));
 
-        //上传图片
-        // fetch(useImageStyle.value.fill.url)
-        // .then(response => response.blob()) // 将文件作为二进制对象（Blob）获取
-        // .then(blob => {
-        //     //上传
-            
-        //     let formData=new FormData()
-
-        //     formData.append('file', blob, 'blob')
-
-        //     fetch('/BLL/TempHandler.ashx?action=UploadMarkImage', {
-        //         method: 'POST',
-        //         body: formData
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.info(data)
-                
-        //         uploadCutOutImg(data)
-        //     })
-        //     .catch(error => console.error(error));
-
-        // })
-        // .catch(error => {
-        //     console.error('读取文件出错:', error);
-        // });
     }
 
     const  uploadCutOutImg=(json)=>{

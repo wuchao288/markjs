@@ -8,14 +8,17 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Canvas: typeof import('./src/components/Canvas.vue')['default']
+    CreateBg: typeof import('./src/components/widgets/CreateBg.vue')['default']
     CropperImg: typeof import('./src/components/widgets/CropperImg.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
+    ElCol: typeof import('element-plus/es')['ElCol']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElProgress: typeof import('element-plus/es')['ElProgress']
+    ElRow: typeof import('element-plus/es')['ElRow']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     Header: typeof import('./src/components/Header.vue')['default']

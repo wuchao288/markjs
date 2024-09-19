@@ -56,7 +56,8 @@ export type TSharpSetting={
   activeColorKey:string,
   gradientColor:string,
   locked:boolean,
-  visible:boolean
+  visible:boolean,
+  cornerRadius:number
 }
 
 
@@ -174,6 +175,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
       height:100,
       locked:false,
       visible:true,
+      cornerRadius:1,
       pureColor:"#FFFFFF",
       activeColorKey:"pure",//gradient//pure
       gradientColor:"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)"

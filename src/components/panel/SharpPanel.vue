@@ -27,7 +27,16 @@
       </el-form-item>
 
       <el-form-item :label="t('stylepanel.strokewidth')">
-        <el-slider v-model="useSharpStyle.strokeWidth"  :max="10"  :min="1" />
+
+        <el-row :gutter="10" style="width: 100%;">
+               <el-col :span="18">
+                <el-slider v-model="useSharpStyle.strokeWidth"  :max="200"  :min="0" />
+              </el-col>
+              <el-col :span="6">
+                 <el-input size="small" v-model="useSharpStyle.strokeWidth"></el-input>
+              </el-col>
+            </el-row>
+
       </el-form-item>
 
       <el-form-item :label="t('stylepanel.stroke')">
@@ -50,9 +59,17 @@
       </el-form-item>
       
       
-      <!-- <el-form-item :label="t('stylepanel.cornerradius')" v-if="useTextStyle.strokeWidth>0">
-        <el-slider v-model="useTextStyle.cornerRadius"  :max="10"  :min="0" />
-      </el-form-item> -->
+      <el-form-item :label="t('stylepanel.cornerradius')" v-if="useSharpStyle.strokeWidth>0">
+     
+        <el-row :gutter="10" style="width: 100%;">
+               <el-col :span="18">
+                <el-slider v-model="useSharpStyle.cornerRadius"  :max="200"  :min="0" />
+              </el-col>
+              <el-col :span="6">
+                 <el-input size="small" v-model="useSharpStyle.cornerRadius"></el-input>
+              </el-col>
+            </el-row>
+      </el-form-item> 
 
 
     </el-form>
@@ -137,7 +154,7 @@
     background-color: white;
     padding: 20px;
     bottom: 0px;
-    width: 280px;
+    width: 350px;
     overflow: auto;
    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px;
   }

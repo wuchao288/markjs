@@ -1,7 +1,9 @@
 <template>
   
   <el-dialog v-model="dialogCropVisible" :close-on-click-modal="false" :destroy-on-close="true" :title="t('stylepanel.crop')"
-     :width="windowHeight<800?windowHeight:800" height="600" @closed="closedCropImg"  @opened="openedCropImg">
+     :width="windowWidth>800?800:windowWidth*.9" 
+     :height="windowHeight>600?600:windowHeight*.9"
+      @closed="closedCropImg"  @opened="openedCropImg">
 
      <img ref="imageRef" :src="imageSrc"   alt="image" style="object-fit: contain;">
         <template #footer>
@@ -55,7 +57,11 @@
   //绑定图片的dom对象
   const imageRef = ref(null)
 
-  let dialogCropVisible=defineModel<boolean>(false);
+  let windowHeight=window.innerHeight
+
+  let windowWidth=window.innerWidth
+
+  let dialogCropVisible=defineModel<boolean>();
 
   let cropper = null;
   //使用Cropper构造函数创建裁剪器实例，并将图片元素和一些裁剪选项传入
@@ -107,26 +113,18 @@
   // 将裁剪后的图片数据URL传递给父组件。
   const cropImage = () => {
 
-  const canvas = cropper.getCroppedCanvas();
-
-  let cropData=  cropper.getCropBoxData()
-
-  const sizeData = cropper.getData();
-
-  
-
-  const croppedImage = canvas.toDataURL();
-    emit('updateImageSrc', {
-      croppedImage,
-      sizeData,
-      cropData
-    });
+      const canvas = cropper.getCroppedCanvas();
+      let cropData=  cropper.getCropBoxData()
+      const sizeData = cropper.getData();
+      const croppedImage = canvas.toDataURL();
+      emit('updateImageSrc', {
+        croppedImage,
+        sizeData,
+        cropData
+      });
   }
 
-  //销毁
-  onBeforeUnmount(()=>{
-    cropper.destroy()
-  })
+
 
 
 </script>

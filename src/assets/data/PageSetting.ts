@@ -49,25 +49,36 @@ export type  PageSizeItem={
 }
 
 export const PageSizeList=[
-  {
-    title: "1200px*1920px",
-    width: 1200,
-    height: 1920,
-    id:3
-  },
    {
-    title: "600px*600px",
+    title: "600px*600px (Yahoo推奨)",
     width: 600,
     height: 600,
     id:1
   },
   {
-    title: "800px*800px",
-    width: 800,
-    height: 800,
+    title: "700px*700px（Rakuten推奨）",
+    width: 700,
+    height: 700,
     id:2
+  },
+  {
+    title: "1280px*750px",
+    width: 1280,
+    height: 750,
+    id:3
+  },
+  {
+    title: "1280px*1280px",
+    width: 1280,
+    height: 1280,
+    id:4
+  },
+  {
+    title: "1180px*260px",
+    width: 1180,
+    height: 260,
+    id:5
   }
-  
 ] as PageSizeItem[]
 
 
