@@ -61,7 +61,7 @@
 
   let windowWidth=window.innerWidth
 
-  let dialogCropVisible=defineModel<boolean>();
+  let dialogCropVisible=defineModel("dialogCropVisible");
 
   let cropper = null;
   //使用Cropper构造函数创建裁剪器实例，并将图片元素和一些裁剪选项传入

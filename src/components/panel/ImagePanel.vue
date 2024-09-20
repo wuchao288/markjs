@@ -64,7 +64,7 @@
                     <i class="iconfont icon icon-koutu"></i>
                     {{$t("stylepanel.createbg")}}
                   </el-button>
-            </el-col> -->
+            </el-col>  -->
          </el-row>
       </el-form-item>
       
@@ -103,7 +103,7 @@
       </el-form-item>
     </el-form>
     </div>
-    <!-- <CreateBg  dialogCreateBgVisible='"createBgVisible" :image-src="imgSrc"  @update-image-src="updateBgImage"/> -->
+    <!-- <CreateBg v-model ="createBgVisible" :image-src="imgSrc"  @update-image-src="updateBgImage"/>  -->
 </template>
 
 <script setup lang="ts">

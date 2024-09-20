@@ -4,7 +4,7 @@
      :close-on-click-modal="false"
       :destroy-on-close="true"
       :append-to-body="true"
-       :title="t('stylepanel.createbg')"
+      :title="t('stylepanel.createbg')"
       :width="windowWidth>800?800:windowWidth*.9" 
       :height="windowHeight>600?600:windowHeight*.9" >
       
