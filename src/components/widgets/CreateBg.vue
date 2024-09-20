@@ -1,11 +1,11 @@
 <template>
   
-    <el-dialog  :v-model="dialogVisible"
-      :close-on-click-modal="false"
-      :destroy-on-close="true"
-      :append-to-body="true"
+    <el-dialog  v-model="dialogVisible"
+      close-on-click-modal="false"
+      destroy-on-close="true"
+      append-to-body="true"
       :title="t('stylepanel.createbg')"
-      :width="800" 
+      width="800" 
       @cloesed="closeedCreateBgImg"
       @opened="openedCreateBgImg"
 >
@@ -67,7 +67,7 @@
     </div>
         <template #footer>
             <div class="dialog-footer">
-                <el-button  @click="closeWin"> {{$t("canvas.cancel")}} </el-button>
+                <el-button  @click="close"> {{$t("canvas.cancel")}} </el-button>
                 <el-button type="primary" @click="createBgImageDone">
                 {{$t("canvas.confirm")}} 
                 </el-button>
@@ -78,7 +78,7 @@
   </template>
   <script setup  lang="ts">
 
-    import {reactive,ref,nextTick,toRef} from "vue";
+    import {reactive,ref,nextTick,defineProps,computed} from "vue";
 
     import { useI18n } from "vue-i18n"
     const { t } = useI18n()
@@ -88,7 +88,15 @@
     import { ElMessage, ElMessageBox } from "element-plus";
 
     let dialogVisible= defineModel("dialogVisible")
-   
+
+    // const props = defineProps({
+    //     dialogVisible: {
+    //     type: Boolean,
+    //     default: false
+    //     }
+    // })
+
+    const emit = defineEmits(['update:dialogVisible','updateImageSrc','closeWin'])
     //let imageSrc= defineModel("imageSrc",{type:String})
 
     export type TImageCreateBgState = {
@@ -104,16 +112,24 @@
         createing:boolean;
         prompt:string
    }
+  
+//    let visible = computed({
+//     get() {
+//         debugger
+//       return props.dialogVisible
+//     },
+//     set(value: boolean) {
+//       console.log('value222',value);
+//       emit('update:dialogVisible', value)
+//     }
+ //})
+const close = ()=>{
+ // 请关闭弹框
+ dialogVisible.value = false;
 
+}
 
-   const closeWin=()=>{
-
-    dialogVisible.value=false
-
-    //emit('closeWin');
-    
-   }
-
+   
    const state = reactive<TImageCreateBgState>({
         show: false,
         rawImage: new URL("@/assets/koutu.png",import.meta.url).href,
@@ -228,7 +244,7 @@
         state.rawImage=''
     }
 
-    const emit = defineEmits(['updateImageSrc','closeWin'])
+   
 
     const createBgImageDone = () => {
 

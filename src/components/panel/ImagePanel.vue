@@ -103,7 +103,7 @@
       </el-form-item>
     </el-form>
     </div>
-   <CreateBg v-model="dialogVisible"  @close-win="closeWin"  @update-image-src="updateBgImage"/>
+   <CreateBg v-model:dialogVisible="dialogVisible"  @close-win="closeWin"  @update-image-src="updateBgImage"/>
 </template>
 
 <script setup lang="ts">
@@ -135,7 +135,7 @@
 
     let imgSrc=ref("")
 
-    let dialogVisible=ref(true)
+    let dialogVisible=ref(false)
 
 
     const updateBgImage=(obj)=>{
