@@ -1752,25 +1752,10 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
     }
 
     const  uploadCutOutImg=(json)=>{
+        
         let formData=new FormData()
-        if((window.parent as any).cutOutImg){
-           // formData.append("loginToken",Cookies.get("token"))
-        }
-       
+
         formData.append("fileUrl",(window.parent as any).cutOutImg?json.response.ImgPath:json.data.fileUrl)
-        // axios.defaults.withCredentials=false
-        // axios.defaults.responseType='json'
-        // axios.defaults.responseEncoding="utf8"
-        // axios.post((window.parent as any).cutOutImg||'http://localhost:9290/BLL/TempHandler.ashx?action=CutOutImg', formData)
-        // .then(response => {
-        //     // 处理上传成功的响应
-        //     console.log(response.data);
-            
-        // })
-        // .catch(error => {
-        //     // 处理上传失败的错误
-        //     console.info(error.stack);
-        // });
 
          fetch((window.parent as any).cutOutImg||'/BLL/TempHandler.ashx?action=CutOutImg', {
                  method: 'POST',

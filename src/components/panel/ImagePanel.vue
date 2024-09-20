@@ -59,12 +59,12 @@
                     {{$t("stylepanel.cutout")}}
                     </el-button>
             </el-col>
-               <!-- <el-col :span="12">
+               <el-col :span="12">
                 <el-button @click="handleCreateBg">
                     <i class="iconfont icon icon-koutu"></i>
                     {{$t("stylepanel.createbg")}}
                   </el-button>
-            </el-col>  -->
+            </el-col>  
          </el-row>
       </el-form-item>
       
@@ -103,7 +103,7 @@
       </el-form-item>
     </el-form>
     </div>
-    <!-- <CreateBg v-model ="createBgVisible" :image-src="imgSrc"  @update-image-src="updateBgImage"/>  -->
+   <CreateBg v-model="createBgVisible" v-model:imageSrc="imgSrc"  @update-image-src="updateBgImage"/>
 </template>
 
 <script setup lang="ts">
@@ -142,14 +142,15 @@
     }
 
     onMounted(()=>{
-      imgSrc.value=editorStore.editor.editor.target?.fill?.url
+      
     })
 
     const format=()=>{return ""}
 
     const handleCreateBg=()=>{
-      debugger
+      
       createBgVisible.value=true
+      imgSrc.value=editorStore.editor.editor.target?.fill?.url
     }
 
 

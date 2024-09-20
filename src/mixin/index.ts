@@ -49,7 +49,7 @@ function isCrossDomain(url) {
       return true;
   }
 }
-async function uploadFile (file: File | Blob, options,  cb?: any) {
+async function uploadFile (file: File | Blob , options,  cb?: any) {
     
     
   const formData = new FormData()
@@ -106,21 +106,13 @@ async function loadFont(fontFamily: string, url: string) {
 }
   
 async function loadImg(url:string) {
-    if(isCrossDomain(url)==false){
-        return url
-    }else{
-
-      let myHeaders = new Headers({
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'text/plain'
-    });
-
-      return  fetch(url,{
+  
+    return  fetch(url,{
         method: 'GET',
         mode: 'cors',
         cache: 'default'
     }).then(async res=>await res.blob())
-    }
+    
 }
 
 

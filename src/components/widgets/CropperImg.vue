@@ -2,7 +2,6 @@
   
   <el-dialog v-model="dialogCropVisible" :close-on-click-modal="false" :destroy-on-close="true" :title="t('stylepanel.crop')"
      :width="windowWidth>800?800:windowWidth*.9" 
-     :height="windowHeight>600?600:windowHeight*.9"
       @closed="closedCropImg"  @opened="openedCropImg">
 
      <img ref="imageRef" :src="imageSrc"   alt="image" style="object-fit: contain;">
