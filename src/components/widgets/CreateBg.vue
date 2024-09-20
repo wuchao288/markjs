@@ -96,7 +96,7 @@
     //     }
     // })
 
-    const emit = defineEmits(['update:dialogVisible','updateImageSrc','closeWin'])
+    const emit = defineEmits(['updateImageSrc','closeWin'])
     //let imageSrc= defineModel("imageSrc",{type:String})
 
     export type TImageCreateBgState = {
