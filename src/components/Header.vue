@@ -364,20 +364,7 @@ const handleExportPng=()=>{
          <li>
           <el-button :icon="Pointer"  plain @click="usePageMove=!usePageMove" circle :type="usePageMove?'primary':''" />
          </li>
-         <!-- <li>
-          <el-color-picker v-model="useColor" show-alpha :predefine="predefineColors" />
-        </li>
-        <li>
-              <el-dropdown split-button  @command="handleBrorderWidthCommand">
-                <span>{{borderWidthType.title}}</span>
-                  <template #dropdown>
-                    <el-dropdown-menu>
-                      <el-dropdown-item :command="item"  :key="item.id" v-for="item in BorderWidthList">{{item.title}}</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-              </el-dropdown>
-         </li> -->
-
+        
          <li>&nbsp;&nbsp;</li>
          <li>
             <el-upload
@@ -390,28 +377,30 @@ const handleExportPng=()=>{
             >
               <template #trigger>
                
-                <el-button type="primary"> 
+                <el-button type="primary" :title="t('header.uploadimg')"> 
                   <span class="iconfont icon icon-shangchuantupian1" style="color: white;"></span> 
-                   {{$t('header.uploadimg')}}
+                  <span class="bgsize"> {{$t('header.uploadimg')}}</span>
                   </el-button>
               </template>
             </el-upload>
          </li>
          <li>
-          <el-button type="danger" @click="handleClearAll">
+          <el-button type="danger" :title="t('header.clear')" @click="handleClearAll">
             <span class="iconfont icon icon-shanchu" style="color: white;"></span>
-            {{$t('header.clear')}}
+            <span class="bgsize"> {{$t('header.clear')}} </span>
           </el-button>
          </li>
          <li>
-          <el-button @click="handleDownImg" >
+          <el-button :title="t('header.download')" @click="handleDownImg" >
             <span class="iconfont icon icon-xiazaitupian"></span>
-            {{$t('header.download')}}</el-button>
+            <span class="bgsize"> {{$t('header.download')}}  </span>
+          </el-button>
          </li>
          <li>
-          <el-button type="primary" @click="handleSaveImg">
+          <el-button type="primary" :title="t('header.save')" @click="handleSaveImg">
             <span class="iconfont icon icon-ok" style="color: white;"></span>
-            {{$t('header.save')}}</el-button>
+            <span > {{$t('header.save')}} </span>
+          </el-button>
          </li>
 
          <li v-if="isTest">
@@ -424,21 +413,10 @@ const handleExportPng=()=>{
               导出效果图
           </el-button>
          </li>
-         <!-- <li>
-              <el-dropdown split-button type="primary"  @command="handlePageSizeCommand">
-                <span>{{pageSize.title}}</span>
-                  <template #dropdown>
-                    <el-dropdown-menu>
-                      <el-dropdown-item :command="item"  :key="item.id" v-for="item in PageSizeList">{{item.title}}</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-              </el-dropdown>
-         </li> -->
-         <!-- <li>
-          <Lang  />
-         </li> -->
+        
          </ul>
      </div>
+     
  </div>
  <div class="zoom">
   <el-button-group >
@@ -465,13 +443,13 @@ const handleExportPng=()=>{
           <el-tab-pane :label="t('header.texteffect')" name="texteff">
                <el-row :gutter="16">
                   <el-col :span="12"   >
-                    <div  v-for="item in  TextEffectItemList.filter((m,index)=> { return index%2==0 })" 
+                    <div  :title="item.id"  v-for="item in  TextEffectItemList.filter((m,index)=> { return index%2==0 })" 
                     :key="item.id" class="mateitem" >
                       <el-image @click="handleAddGroup(item)" class="mateitem-img"  :src="item.preview"></el-image>
                     </div>
                   </el-col>
                   <el-col :span="12"   >
-                    <div v-for="item in  TextEffectItemList.filter((m,index)=> { return index%2==1 })" :key="item.id" class="mateitem" 
+                    <div :title="item.id" v-for="item in  TextEffectItemList.filter((m,index)=> { return index%2==1 })" :key="item.id" class="mateitem" 
                      >
                       <el-image @click="handleAddGroup(item)" class="mateitem-img"  :src="item.preview"></el-image>
                     </div>
@@ -560,5 +538,8 @@ const handleExportPng=()=>{
 
 .active{
   background-color: aquamarine;
+}
+.bgsize{
+  display: none;
 }
 </style>

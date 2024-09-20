@@ -97,12 +97,23 @@ export const StyleFontList=[
   "preview":new URL("@/assets/fonts/A-OTF-GothicMB101Pr5-Reg.png",import.meta.url).href,
   "url":new URL("@/assets/fonts/A-OTF-GothicMB101Pr5-Reg.otf",import.meta.url).href,
   "value":"A-OTF-GothicMB101Pr5-Reg"
-},
-{ 
-    "alias":"karakaze",
-    "preview":new URL("@/assets/fonts/475486472288337920.png",import.meta.url).href,
-    "url":new URL("@/assets/fonts/475486472288337920.otf",import.meta.url).href,
-    "value":"karakaze"
+}
+,{ 
+  "alias":"karakaze",
+  "preview":new URL("@/assets/fonts/475486472288337920.png",import.meta.url).href,
+  "url":new URL("@/assets/fonts/475486472288337920.otf",import.meta.url).href,
+  "value":"karakaze"
+},{ 
+  "alias":"SoukouMincho",
+  "preview":new URL("@/assets/fonts/SoukouMincho.png",import.meta.url).href,
+  "url":new URL("@/assets/fonts/SoukouMincho.ttf",import.meta.url).href,
+  "value":"SoukouMincho"
+}
+,{ 
+  "alias":"FontopoNIHONGO",
+  "preview":new URL("@/assets/fonts/FontopoNIHONGO.png",import.meta.url).href,
+  "url":new URL("@/assets/fonts/FontopoNIHONGO.otf",import.meta.url).href,
+  "value":"FontopoNIHONGO"
 }] as StyleFontItem[]
 
 
@@ -114,7 +125,42 @@ export type TextEffectItem={
     id:string
 }
 
-export const  TextEffectItemList=[{
+export const  TextEffectItemList=[
+  {
+    preview:new URL("@/assets/images/mate/texteffect/11.png",import.meta.url).href,
+    url:'',
+    id:"10011",
+    data:
+    {"tag":"Group","id":"fQaUnheirpPvBCvFa2Icd","zIndex":1,"x":229.89377845220028,"y":258.1183611532626,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"DFH3i8lzBtb_qzFiw0zR2","name":"Rect","visible":true,"locked":false,"zIndex":1,"x":1.1368683772161603e-13,"y":0,"width":120,"height":100,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#0c6bca"}],"stroke":"#FFFFFF","strokeWidth":2,"dashPattern":[],"cornerRadius":4,"data":{"fillData":{"activeColorKey":"pure","gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#0c6bca"}}},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"冷蔵室","fontFamily":"アプリ明朝","fontSize":24,"letterSpacing":0,"lineHeight":{"type":"percent","value":1.5},"id":"5QhpKDRAc_gd6JAFQhMzN","name":"Text","visible":true,"zIndex":2,"x":18.209408194233788,"y":10.015174506828487,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"250L","fontFamily":"アプリ明朝","fontSize":33,"fontWeight":"normal","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"2JH3krEcijlW6bwzcD0b2","name":"Text","visible":true,"zIndex":3,"x":14.567526555387076,"y":42.04275365514343,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
+  },
+  {
+    preview:new URL("@/assets/images/mate/texteffect/1001.png",import.meta.url).href,
+    url:'',
+    id:"1001",
+    data:
+    {"tag":"Group","id":"kgPTjw0g1HwuT8Dj5pVMG","zIndex":1,"x":300,"y":300,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"DFH3i8lzBtb_qzFiw0zR2","name":"Rect","visible":true,"locked":false,"zIndex":1,"x":1.1368683772161603e-13,"y":0,"width":120,"height":100,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#46aaa3"}],"stroke":"#FFFFFF","strokeWidth":2,"dashPattern":[],"cornerRadius":4,"data":{"fillData":{"activeColorKey":"pure","gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#46aaa3"}}},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"冷凍室","fontFamily":"アプリ明朝","fontSize":24,"letterSpacing":0,"lineHeight":{"type":"percent","value":1.5},"id":"5QhpKDRAc_gd6JAFQhMzN","name":"Text","visible":true,"zIndex":2,"x":18.209408194233788,"y":10.015174506828487,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"150L","fontFamily":"アプリ明朝","fontSize":33,"fontWeight":"normal","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"2JH3krEcijlW6bwzcD0b2","name":"Text","visible":true,"zIndex":3,"x":14.567526555387076,"y":42.04275365514343,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}  },
+   ,
+   {
+    preview:new URL("@/assets/images/mate/texteffect/1002.png",import.meta.url).href,
+    url:'',
+    id:"1002",
+    data:
+    {"tag":"Group","x":247.26858877086488,"y":251.82094081942324,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"fWWGfWUc_eutty_eyQpDu","name":"Rect","visible":true,"locked":false,"zIndex":1,"x":-1.1368683772161603e-13,"y":5.684341886080802e-14,"width":100,"height":100,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#FFFFFF"}],"stroke":"rgba(0, 0, 0, 1)","strokeWidth":2,"dashPattern":[],"cornerRadius":4,"data":{"fillData":{"activeColorKey":"pure","gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#FFFFFF"}}},{"tag":"Text","resizeFontSize":true,"fill":"#000000","text":"観音\n開き","fontFamily":"アプリ明朝","fontSize":24,"letterSpacing":4,"lineHeight":{"type":"percent","value":1.5},"id":"ylXEcnDZjLFeFcdNB1bhl","name":"Text","visible":true,"zIndex":2,"x":19.119878603945267,"y":8.194233687405301,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]} 
+    },
+    {
+      preview:new URL("@/assets/images/mate/texteffect/1003.png",import.meta.url).href,
+      url:'',
+      id:"1003",
+      data:
+      {"tag":"Group","x":147.11001517450745,"y":184.00531107739005,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"2VJAzGQR8F0idFip9JpM8","name":"Rect","visible":true,"locked":false,"zIndex":1,"x":0,"y":0,"width":130,"height":44,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#FFFFFF"}],"stroke":"rgba(0, 0, 0, 1)","strokeWidth":0,"dashPattern":[],"cornerRadius":0,"data":{"fillData":{"activeColorKey":"pure","gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#FFFFFF"}}},{"tag":"Text","resizeFontSize":true,"fill":"#000000","text":"2年保証","fontFamily":"アプリ明朝","fontSize":24,"letterSpacing":3,"lineHeight":{"type":"percent","value":1.5},"id":"u9QvHV5LqD4wCxRQKfXwh","name":"Text","visible":true,"zIndex":2,"x":10.925644916539568,"y":0.8209408194232992,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
+   },
+   {
+    preview:new URL("@/assets/images/mate/texteffect/1004.png",import.meta.url).href,
+    url:'',
+    id:"1004",
+    data:
+    {"tag":"Group","x":147.11001517450745,"y":184.00531107739005,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"2VJAzGQR8F0idFip9JpM8","name":"Rect","visible":true,"locked":false,"zIndex":1,"x":0,"y":0,"width":130,"height":44,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#FFFFFF"}],"stroke":"rgba(0, 0, 0, 1)","strokeWidth":0,"dashPattern":[],"cornerRadius":0,"data":{"fillData":{"activeColorKey":"pure","gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#FFFFFF"}}},{"tag":"Text","resizeFontSize":true,"fill":"#000000","text":"ファン式","fontFamily":"アプリ明朝","fontSize":24,"letterSpacing":3,"lineHeight":{"type":"percent","value":1.5},"id":"u9QvHV5LqD4wCxRQKfXwh","name":"Text","visible":true,"zIndex":2,"x":3.641881638846092,"y":0.8209408194232992,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]} },
+   ,{
     preview:new URL("@/assets/images/mate/texteffect/mate1.png",import.meta.url).href,
     url:'',
     id:"1",
@@ -150,13 +196,7 @@ export const  TextEffectItemList=[{
   id:"1003",
   data:{"tag":"Group","id":"uC2bG-5EwScfvpEsTHGkk","zIndex":1,"x":258.1645957289336,"y":254.49685984457864,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"wDe00cHPvHdThrojJCas0","name":"image","locked":false,"zIndex":1,"x":208.5630359020166,"y":188.19555192721032,"width":417.1260718040332,"height":376.39110385442063,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,"fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/3.png",import.meta.url).href,"mode":"strench"},"data":{"original":new URL("@/assets/images/mate/texteffect/3.png",import.meta.url).href,"sizeData":null,"cropData":null}},{"tag":"Text","resizeFontSize":true,"fill":"#F7371E","text":"人気\n商品","fontFamily":"アプリ明朝","fontSize":40.01695003142718,"fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":1.5},"id":"fzNz6jCu5GDKuWSqQvTWP","name":"Text","visible":true,"zIndex":1,"x":171.18536731728378,"y":129.6680635461789,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
 },
-{
-  preview:new URL("@/assets/images/mate/texteffect/11.png",import.meta.url).href,
-  url:'',
-  id:"10011",
-  data:
-  {"tag":"Group","x":118.31644581303158,"y":152.80267600592833,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"TV5ugVulEE_QGhqXFMSIl","name":"Rect","visible":true,"locked":false,"zIndex":1,"x":1.1368683772161603e-13,"y":2.842170943040401e-14,"width":375,"height":288,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#4e7fa9"}],"stroke":"rgba(0, 0, 0, 1)","strokeWidth":2,"dashPattern":[],"cornerRadius":16,"data":{"fillData":{"activeColorKey":"pure","gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#4e7fa9"}}},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"冷蔵室","fontFamily":"アプリ明朝","fontSize":60,"fontWeight":"normal","letterSpacing":0,"lineHeight":{"type":"percent","value":1.5},"id":"-8ax1xHKFBXSflryTgOo-","name":"Text","visible":true,"zIndex":2,"x":94.20628735620596,"y":15.140296182247369,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"250L","fontFamily":"アプリ明朝","fontSize":105,"fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":1.5},"id":"LM5oJx2nxQh94YOIVLPp5","name":"Text","visible":true,"zIndex":2,"x":54.57976098106167,"y":117.10254858325592,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":"","data":{}}]}
-},
+
 {
   preview:new URL("@/assets/images/mate/texteffect/12.png",import.meta.url).href,
   url:'',
@@ -191,6 +231,13 @@ export const  TextEffectItemList=[{
   {"tag":"Group","x":106.96347526157604,"y":225.88434311478545,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"_IIIrcSJhm58ounsuTCm4","name":"image","locked":false,"zIndex":1,"x":196.50000000000017,"y":84.00000000000001,"width":393,"height":168,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,"fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/16-1.png",import.meta.url).href,"mode":"strench"},"data":{"original":new URL("@/assets/images/mate/texteffect/16-1.png",import.meta.url).href,"sizeData":null,"cropData":null}},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"庫内灯","fontFamily":"アプリ明朝","fontSize":"64","fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":1.5},"id":"2h_1wfJnUCAJHKjMDsBAc","name":"Text","visible":true,"zIndex":1,"x":103.81042458667889,"y":38.60731090645879,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
 },
 {
+  preview:new URL("@/assets/images/mate/texteffect/18.png",import.meta.url).href,
+  url:'',
+  id:"10018",
+  data:
+  {"tag":"Group","x":91.5,"y":91.49999999999997,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"eWx6MPTb2F6cVX8EJEXKh","name":"image","locked":false,"zIndex":1,"x":208.50000000000006,"y":208.5000000000001,"width":417,"height":417,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,"fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/18-1.png",import.meta.url).href,"mode":"strench"},"data":{"original":new URL("@/assets/images/mate/texteffect/18-1.png",import.meta.url).href,"sizeData":null,"cropData":null}},{"tag":"Text","resizeFontSize":true,"fill":"#65BCD4","text":"除菌","fontFamily":"アプリ明朝","fontSize":97,"fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"_2F1vQG6AOGxerzFlw0cm","name":"Text","visible":true,"zIndex":1,"x":107.60782636453769,"y":211.25734884058642,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""},{"tag":"Text","resizeFontSize":true,"fill":"#65BCD4","text":"さらに","fontFamily":"アプリ明朝","fontSize":97,"fontWeight":"normal","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"5M0VeqNqMJyAhs1HY1wzK","name":"Text","visible":true,"zIndex":1,"x":56.978258950154896,"y":51.49456008031433,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":"","data":{}}]}
+},
+{
   preview:new URL("@/assets/images/mate/texteffect/17.png",import.meta.url).href,
   url:'',
   id:"10017",
@@ -202,12 +249,6 @@ export const  TextEffectItemList=[{
   "scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,
   "fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/17-1.png",import.meta.url).href,
   "mode":"strench"},"data":{"original":new URL("@/assets/images/mate/texteffect/17-1.png",import.meta.url).href,"sizeData":null,"cropData":null}},{"tag":"Text","resizeFontSize":true,"fill":"#6F9EB2","text":"調節脚","fontFamily":"アプリ明朝","fontSize":79,"fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"XJXv5nQNIOOyCwhKimaXL","name":"Text","visible":true,"zIndex":1,"x":176.0275589295079,"y":60.42138992165215,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
-},{
-  preview:new URL("@/assets/images/mate/texteffect/18.png",import.meta.url).href,
-  url:'',
-  id:"10018",
-  data:
-  {"tag":"Group","x":91.5,"y":91.49999999999997,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"eWx6MPTb2F6cVX8EJEXKh","name":"image","locked":false,"zIndex":1,"x":208.50000000000006,"y":208.5000000000001,"width":417,"height":417,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,"fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/18-1.png",import.meta.url).href,"mode":"strench"},"data":{"original":new URL("@/assets/images/mate/texteffect/18-1.png",import.meta.url).href,"sizeData":null,"cropData":null}},{"tag":"Text","resizeFontSize":true,"fill":"#65BCD4","text":"除菌","fontFamily":"アプリ明朝","fontSize":97,"fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"_2F1vQG6AOGxerzFlw0cm","name":"Text","visible":true,"zIndex":1,"x":107.60782636453769,"y":211.25734884058642,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""},{"tag":"Text","resizeFontSize":true,"fill":"#65BCD4","text":"さらに","fontFamily":"アプリ明朝","fontSize":97,"fontWeight":"normal","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"5M0VeqNqMJyAhs1HY1wzK","name":"Text","visible":true,"zIndex":1,"x":56.978258950154896,"y":51.49456008031433,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":"","data":{}}]}
 }
 
 ] as TextEffectItem[]
@@ -220,7 +261,90 @@ export type ImageEffectItem={
   type:string  //img/svg
 }
 
-export const ImageEffectList=[{
+export const ImageEffectList=[
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/1.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/1.png",import.meta.url).href,
+    id:"1001",
+    type:"img"
+  },
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/2.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/2.png",import.meta.url).href,
+    id:"1002",
+    type:"img"
+  },
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/3.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/3.png",import.meta.url).href,
+    id:"1003",
+    type:"img"
+  },
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/4.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/4.png",import.meta.url).href,
+    id:"1004",
+    type:"img"
+  },
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/5.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/5.png",import.meta.url).href,
+    id:"1005",
+    type:"img"
+  },
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/6.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/6.png",import.meta.url).href,
+    id:"1006",
+    type:"img"
+  },
+
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/7.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/7.png",import.meta.url).href,
+    id:"1007",
+    type:"img"
+  },
+
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/8.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/8.png",import.meta.url).href,
+    id:"1008",
+    type:"img"
+  },
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/9.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/9.png",import.meta.url).href,
+    id:"1009",
+    type:"img"
+  },
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/10.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/10.png",import.meta.url).href,
+    id:"1010",
+    type:"img"
+  },
+
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/11.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/11.png",import.meta.url).href,
+    id:"1011",
+    type:"img"
+  },
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/12.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/12.png",import.meta.url).href,
+    id:"1012",
+    type:"img"
+  },
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/13.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/13.png",import.meta.url).href,
+    id:"1013",
+    type:"img"
+  },
+
+  {
   preview:new URL("@/assets/images/mate/imageeffect/mateimg1.png",import.meta.url).href,
   url:new URL("@/assets/images/mate/imageeffect/mateimg1.png",import.meta.url).href,
   id:"1",

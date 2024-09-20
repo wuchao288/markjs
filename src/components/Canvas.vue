@@ -418,6 +418,8 @@
                     let image=e.list[0]
 
                     useImageStyle.value.fill=image.fill
+
+                    
                    
                     useImageStyle.value.corners=Number(image.cornerRadius.toString())
                    
@@ -767,10 +769,12 @@
             canvasApp.editor.height=img.height
           
             canvasApp.editor.target.fill={
-            type: 'image',
-            url: newValue,
-            mode: 'strench'
-        }
+                type: 'image',
+                url: newValue,
+                mode: 'strench'
+            }
+
+            canvasApp.editor.target.data.original=newValue
 
          }else{
 
@@ -1192,6 +1196,11 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         group.y= pageHeight.value/2
         
         frame.add(group)
+
+        ElMessage({
+            message: 'Success!',
+            type: 'success'
+        })
    }
 
    const locked=(flag:boolean)=>{
@@ -1633,6 +1642,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
    const handleAddMateImg=(img:any)=>{
       if(img.type=="img"){
         addBgImg(img.url)
+
       }
    }
 
