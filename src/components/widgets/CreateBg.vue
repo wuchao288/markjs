@@ -1,11 +1,12 @@
 <template>
   
-    <el-dialog  :v-model="dialogCreateBgVisible"
+    <el-dialog  :v-model="dialogVisible"
       :close-on-click-modal="false"
       :destroy-on-close="true"
-      :append-to-body="false"
+      :append-to-body="true"
       :title="t('stylepanel.createbg')"
       :width="800" 
+      @cloesed="closeedCreateBgImg"
       @opened="openedCreateBgImg"
 >
 
@@ -38,11 +39,27 @@
             </el-space>
         </el-form>
       
-        <div v-show="state.rawImage" v-loading="state.createing" :style="{ width: state.offsetWidth ? state.offsetWidth + 'px' : '100%' }" class="scan-effect transparent-bg">
-            <img ref="raw" :style="{ 'clip-path': 'inset(0 0 0 ' + state.percent + '%)' }" :src="state.rawImage" alt="" />
-            <img v-show="state.bgImage" src="http://localhost:5173/file/temp/00515991fe07476cadbd82fc80fad306.png" alt="结果图像" @mousemove="mousemove" />
+        <!-- <div v-show="state.rawImage" v-loading="state.createing" :style="{ width: state.offsetWidth ? state.offsetWidth + 'px' : '100%' }" class="scan-effect transparent-bg">
+            <img   v-show="state.bgImage" :src="state.bgImage" alt="结果图像"  :style="{ 'clip-path': 'inset(0 0 0 ' + state.percent + '%)' }" />
+            <img  ref="raw" @load.once="onImageLoad"   :src="state.rawImage"  @mousemove="mousemove" />
+           
             <div v-show="state.bgImage" :style="{ left: state.percent + '%' }" class="scan-line"></div>
-        </div>
+        </div> -->
+
+
+         <div v-show="state.rawImage"  v-loading="state.createing" class="c-compare scan-effect" 
+          :style="{ width: state.offsetWidth ? state.offsetWidth + 'px' : '100%','--value':state.percent+'%' }">
+            <img v-show="state.bgImage" class="c-compare__left" :src="state.bgImage" alt="结果图像"/>
+            <img ref="raw" @load.once="onImageLoad" class="c-compare__right" :src="state.rawImage" alt="B/W" />
+            <input type="range" v-show="state.bgImage" class="c-rng c-compare__range" min="0" max="100"  v-model="state.percent"
+              />
+            <div class="scroller scroller-top" v-show="state.bgImage"  :style="{left: state.percent+'%'}">
+                <svg class="scroller__thumb" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+                    <polygon points="0 50 37 68 37 32 0 50" style="fill:#FFAB91"></polygon>
+                    <polygon points="100 50 64 32 64 68 100 50" style="fill:#FFAB91"></polygon>
+                </svg>
+            </div> 
+        </div> 
 
         <!-- <div>
             <img  alt="image" :src="imageSrc" style="object-fit: contain;">
@@ -50,7 +67,7 @@
     </div>
         <template #footer>
             <div class="dialog-footer">
-                <el-button> {{$t("canvas.cancel")}} </el-button>
+                <el-button  @click="closeWin"> {{$t("canvas.cancel")}} </el-button>
                 <el-button type="primary" @click="createBgImageDone">
                 {{$t("canvas.confirm")}} 
                 </el-button>
@@ -61,7 +78,7 @@
   </template>
   <script setup  lang="ts">
 
-    import {reactive} from "vue";
+    import {reactive,ref,nextTick,toRef} from "vue";
 
     import { useI18n } from "vue-i18n"
     const { t } = useI18n()
@@ -70,9 +87,9 @@
     import {mixins} from "@/mixin/index"
     import { ElMessage, ElMessageBox } from "element-plus";
 
-    let dialogCreateBgVisible= defineModel("dialogCreateBgVisible")
-
-    let imageSrc= defineModel("imageSrc",{type:String})
+    let dialogVisible= defineModel("dialogVisible")
+   
+    //let imageSrc= defineModel("imageSrc",{type:String})
 
     export type TImageCreateBgState = {
         show: boolean;
@@ -88,10 +105,19 @@
         prompt:string
    }
 
+
+   const closeWin=()=>{
+
+    dialogVisible.value=false
+
+    //emit('closeWin');
+    
+   }
+
    const state = reactive<TImageCreateBgState>({
         show: false,
-        rawImage: imageSrc.value,
-        bgImage:'',
+        rawImage: new URL("@/assets/koutu.png",import.meta.url).href,
+        bgImage:"",//new URL("@/assets/createbg.png",import.meta.url).href,
         offsetWidth: 0,
         percent: 0,
         progress: 0,
@@ -102,20 +128,31 @@
         prompt:''
    })
 
-  const openedCreateBgImg=()=>{
-    state.rawImage=imageSrc.value
+   let raw=ref(null);
+  
+    function  onImageLoad(){
+
+        state.offsetWidth = (raw.value as HTMLElement).offsetWidth
+    }
+
+    const openedCreateBgImg=()=>{
+
+        
+        nextTick(()=>{
+            state.rawImage=new URL("@/assets/koutu.png",import.meta.url).href
+        })
   }
 
-   const mousemove = (e: MouseEvent) => {
-      !isRuning && (state.percent = (e.offsetX / (e.target as any).width) * 100)
-   }
-
-   let isRuning: boolean = false
-
+  let isRuning: boolean = false
 
    const  createBg=async ()=>{
 
+
+    state.bgImage=new URL("@/assets/createbg.png",import.meta.url).href
+
+    requestAnimationFrame(run)
     
+    return;
         const  uploadCreateBgImg=(fileUrl:string)=>{
             
             let formData=new FormData()
@@ -180,8 +217,18 @@
 
    }
    
+   const run = () => {
+        state.percent += 1
+        isRuning = true
+        state.percent < 100 ? requestAnimationFrame(run) : (isRuning = false)
+}
 
-    const emit = defineEmits(['updateImageSrc'])
+    const closeedCreateBgImg=()=>{
+        state.bgImage=''
+        state.rawImage=''
+    }
+
+    const emit = defineEmits(['updateImageSrc','closeWin'])
 
     const createBgImageDone = () => {
 
@@ -225,4 +272,111 @@
     .progress {
     width: 100%;
     }
+
+
+
+    .c-compare {
+  --h: 9;
+  --m: 1rem 0;
+  --w: 16;
+  --thumb-bgc: #FFAB91;
+  --thumb-bgc-focus: hsla(0, 70%, 70%, 0.7);
+  --thumb-w: 0.3rem;
+
+  margin: var(--m);
+  position: relative;
+}
+.c-compare::after {
+  content: "";
+  display: block;
+  padding-bottom: calc((var(--h) / var(--w)) * 100%);
+}
+.c-compare__left,
+.c-compare__right {
+  height: 100%;
+  object-fit: contain;
+  position: absolute;
+  width: 100%;
+}
+.c-compare__left {
+  clip-path: polygon(0% 0%, var(--value) 0%, var(--value) 100%, 0% 100%);
+}
+.c-compare__right {
+  clip-path: polygon(100% 0%, var(--value) 0%, var(--value) 100%, 100% 100%);
+}
+.c-compare__range {
+  background-color: transparent;
+  box-sizing: border-box;
+  font-family: inherit;
+  height: 100%;
+  margin: 0;
+  outline: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.c-compare__range::-moz-range-thumb {
+  background-color: var(--thumb-bgc);
+  cursor: ew-resize;
+  height: 100%;  
+  width: var(--thumb-w);
+}
+.c-compare__range::-webkit-slider-thumb {
+  background-color: var(--thumb-bgc);
+  cursor: ew-resize;
+  height: 100%;  
+  width: var(--thumb-w);
+}
+.c-compare__range:focus::-webkit-slider-thumb {
+  background-color: var(--thumb-bgc-focus);
+  box-shadow: 0 0 0 3px var(--thumb-bgc);
+}
+.c-compare__range:focus::-moz-range-thumb {
+  background-color: var(--thumb-bgc-focus);
+  box-shadow: 0 0 0 3px var(--thumb-bgc);
+}
+.c-compare__range::-moz-range-track {
+  background: transparent;
+  background-size: 100%;
+  box-sizing: border-box;
+}
+.c-compare__range::-webkit-slider-runnable-track {
+  background: transparent;
+  background-size: 100%;
+  box-sizing: border-box;
+  height: 100%;
+}
+.c-compare__range,
+.c-compare__range::-webkit-slider-runnable-track,
+.c-compare__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.scroller {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 100px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-25px);
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.9;
+    transition: opacity 0.12s ease-in-out;
+    pointer-events: auto;
+    cursor: pointer;
+    box-shadow: 3.5px 0px 7px rgba(100, 100, 100, 0.2);
+    pointer-events: none;
+}
+
+.scroller-top>.scroller__thumb {
+    border: 5px solid #FFAB91;
+}
+
+.scroller__thumb {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    padding: 7px;
+}
 </style>

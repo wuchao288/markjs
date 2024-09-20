@@ -103,12 +103,12 @@
       </el-form-item>
     </el-form>
     </div>
-   <CreateBg v-model="createBgVisible" v-model:imageSrc="imgSrc"  @update-image-src="updateBgImage"/>
+   <CreateBg v-model="dialogVisible"  @close-win="closeWin"  @update-image-src="updateBgImage"/>
 </template>
 
 <script setup lang="ts">
 
-    import { onMounted, ref} from 'vue'
+    import { onMounted, ref,watch} from 'vue'
 
     import {ElProgress,ElDialog,ElUpload,ElCard,ElMessage,ElRow,ElCol, ElForm,ElFormItem,ElButton,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
 
@@ -127,6 +127,7 @@
     
 
     import { mixins } from "@/mixin/index";
+
     
     const emit = defineEmits([
         'handleCutOut','handleCropImg','handleExportImg'
@@ -134,7 +135,7 @@
 
     let imgSrc=ref("")
 
-    let createBgVisible=ref(false)
+    let dialogVisible=ref(true)
 
 
     const updateBgImage=(obj)=>{
@@ -145,12 +146,20 @@
       
     })
 
+    watch(()=>dialogVisible.value,(value)=>{
+      console.info(value)
+    })
+
     const format=()=>{return ""}
 
     const handleCreateBg=()=>{
       
-      createBgVisible.value=true
+      dialogVisible.value=true
       imgSrc.value=editorStore.editor.editor.target?.fill?.url
+    }
+
+    const closeWin=()=>{
+      dialogVisible.value=false
     }
 
 
