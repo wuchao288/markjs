@@ -8,8 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Canvas: typeof import('./src/components/Canvas.vue')['default']
+    copy: typeof import('./src/components/widgets/CutoutImg copy.vue')['default']
     CreateBg: typeof import('./src/components/widgets/CreateBg.vue')['default']
     CropperImg: typeof import('./src/components/widgets/CropperImg.vue')['default']
+    CutoutImg: typeof import('./src/components/widgets/CutoutImg.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']

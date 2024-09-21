@@ -1,3 +1,5 @@
+import { ElMessage } from "element-plus";
+
 function debounce(func, wait, immediate) {
     let timeout; // 定义一个计时器变量，用于延迟执行函数
     return function (...args) { // 返回一个包装后的函数
@@ -47,6 +49,9 @@ function isCrossDomain(url) {
       return true;
   }
 }
+
+//export type TUploadFile=(file: File | Blob , options:object,  cb?: any)=>string
+
 async function uploadFile (file: File | Blob , options,  cb?: any) {
     
     
@@ -55,19 +60,49 @@ async function uploadFile (file: File | Blob , options,  cb?: any) {
   formData.append('file',file,'blob')
 
   return new Promise((resolve: any, reject: (err: string) => void) => {
-
+    debugger
     fetch((window.parent as any).sploadImgToTempdes||'/BLL/TempHandler.ashx?action=UploadMarkImage', {
       method: 'POST',
       body: formData
     })
     .then(response => response.json())
     .then(data => {
-        if(data.code==0){
-          cb?.(data)
-          resolve(data)
-        }else{
-          reject(data);
-        }
+
+      let isUploadOk=true
+      let rurl=''
+      let error=''
+
+      if((window.parent as any).cutOutImg){
+
+          if((data as any).response.success==false){
+
+            isUploadOk=false
+            error=(data as any).response.msg
+
+          }else{
+           
+            rurl= (data as any).response.ImgPath
+          }
+      }else{
+
+         if((data as any).code!=0){
+
+            isUploadOk=false
+            error=(data as any).msg
+
+          }else{
+
+            rurl= (data as any).data.fileUrl
+          }
+      }
+
+      if(isUploadOk){
+        cb?.(rurl)
+        resolve(rurl)
+      }else{
+        reject(rurl);
+        ElMessage.error(error)
+      }
     })
     .catch(error => {
       console.error(error)
@@ -91,7 +126,7 @@ async function loadFont(fontFamily: string, url: string) {
     if (url) {
 
       const prefont = new FontFace(fontFamily, `url("${url}")`);
-      
+
       try {
 
         const res = await prefont.load();

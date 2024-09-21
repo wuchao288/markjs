@@ -143,18 +143,13 @@ const handleAvatarSuccess: UploadProps['onChange'] = (
   }
 
   if(window==window.parent){
-          let url=URL.createObjectURL(uploadFile.raw!)
-          emit('handleAddImg',url)
-          return false
+      //let url=URL.createObjectURL(uploadFile.raw!)
+      //emit('handleAddImg',url)
+      //return false
   }
 
   mixins.uploadFile(rawFile,{}).then((data)=>{
-      
-      if((data as any).code==0){
-        emit('handleAddImg',(window.parent as any).sploadImgToTempdes?(data as any).response.ImgPath:(data as any).data.fileUrl)
-      }else{
-        ElMessage.error((data as any).msg)
-      }
+     emit('handleAddImg',data)
   }).catch((error)=>{
     console.info(error)
     ElMessage.error("Upload error")

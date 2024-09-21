@@ -113,6 +113,12 @@
         :cropData="cropData"
         v-model:dialogCropVisible="dialogCropVisible" 
         @update-image-src="updateCropImageSrc" />
+
+
+        <CutoutImg  
+        v-model:dialogVisible="dialogCutVisible"  
+         v-model:imageSrc="imageCutSrc"
+           @update-image-src="updateCutImageDone"/>
 </template>
 
 <script setup lang="ts">
@@ -134,6 +140,8 @@
     import  ShortCut  from '@/components/widgets/ShortCut.vue'
     import  CreateBg  from '@/components/widgets/CreateBg.vue'
     import  CropperImg  from '@/components/widgets/CropperImg.vue'
+    import  CutoutImg  from '@/components/widgets/CutoutImg.vue'
+    
 
     import { mixins } from "@/mixin/index";
 
@@ -141,7 +149,7 @@
 
     
     const emit = defineEmits([
-        'handleCutOut','handleExportImg'
+        'handleExportImg'
     ])
 
     let imgSrc=ref("")
@@ -194,7 +202,7 @@
     //点击裁剪按钮
     const updateCropImageSrc = (updateImageData) => {
     
-      debugger
+      
     //const { x, y, width, height } = updateImageData.size;
 
       let canvasApp=editorStore.editor;
@@ -224,16 +232,30 @@
       dialogCropVisible.value=false
    }
 
-  //   type TState = {
-  //     activeNames: string[],
-  //     innerElement: TImageSetting,
-  //     tag: boolean,
-  //     ingoreKeys: string[],
-  //     fontSizeList: number[],
-  //     fontClassList: Record<string, any>, 
-  //     lineHeightList: number[],
-  //     letterSpacingList: number[]
-  // }
+
+  let dialogCutVisible=ref(false)
+
+  let imageCutSrc=ref('')
+
+  const  handleCutout=()=>{
+
+    dialogCutVisible.value=true
+    let canvasApp=editorStore.editor;
+    imageCutSrc.value=canvasApp.editor.target.fill.url
+
+  }
+
+  const updateCutImageDone=(updateImageData)=>{
+
+     let canvasApp=editorStore.editor;
+      canvasApp.editor.target.data.action="cutout" 
+      useImageStyle.value.fill.url=updateImageData.cutoutImg
+      imageCutSrc.value=""
+
+      dialogCutVisible.value=false
+  }
+   
+
 
 
   const handleAvatarSuccess: UploadProps['onChange'] = (
@@ -260,12 +282,8 @@
           return
         }
 
-        mixins.uploadFile(rawFile,{}).then((data)=>{
-          if((data as any).code==0){
-            useImageStyle.value.fill.url = (window.parent as any).sploadImgToTempdes?(data as any).response.ImgPath:(data as any).data.fileUrl
-          }else{
-            ElMessage.error((data as any).msg)
-          }
+        mixins.uploadFile(rawFile,{}).then((data:string)=>{
+          useImageStyle.value.fill.url=data
         }).catch((error)=>{
           ElMessage.error("Upload error")
         })
@@ -306,10 +324,7 @@
 
 
 
-   const  handleCutout=()=>{
-     emit("handleCutOut")
 
-   }
 
    const  handleFilter=()=>{
     

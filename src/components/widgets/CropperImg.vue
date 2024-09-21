@@ -75,7 +75,7 @@
 
   let sizeData=(toRaw(props.sizeData))
   let cropData=(toRaw(props.cropData))
-debugger
+
   console.info("openedCropImg")
 
   nextTick(()=>{
@@ -128,12 +128,7 @@ debugger
 
       cropper.getCroppedCanvas().toBlob(async (blob) => {
 
-        var croppedImage= await mixins.uploadFile(blob as any ,{})
-              
-        .then(async (data)=>{
-            let url= (window.parent as any).cutOutImg?data.response.ImgPath:data.data.fileUrl
-            return url;
-        }).catch((error)=>{
+        var croppedImage= await mixins.uploadFile(blob as any ,{}).catch((error)=>{
             state.isUploading=false
             console.error(error)
         })

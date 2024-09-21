@@ -188,12 +188,7 @@
 
             var blobData=await mixins.loadImg(state.rawImage)
 
-            var updata= await mixins.uploadFile(blobData as any ,{})
-
-            .then(async (data)=>{
-                let url= (window.parent as any).cutOutImg?data.response.ImgPath:data.data.fileUrl
-                return url;
-            }).catch((error)=>{
+            var updata= await mixins.uploadFile(blobData as any ,{}).catch((error)=>{
                 state.createing=false
                 console.error(error)
             })
@@ -201,6 +196,7 @@
             let result=await  uploadCreateBgImg(updata).catch((error)=>{
                     state.createing=false
                     console.error(error)
+                    ElMessage.error("Create Img Error!")
             })
 
             state.bgImage=result.data[0]
@@ -212,7 +208,11 @@
         }else{
             //直接生成背景
             state.createing=true
-            let result=await   uploadCreateBgImg(state.rawImage as string)
+            let result=await   uploadCreateBgImg(state.rawImage as string).catch((error)=>{
+                  state.createing=false
+                  console.error(error)
+                  ElMessage.error("Create Img Error!")
+          })
 
             state.bgImage=result.data[0]
 

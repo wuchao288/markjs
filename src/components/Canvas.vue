@@ -22,40 +22,10 @@
        </div>
        
     <keep-alive>
-      <component  :is="componen" @handleCutOut="cutOutImg"       @handleExportImg="exportImg"> </component>
+      <component  :is="componen"       @handleExportImg="exportImg"> </component>
     </keep-alive>
 
     
-    <el-dialog v-model="dialogFormVisible" :close-on-click-modal="false"
-     :destroy-on-close="true" title="AI Cut Out" 
-     :width="windowWidth>800?800:windowWidth*.9" 
-     :height="windowHeight>600?600:windowHeight*.9"
-       @opened="openedCutout">
-
-        <div :class="loading?'':'cutimg'" style="height: 560px;">
-            <div v-if="loading" >
-                <h3 style="margin-bottom: 10px;">{{$t("canvas.loading")}} </h3>
-                <div>
-                    <el-progress :percentage="100" :format="format" :indeterminate="true" />
-                </div>
-            </div>
-            <div  v-loading="loading"> 
-                 <el-image style="width: 500px; height: 500px" :src="imgCutImg" fit="contain" />
-            </div>
-        </div>
-
-        <template #footer>
-        <div class="dialog-footer">
-            <el-button @click="dialogFormVisible = false"> {{$t("canvas.cancel")}} </el-button>
-            <el-button type="primary" @click="enterCutout">
-            {{$t("canvas.confirm")}} 
-            </el-button>
-        </div>
-        </template>
-    </el-dialog>
-
-
-
 </template>
 
 <script lang="ts">
@@ -789,7 +759,7 @@
             let font= StyleFontList.find(m=>m.value==newValue) 
 
             await mixins.loadFont(font.value,font.url)
-            
+
             msg.close()
         }
 
@@ -1714,75 +1684,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
     }
 
 
-    const cutOutImg=()=>{
-        dialogFormVisible.value=true
-    }
-
-    const  format=()=>{
-        return ""
-    }
-
-    const  enterCutout=async ()=>{
-        useImageStyle.value.fill.url=imgCutImg.value
-        dialogFormVisible.value=false
-        imgCutImg.value=""
-    }
-
-    const openedCutout=async ()=>{
-
-        loading.value=true
-
-        let blob= await canvasApp.editor.target.export('png', { blob: true })
-
-        let formData=new FormData()
-
-        formData.append('file', blob.data, 'blob')
-
-        fetch((window.parent as any).sploadImgToTempdes||'/BLL/TempHandler.ashx?action=UploadMarkImage', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            uploadCutOutImg(data)
-        })
-        .catch(error => console.error(error));
-
-    }
-
-    const  uploadCutOutImg=(json)=>{
-        
-        let formData=new FormData()
-
-        formData.append("fileUrl",(window.parent as any).cutOutImg?json.response.ImgPath:json.data.fileUrl)
-
-         fetch((window.parent as any).cutOutImg||'/BLL/TempHandler.ashx?action=CutOutImg', {
-                 method: 'POST',
-                 body: formData,
-                 //credentials: 'include'
-             })
-             .then(response => response.json())
-             .then(data => {
-
-                loading.value=false
-
-                if(data.code==0){
-                    imgCutImg.value=data.data[0]
-                }else{
-                    ElMessageBox.alert(data.msg)
-                }
-               }
-             )
-             .catch(error => 
-             { 
-                 ElMessage.error("Cut Out Error!")
-
-            }
-         );
-    }
-
-     
-
     defineExpose({
         handleClearAll,
         handleDownImg,
@@ -1794,7 +1695,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         handleExportJson,
         handleAddGroup,
         handleAddMateImg
-        
     })
 </script>
 

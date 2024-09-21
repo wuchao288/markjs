@@ -201,13 +201,8 @@ const  changeActiveName=(activeName)=>{
 
         
 
-        mixins.uploadFile(rawFile,{}).then((data)=>{
-          if((data as any).code==0){
-            usePageSetting.value.pageBgSet.backgroundImage = (window.parent as any).sploadImgToTempdes?(data as any).response.ImgPath:(data as any).data.fileUrl
-
-          }else{
-            ElMessage.error((data as any).msg)
-          }
+        mixins.uploadFile(rawFile,{}).then((data:string)=>{
+          usePageSetting.value.pageBgSet.backgroundImage=data
         }).catch((error)=>{
           ElMessage.error("Upload error")
         })
