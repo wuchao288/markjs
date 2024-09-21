@@ -22,7 +22,7 @@
        </div>
        
     <keep-alive>
-      <component  :is="componen" @handleCutOut="cutOutImg" @handleCropImg="cropImg"      @handleExportImg="exportImg"> </component>
+      <component  :is="componen" @handleCutOut="cutOutImg"       @handleExportImg="exportImg"> </component>
     </keep-alive>
 
     
@@ -54,12 +54,7 @@
         </template>
     </el-dialog>
 
-    <cropper-img
-     :imageSrc="imageCropSrc" 
-     :sizeData="sizeData"
-      :cropData="cropData"
-      v-model="dialogCropVisible" 
-      @updateImageSrc="updateCropImageSrc" />
+
 
 </template>
 
@@ -88,7 +83,7 @@
 <script setup lang="ts">
 
 
-    import {onMounted,ref,watch,shallowRef,defineAsyncComponent,getCurrentInstance} from 'vue'
+    import {onMounted,ref,watch,shallowRef,defineAsyncComponent} from 'vue'
 
     import { App, Box ,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,ImageEvent,Group} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
@@ -124,8 +119,7 @@
 
 
     const { t } = useI18n()
-    //import axios from 'axios';
-    import CropperImg from "@/components/widgets/CropperImg.vue";
+
 
     let componen = shallowRef(null);
     const PagePanel = defineAsyncComponent(() => import("./panel/PagePanel.vue"));
@@ -152,14 +146,6 @@
     let loading=ref(true)
 
     let imgCutImg=ref('')
-
-    let dialogCropVisible=ref(false)
-
-    let sizeData=ref()
-    let cropData=ref()
-
-   //定义一个imageNew变量来接收裁剪之后的图片
-    const imageCropSrc = ref()
    
     let ctop=ref("0px")
     let cleft=ref("0px")
@@ -765,16 +751,25 @@
          if(oldValue!=newValue&&oldValue!=""){
 
             let img=await getImage(newValue)
+
             canvasApp.editor.width=img.width
             canvasApp.editor.height=img.height
-          
+
+            //useImageStyle.value.width=img.width
+            //useImageStyle.value.height=img.height
+
             canvasApp.editor.target.fill={
                 type: 'image',
                 url: newValue,
                 mode: 'strench'
             }
-
-            canvasApp.editor.target.data.original=newValue
+            if(canvasApp.editor.target.data.action&&canvasApp.editor.target.data.action!='crop'){
+                canvasApp.editor.target.data.original=newValue
+            }else{
+                canvasApp.editor.target.data.sizeData=null
+                canvasApp.editor.target.data.cropData=null
+            }
+            //canvasApp.editor.target.data.original=newValue
 
          }else{
 
@@ -790,8 +785,11 @@
                 type: 'success',
                 message: t("canvas.fontload"),
             })
+
             let font= StyleFontList.find(m=>m.value==newValue) 
+
             await mixins.loadFont(font.value,font.url)
+            
             msg.close()
         }
 
@@ -1115,6 +1113,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 name:'image',
                 around: 'center',
                 data:{
+                    action:'',
                     original:imgUrl,
                     sizeData:null,
                     cropData:null
@@ -1782,44 +1781,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
          );
     }
 
-    
-    const cropImg=()=>{
-      dialogCropVisible.value=true
-      imageCropSrc.value=canvasApp.editor.target.data.original
-
-      sizeData.value= canvasApp.editor.target.data.sizeData
-      cropData.value= canvasApp.editor.target.data.cropData
-    }
-
-
-     //点击裁剪按钮
-     const updateCropImageSrc = (updateImageData) => {
-    
-        //const { x, y, width, height } = updateImageData.size;
-
-  
-        canvasApp.editor.target.data.sizeData=updateImageData.sizeData
-        canvasApp.editor.target.data.cropData=updateImageData.cropData
      
-        // 因为裁剪数据不能超过原始尺寸，这里向下取整确保不会超过原始尺寸
-        // elementData.cropSize = {
-        //     x: ~~x,
-        //     y: ~~y,
-        //     width: ~~width,
-        //     height: ~~height,
-        // };
-        // const scalex = elementData.width / elementData.cropSize.width;
-        // const scaley = elementData.height / elementData.cropSize.height;
-        // const scale = Math.min(scalex, scaley);
-
-        // // 设置新的宽高
-        // elementData.width = ~~(elementData.cropSize.width * scale);
-        // elementData.height = ~~(elementData.cropSize.height * scale);
-
-        dialogCropVisible.value=false
-        useImageStyle.value.fill.url=updateImageData.croppedImage
-        imageCropSrc.value=""
-    }
 
     defineExpose({
         handleClearAll,

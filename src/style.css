@@ -35,3 +35,7 @@ h1 {
 ul li{
   list-style: none;
 }
+.el-icon.el-dialog__close{
+  font-size: 32px !important;
+  
+}

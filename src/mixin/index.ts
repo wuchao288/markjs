@@ -27,9 +27,7 @@ function throttle(func, wait) {
     };
 }
 
-if (!(window as any)._hasLoadFonts) {
-    (window as any)._hasLoadFonts = {};
-}
+
 
 function isCrossDomain(url) {
   try {
@@ -79,18 +77,23 @@ async function uploadFile (file: File | Blob , options,  cb?: any) {
 
 }
 
+if (!(window as any)._hasLoadFonts) {
+  (window as any)._hasLoadFonts = {};
+}
+
 async function loadFont(fontFamily: string, url: string) {
     if ((window as any)._hasLoadFonts[fontFamily]) {
       console.log('该字体已加载', fontFamily);
       return true;
     }
     (window as any)._hasLoadFonts[fontFamily] = true;
-  
-    console.log('url', url);
 
     if (url) {
+
       const prefont = new FontFace(fontFamily, `url("${url}")`);
+      
       try {
+
         const res = await prefont.load();
         document.fonts.add(res);
 

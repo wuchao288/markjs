@@ -15,11 +15,13 @@
       <el-form-item>
       
       <ShortCut v-model:visible="useImageStyle.visible" v-model:="useImageStyle.locked"></ShortCut>
+     
+
     </el-form-item>
       <el-form-item  :label="t('stylepanel.set')">
     
           <el-row :gutter="10">
-                <el-col :span="12">
+                <el-col :span="24">
                     <el-upload 
                       ref="uploadRef" 
                       class="upload-demo"
@@ -35,7 +37,7 @@
                       </template>
                 </el-upload>
               </el-col>
-              <el-col :span="12"> 
+              <el-col :span="24"> 
                   <el-button @click="handleExportImg">
                     <i class="iconfont icon icon-xiazaitupian"></i>
                     {{$t('stylepanel.exportimg')}}
@@ -47,19 +49,19 @@
 
       <el-form-item>
          <el-row :gutter="15">
-            <el-col :span="12">
+            <el-col :span="24">
                 <el-button @click="handleCrop">
                     <i class="iconfont icon icon-crop-full"></i>
                     {{$t("stylepanel.crop")}}
                 </el-button>
             </el-col>
-            <el-col :span="12"> 
+            <el-col :span="24"> 
                 <el-button @click="handleCutout">
                     <i class="iconfont icon icon-AIkoutu"></i>
                     {{$t("stylepanel.cutout")}}
                     </el-button>
             </el-col>
-               <el-col :span="12">
+               <el-col :span="24">
                 <el-button @click="handleCreateBg">
                     <i class="iconfont icon icon-koutu"></i>
                     {{$t("stylepanel.createbg")}}
@@ -103,7 +105,14 @@
       </el-form-item>
     </el-form>
     </div>
-   <CreateBg v-model:dialogVisible="dialogVisible"  @close-win="closeWin"  @update-image-src="updateBgImage"/>
+   <CreateBg v-model:dialogVisible="dialogVisible"  v-model:imageSrc="imgSrc"  @close-win="closeWin"  @update-image-src="updateBgImageDone"/>
+
+   <CropperImg
+      :image-src="imageCropSrc" 
+      :sizeData="sizeData"
+        :cropData="cropData"
+        v-model:dialogCropVisible="dialogCropVisible" 
+        @update-image-src="updateCropImageSrc" />
 </template>
 
 <script setup lang="ts">
@@ -124,13 +133,15 @@
 
     import  ShortCut  from '@/components/widgets/ShortCut.vue'
     import  CreateBg  from '@/components/widgets/CreateBg.vue'
-    
+    import  CropperImg  from '@/components/widgets/CropperImg.vue'
 
     import { mixins } from "@/mixin/index";
 
+    const {useImageStyle} = storeToRefs(editorStore)
+
     
     const emit = defineEmits([
-        'handleCutOut','handleCropImg','handleExportImg'
+        'handleCutOut','handleExportImg'
     ])
 
     let imgSrc=ref("")
@@ -138,17 +149,18 @@
     let dialogVisible=ref(false)
 
 
-    const updateBgImage=(obj)=>{
-        console.info(obj)
+    const updateBgImageDone=(obj)=>{
+
+        let canvasApp=editorStore.editor;
+        useImageStyle.value.fill.url=obj.createBgImg
+        canvasApp.editor.target.data.action="createbg"
+        dialogVisible.value=false
     }
 
     onMounted(()=>{
       
     })
 
-    watch(()=>dialogVisible.value,(value)=>{
-      console.info(value)
-    })
 
     const format=()=>{return ""}
 
@@ -162,17 +174,66 @@
       dialogVisible.value=false
     }
 
+    let sizeData=ref()
+    let cropData=ref()
+    let imageCropSrc=ref('')
+    let dialogCropVisible=ref(false)
 
-    type TState = {
-      activeNames: string[],
-      innerElement: TImageSetting,
-      tag: boolean,
-      ingoreKeys: string[],
-      fontSizeList: number[],
-      fontClassList: Record<string, any>, 
-      lineHeightList: number[],
-      letterSpacingList: number[]
-  }
+    const  handleCrop=()=>{
+
+      let canvasApp=editorStore.editor;
+
+      dialogCropVisible.value=true
+      imageCropSrc.value=editorStore.editor.editor.target.data.original
+
+      sizeData.value= canvasApp.editor.target.data.sizeData
+      cropData.value= canvasApp.editor.target.data.cropData
+    }
+
+
+    //点击裁剪按钮
+    const updateCropImageSrc = (updateImageData) => {
+    
+      debugger
+    //const { x, y, width, height } = updateImageData.size;
+
+      let canvasApp=editorStore.editor;
+
+      canvasApp.editor.target.data.sizeData=updateImageData.sizeData
+      canvasApp.editor.target.data.cropData=updateImageData.cropData
+      canvasApp.editor.target.data.action="crop" //裁剪不换原图
+    // 因为裁剪数据不能超过原始尺寸，这里向下取整确保不会超过原始尺寸
+    // elementData.cropSize = {
+    //     x: ~~x,
+    //     y: ~~y,
+    //     width: ~~width,
+    //     height: ~~height,
+    // };
+    // const scalex = elementData.width / elementData.cropSize.width;
+    // const scaley = elementData.height / elementData.cropSize.height;
+    // const scale = Math.min(scalex, scaley);
+
+    // // 设置新的宽高
+    // elementData.width = ~~(elementData.cropSize.width * scale);
+    // elementData.height = ~~(elementData.cropSize.height * scale);
+
+     
+      useImageStyle.value.fill.url=updateImageData.croppedImage
+      imageCropSrc.value=""
+
+      dialogCropVisible.value=false
+   }
+
+  //   type TState = {
+  //     activeNames: string[],
+  //     innerElement: TImageSetting,
+  //     tag: boolean,
+  //     ingoreKeys: string[],
+  //     fontSizeList: number[],
+  //     fontClassList: Record<string, any>, 
+  //     lineHeightList: number[],
+  //     letterSpacingList: number[]
+  // }
 
 
   const handleAvatarSuccess: UploadProps['onChange'] = (
@@ -213,7 +274,7 @@
    }
 
 
-  const {useImageStyle} = storeToRefs(editorStore)
+
 
     const predefineColors = ref([
       '#ff4500',
@@ -243,9 +304,7 @@
       emit("handleExportImg")
    }
 
-   const  handleCrop=()=>{
-      emit("handleCropImg")
-   }
+
 
    const  handleCutout=()=>{
      emit("handleCutOut")
