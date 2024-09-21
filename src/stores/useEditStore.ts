@@ -8,6 +8,7 @@ import {IPointData,IUI,IShadowEffect}  from '@leafer-ui/interface'
 export type TPageSetting={
   pageSizeId:number,
   pageMove:boolean,
+  pageZoom:number,
   pageBgClass:string,
   pageBgSet:{
     backgroundImage:string,

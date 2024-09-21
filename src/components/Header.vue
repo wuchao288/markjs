@@ -288,6 +288,25 @@ const handleExportPng=()=>{
   
 }
 
+const setZoom=(parm)=>{
+  let canvasApp=editorStore.editor
+  canvasApp.tree.zoom(parm)
+ // canvasApp.emit('zoom', { scale: canvasApp.tree.zoomLayer.scale }) 
+
+ let scale=canvasApp.tree.zoomLayer.scale 
+
+  if(ZoomItemList.find(m=>m.value==scale)){
+
+    pageZoom.value=ZoomItemList.find(m=>m.value==scale)
+
+  }else{
+
+    pageZoom.value={title:(scale*100)+"%",value:parm,id:scale}
+
+  }
+
+}
+
 </script>
 
 <template>
@@ -415,7 +434,7 @@ const handleExportPng=()=>{
  </div>
  <div class="zoom">
   <el-button-group >
-    <el-button size="large" round :icon="Plus" />
+    <el-button size="large" round :icon="Plus" @click="setZoom('in')"/>
     <el-button size="large">
       <el-dropdown @command="handleZoomCommand">
         <span>{{pageZoom.title}}</span>
@@ -426,7 +445,7 @@ const handleExportPng=()=>{
         </template>
        </el-dropdown>
       </el-button>
-    <el-button size="large" round  :icon="Minus" />
+    <el-button size="large" round  :icon="Minus"  @click="setZoom('out')"/>
   </el-button-group>
  </div>
 

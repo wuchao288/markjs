@@ -55,10 +55,12 @@
 
     import {onMounted,ref,watch,shallowRef,defineAsyncComponent} from 'vue'
 
-    import { App, Box ,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,ImageEvent,Group} from 'leafer-ui'
+    import { App,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,Group} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
     import '@leafer-in/view'
+
+    import { ScrollBar } from '@leafer-in/scroll'
 
     import { Ruler } from 'leafer-x-ruler'
 
@@ -110,12 +112,6 @@
     let menuVisible=ref(false)
 
     let isGroup=ref(false)
-
-    let dialogFormVisible=ref(false)
-
-    let loading=ref(true)
-
-    let imgCutImg=ref('')
    
     let ctop=ref("0px")
     let cleft=ref("0px")
@@ -186,7 +182,7 @@
             }
         })
         
-        
+        const scroll = new ScrollBar(canvasApp, { padding: 100 }) 
      
         //canvasApp.config.move.dragEmpty=true
         
@@ -209,12 +205,11 @@
 
         editorStore.setApp(canvasApp);
 
-         canvasApp.tree.on(ZoomEvent.ZOOM, () => {
 
-             if(canvasApp.tree.scale){
-                 editorStore.setScale(canvasApp.tree.scale);
-            }
-        });
+        // canvasApp.on(ZoomEvent.ZOOM, function (e: ZoomEvent) {
+        //     //console.info(e.scale)
+        // })
+
          canvasApp.tree.on(ResizeEvent.RESIZE, () => {
 
             if(canvasApp.tree.scale){
@@ -223,6 +218,8 @@
 
         });
 
+
+        
         canvasApp.editor.on(EditorScaleEvent.SCALE,mixins.debounce(function(e:EditorScaleEvent){
                 
               if(e.target.tag=="Text"){
@@ -475,7 +472,7 @@
 
             frame.editable=false
 
-            frame.hitSelf=false
+            frame.hitSelf=true
             
             usePageBgColor.value=frame.fill.toString()
 
@@ -488,7 +485,7 @@
             frame = new Frame({
                 editable:false,
                 disabled:false,
-                hitSelf:false,
+                hitSelf:true,
                 x:0,
                 fill:usePageBgColor.value,
                 y:0,
@@ -507,7 +504,10 @@
         }
 
 
-        canvasApp.tree.zoom('fit', 100) 
+        canvasApp.config.zoom.max=4
+        canvasApp.config.zoom.min=0.25
+
+        canvasApp.tree.zoom('fit', 100)
 
         window.onresize=function(){
 

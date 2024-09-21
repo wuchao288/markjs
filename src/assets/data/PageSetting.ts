@@ -32,10 +32,19 @@ export const ZoomItemList=[
         value:2,
         id:5
     },
+    {
+      title: "300%",
+      value:3,
+      id:6
+  },{
+    title: "400%",
+    value:4,
+    id:7
+},
    {
      title: "header.fitscreen",
      value:"fit",
-     id:6
+     id:8
    }
 ] as ZoomItem[]
 
