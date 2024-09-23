@@ -83,6 +83,7 @@ type TStoreBaseState = {
   useTool:string
   useToolType:string
   shapes:Map<string,object>
+  useSelect:number,
   usePageMove:boolean,
   useColor:string
   usePageBgColor:string
@@ -118,6 +119,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     shapes:new Map(),
     useColor:'rgba(0, 0, 0, 1)',
     useBorderWidth:2,
+    useSelect:0,
     usePageMove:false,
     usePageBgColor:'rgba(255, 255,255, 1)',
     useCurrPanel:"PagePanel",

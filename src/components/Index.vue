@@ -24,7 +24,7 @@ import Header from './Header.vue'
 import Canvas from './Canvas.vue'
 
 
-import {onMounted, ref} from 'vue'
+import {onMounted, ref,provide} from 'vue'
 
 import { IZoomType } from '@leafer/interface'
 import { PageSizeItem } from '@/assets/data/PageSetting';
