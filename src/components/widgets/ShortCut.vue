@@ -61,6 +61,7 @@ const editorStore = useEditStore()
 const locked3 = defineModel("locked")
 
 
+
 const copy=()=>{
 
     var app=editorStore.editor

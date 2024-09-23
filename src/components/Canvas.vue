@@ -22,7 +22,7 @@
        </div>
        
     <keep-alive>
-      <component  :is="componen"       @handleExportImg="exportImg"> </component>
+      <component ref="componentthis" :is="componen"       @handleExportImg="exportImg"> </component>
     </keep-alive>
 
     
@@ -53,18 +53,21 @@
 <script setup lang="ts">
 
 
-    import {onMounted,ref,watch,shallowRef,defineAsyncComponent} from 'vue'
+    import {onMounted,ref,watch,shallowRef,defineAsyncComponent, provide} from 'vue'
 
-    import { App,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,Group} from 'leafer-ui'
+    import { App,Box,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,Group,Platform} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
     import '@leafer-in/view'
-
+    import { Flow } from '@leafer-in/flow'
     import { ScrollBar } from '@leafer-in/scroll'
 
     import { Ruler } from 'leafer-x-ruler'
 
     import { Arrow } from '@leafer-in/arrow'
+
+    import { HTMLText } from '@leafer-in/html'
+
 
     import { IZoomType} from '@leafer/interface'
 
@@ -77,14 +80,13 @@
     
     //import Cookies from 'js-cookie'
 
-    import rotatePng from '@/assets/images/rotate.png'
 
     import useEditStore from "@/stores/useEditStore"
 
     import  {nanoid} from  'nanoid'
     import '@leafer-in/state'
     import { storeToRefs } from 'pinia'
-    import { InnerEditorEvent ,EditorEvent,EditorScaleEvent} from '@leafer-in/editor'
+    import { InnerEditorEvent ,Editor,EditorEvent,EditorScaleEvent} from '@leafer-in/editor'
     import { ElMessage, ElMessageBox } from 'element-plus'
     
     import { useI18n } from "vue-i18n"
@@ -98,14 +100,16 @@
     const TextPanel = defineAsyncComponent(() => import("./panel/TextPanel.vue"));
     const SharpPanel = defineAsyncComponent(() => import("./panel/SharpPanel.vue"));
     const ImagePanel = defineAsyncComponent(() => import("./panel/ImagePanel.vue"));
+    const GroupPanel = defineAsyncComponent(() => import("./panel/GroupPanel.vue"));
     let objcomponen = shallowRef({
         PagePanel,
         TextPanel,
         SharpPanel,
-        ImagePanel
+        ImagePanel,
+        GroupPanel
     });
 
-
+  let componentthis=ref()
 
     componen.value = objcomponen.value.PagePanel
 
@@ -147,6 +151,9 @@
 
     let windowWidth=ref(0)
 
+    provide("canvasApp",canvasApp)
+
+
     onMounted(() => {
         
         let appWrap=  document.getElementById("main-canvas") as HTMLDivElement
@@ -159,29 +166,84 @@
         windowHeight.value=window.innerHeight;
         windowWidth.value=window.innerWidth;
 
+        // canvasApp = new App({
+        //     view: 'main-canvas'
+        // })
+        
+        // canvasApp.editor = new Editor({
+        //         buttonsFixed:true,
+        //         buttonsDirection:'top',
+        //         // lockRatio: 'corner',
+        //         // stroke: '#3f99f7',
+        //         // skewable: false,
+        //         // // hover: true,
+        //         // flipable:false,
+        //         // resizeable:true,
+        //         // mask:false,
+        //         // rotateGap:15,
+        //         // middlePoint: { cornerRadius: 100, width: 20, height: 6 },
+        //         // rotatePoint: {
+        //         //     width: 20,
+        //         //     height: 20,
+        //         //     fill: {
+        //         //         type: 'image',
+        //         //         url: rotatePng,
+        //         //     }
+        //         // }
+        //     });
+        // canvasApp.sky.add(canvasApp.editor)
+
+
+          // 实例应用
         canvasApp = new App({
-            view: 'main-canvas',
-            editor:{
-                lockRatio: 'corner',
-                stroke: '#3f99f7',
-                skewable: false,
-                hover: true,
-                flipable:false,
-                resizeable:true,
-                mask:false,
-                rotateGap:15,
-                middlePoint: { cornerRadius: 100, width: 20, height: 6 },
-                rotatePoint: {
-                    width: 20,
-                    height: 20,
-                    fill: {
-                        type: 'image',
-                        url: rotatePng,
-                    }
+            view:'main-canvas',
+            fill: 'transparent',
+            // 通过 app.editor = new Editor(); 时，不需要添加 editor 属性，会有问题
+            // editor:{}
+        })
+
+        canvasApp.tree = canvasApp.addLeafer();
+        canvasApp.sky = canvasApp.addLeafer({type:'draw', usePartRender: false});
+        canvasApp.editor = new Editor({
+            buttonsFixed:true,
+            buttonsDirection:'top',
+            lockRatio: 'corner',
+            stroke: 'rgba(77, 124, 255, 1)',
+            strokeWidth:2,
+            skewable: false,
+            hover: true,
+            flipable:false,
+            resizeable:true,
+            mask:false,
+            rotateGap:15,
+            point:{ 
+                
+                 stroke:'rgba(0, 0, 0, 0.5)',
+                 strokeWidth:1,
+            },
+            middlePoint: { 
+                 cornerRadius: 100,
+                 width: 20,
+                 height: 6,
+                 stroke:'rgba(0, 0, 0, 0.5)',
+                 strokeWidth:1,
+            },
+            rotatePoint: {
+                width: 20,
+                height: 20,
+                stroke:'rgba(0, 0, 0, 0.5)',
+                strokeWidth:1,
+                fill: {
+                    type: 'image',
+                    url: "data:image/svg+xml;charset=utf-8,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='rgba(0, 0, 0, 0)' xmlns='http://www.w3.org/2000/svg'%3E %3Ccircle cx='11' cy='11' r='10' fill='white'/%3E %3Ccircle cx='11' cy='11' r='10.5' stroke='black' stroke-opacity='0.2'/%3E %3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.66667 5.14868C6.99468 5.75499 5 8.14455 5 11C5 13.8555 6.99468 16.245 9.66667 16.8513V15.8203C7.55254 15.2368 6 13.2997 6 11C6 8.70032 7.55254 6.76325 9.66667 6.17975V5.14868ZM12.3333 15.8203C14.4475 15.2368 16 13.2997 16 11C16 8.70032 14.4475 6.76325 12.3333 6.17975V5.14868C15.0053 5.75499 17 8.14455 17 11C17 13.8555 15.0053 16.245 12.3333 16.8513V15.8203Z' fill='black'/%3E %3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.16667 5.5H6.33333V4.5H10.1667V8.33333H9.16667V5.5Z' fill='black'/%3E %3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.8333 16.5H15.6667V17.5H11.8333L11.8333 13.6667L12.8333 13.6667L12.8333 16.5Z' fill='black'/%3E %3C/svg%3E"//rotatePng,
                 }
             }
-        })
-        
+        });
+        canvasApp.sky.add(canvasApp.editor)
+
+
+       
+
         const scroll = new ScrollBar(canvasApp, { padding: 100 }) 
      
         //canvasApp.config.move.dragEmpty=true
@@ -248,6 +310,13 @@
         },300,false))
 
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
+
+            if(canvasApp.editor.multiple){
+                
+                componen.value = objcomponen.value.GroupPanel
+
+                return;
+            }
 
             if(e.list.length==0){
                 canvasApp.editor.target=null
@@ -436,27 +505,100 @@
             isGroup.value=false
         })
 
-       
-        // const button = Box.one({// 添加移除按钮
-        //     around: 'center',
-        //     fill: {
-        //         type: 'image',
-        //         url: delPng,
-        //     },
-        //     cornerRadius: 20,
-        //     cursor: 'pointer'
-            
-        // })
+ 
+         const button = new  Flow({// 添加移除按钮
+             around: 'center',
+             fill:"#ffffff",
+             //flowAlign:'center',
+             cornerRadius: 5,
+             //gap:'auto',
+             cursor: 'pointer',
+             //height:32,
+             shadow: {
+                x: 1,
+                y: 1,
+                blur: 20,
+                color: 'rgba(0, 0, 0, 0.25)',
+                box: true
+            },
+            padding:8
+         })
+         
+         //del
+        const btnDel =Box.one({
+            hoverStyle: {
+                fill: [
+                    {type:'solid',color:'rgba(0,0,0, 0.1)'},
+                    {
+                type: 'image',
+                url: Platform.toURL('<svg  width="48" height="48" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M160 256H96a32 32 0 0 1 0-64h256V95.936a32 32 0 0 1 32-32h256a32 32 0 0 1 32 32V192h256a32 32 0 1 1 0 64h-64v672a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32zm448-64v-64H416v64zM224 896h576V256H224zm192-128a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32m192 0a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32"></path></svg>', 'svg'),
+                mode: 'fit',
+                padding:4
+            }]
+            },
+            fill: {
+                type: 'image',
+                url: Platform.toURL('<svg  width="48" height="48" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M160 256H96a32 32 0 0 1 0-64h256V95.936a32 32 0 0 1 32-32h256a32 32 0 0 1 32 32V192h256a32 32 0 1 1 0 64h-64v672a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32zm448-64v-64H416v64zM224 896h576V256H224zm192-128a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32m192 0a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32"></path></svg>', 'svg'),
+                mode:'fit',
+                padding:4
+            },
+            width:26,
+            height:26,
+            cornerRadius:5,
+            around: 'center',
+        })
 
-        // canvasApp.editor.buttons.add(button)
+         button.add(btnDel)
+          //copy
+        const btnCopy =Box.one({
+            hoverStyle: {
+                fill: [
+                    {type:'solid',color:'rgba(0,0,0, 0.1)'},
+                    {
+                type: 'image',
+                url: Platform.toURL('<svg  width="48" height="48" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z"></path><path fill="currentColor" d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64"></path></svg>', 'svg'),
+                mode: 'fit',
+                padding:4
+            }]
+            },
+            fill: {
+                type: 'image',
+                url: Platform.toURL('<svg  width="48" height="48"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z"></path><path fill="currentColor" d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64"></path></svg>', 'svg'),
+                mode:'fit',
+                padding:4
+            },
+            width:26,
+            height:26,
+            cornerRadius:5,
+            around: 'center',
+        })
 
-        // button.on(PointerEvent.TAP, () => { // 点击删除元素，并取消选择
-        //     canvasApp.editor.list.forEach(rect => {
-        //         editorStore.delShape(rect.id as string)
-        //         rect.remove()
-        //     })
-        //     canvasApp.editor.target = undefined
-        // })
+         button.add(btnCopy)
+         canvasApp.editor.buttons.add(button)
+
+         btnDel.on(PointerEvent.TAP, () => { // 点击删除元素，并取消选择
+             canvasApp.editor.list.forEach(rect => {
+             editorStore.delShape(rect.id as string)
+                 rect.remove()
+            })
+             canvasApp.editor.target = undefined
+         })
+
+
+         btnCopy.on(PointerEvent.TAP, () => { // 点击删除元素，并取消选择
+             canvasApp.editor.list.forEach(rect => {
+                var obj= rect.clone()
+                obj.id=nanoid()
+                obj.x=obj.x+10
+                obj.y=obj.y+10
+                obj.data=JSON.parse(JSON.stringify(obj.data))
+                editorStore.addShape(obj.id as string)
+                canvasApp.findOne("Frame").add(obj)
+                canvasApp.editor.target=obj
+            })
+         })
+
+         
 
         if(settingJson&&settingJson.setting.initData){
 
@@ -1235,13 +1377,15 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
    
 
    const  toGroup=(flag)=>{
-        if(flag==true){
-            canvasApp.editor.group()
-        }else{
-           
-            canvasApp.editor.ungroup()
 
-            canvasApp.editor.list.forEach((elem)=>{ console.info(elem.toString())  })
+        if(flag==true){
+
+           let obj= canvasApp.editor.group()
+           obj.hitFill='none'
+           console.info(obj)
+        }else{
+            canvasApp.editor.ungroup()
+           // canvasApp.editor.list.forEach((elem)=>{ console.info(elem.toString())  })
             //elem.editable=true
         }
         menuVisible.value=false
@@ -1339,7 +1483,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 stroke,
                 strokeWidth,
                 name:"Ellipse",
-                cursor:'pointer',
                 data:{
                     fillData:{
                         activeColorKey:obs.activeColorKey,
@@ -1371,7 +1514,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 height:20,
                 strokeCap: 'round',
                 strokeJoin: 'round',
-                cursor:'pointer',
                 data:{
                     fillData:{
                         activeColorKey:obs.activeColorKey,
@@ -1590,7 +1732,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
             zIndex,
             cursor:'pointer',
             stroke:stroke,
-            strokeWidth:2,
+            strokeWidth:1,
             cornerRadius: 0,
             height,
             data:{

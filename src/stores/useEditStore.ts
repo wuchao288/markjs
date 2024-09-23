@@ -140,7 +140,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
         bgcolor:'#ffffff',
         fontSize:16,
         fontWeight:'normal',
-        strokeWidth:2,
+        strokeWidth:1,
         stroke:"#000000",
         lineStyle: 'solid',
         cornerRadius:2,
@@ -166,7 +166,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
 
     useSharpStyle:{
       fill:"#FFFFFF",
-      strokeWidth:2,
+      strokeWidth:1,
       zIndex:10000,
       stroke:"#000000",
       lineStyle:'solid',

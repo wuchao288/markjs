@@ -1,5 +1,12 @@
 // Some primary CSS, and reset CSS
-
+:root{
+  --actionbutton-color-regular:#222529;
+  --actionbutton-background-color-regular:#f1f2f4;
+  --actionbutton-border-color-regular:rgba(0,0,0,0);
+  --actionbutton-color-hover:#222529;
+  --actionbutton-background-color-hover:#e8eaec;
+  --actionbutton-border-color-hover:rgba(0,0,0,0);
+}
 
   body {
     --moveable-color: #2254f4 !important;
@@ -9,6 +16,7 @@
     color: #333333;
     font-family: Hiragino Sans GB, Hiragino Sans GB W3, Arial, Microsoft Yahei, STHeiti, sans-serif;
     overflow: hidden;
+
   }
   
   * {
@@ -142,3 +150,18 @@
     font-size: 32px !important;
   }
  
+
+  .gda-btn-action {
+    color: var(--actionbutton-color-regular);
+    background-color: var(--actionbutton-background-color-regular);
+    border-color: var(--actionbutton-border-color-regular);
+    font-weight: 400;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gda-btn-action:hover {
+      color: var(--actionbutton-color-hover);
+      background-color: var(--actionbutton-background-color-hover);
+      border-color: var(--actionbutton-border-color-hover);
+  }
+}

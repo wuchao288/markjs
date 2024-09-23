@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4676971 */
-  src: url('iconfont.woff2?t=1725945380842') format('woff2'),
-       url('iconfont.woff?t=1725945380842') format('woff'),
-       url('iconfont.ttf?t=1725945380842') format('truetype');
+  src: url('iconfont.woff2?t=1727071782081') format('woff2'),
+       url('iconfont.woff?t=1727071782081') format('woff'),
+       url('iconfont.ttf?t=1727071782081') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,46 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shuipingfenbu:before {
+  content: "\e6df";
+}
+
+.icon-duiqi-youduiqi:before {
+  content: "\e890";
+}
+
+.icon-duiqi-xiaduiqi:before {
+  content: "\e891";
+}
+
+.icon-duiqi-shangduiqi:before {
+  content: "\e892";
+}
+
+.icon-duiqi-zuoduiqi:before {
+  content: "\e893";
+}
+
+.icon-duiqi-chuizhiduiqi:before {
+  content: "\e894";
+}
+
+.icon-duiqi-juzhongduiqi:before {
+  content: "\e895";
+}
+
+.icon-chuizhifenbu2:before {
+  content: "\e657";
+}
+
+.icon-yahoo-icon:before {
+  content: "\e652";
+}
+
+.icon-letian:before {
+  content: "\e6a6";
 }
 
 .icon-tupianshangchuan:before {
