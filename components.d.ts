@@ -8,26 +8,16 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Canvas: typeof import('./src/components/Canvas.vue')['default']
-    copy: typeof import('./src/components/widgets/CutoutImg copy.vue')['default']
     CreateBg: typeof import('./src/components/widgets/CreateBg.vue')['default']
     CropperImg: typeof import('./src/components/widgets/CropperImg.vue')['default']
     CutoutImg: typeof import('./src/components/widgets/CutoutImg.vue')['default']
-    ElAlert: typeof import('element-plus/es')['ElAlert']
-    ElButton: typeof import('element-plus/es')['ElButton']
     ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
-    ElForm: typeof import('element-plus/es')['ElForm']
-    ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElLink: typeof import('element-plus/es')['ElLink']
-    ElOption: typeof import('element-plus/es')['ElOption']
-    ElProgress: typeof import('element-plus/es')['ElProgress']
     ElRow: typeof import('element-plus/es')['ElRow']
-    ElSelect: typeof import('element-plus/es')['ElSelect']
-    ElSpace: typeof import('element-plus/es')['ElSpace']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     GroupPanel: typeof import('./src/components/panel/GroupPanel.vue')['default']
@@ -39,8 +29,5 @@ declare module 'vue' {
     SharpPanel: typeof import('./src/components/panel/SharpPanel.vue')['default']
     ShortCut: typeof import('./src/components/widgets/ShortCut.vue')['default']
     TextPanel: typeof import('./src/components/panel/TextPanel.vue')['default']
-  }
-  export interface ComponentCustomProperties {
-    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

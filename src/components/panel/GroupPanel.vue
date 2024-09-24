@@ -101,8 +101,8 @@
                 </el-card>
     
                 <el-space wrap class="btn-action-wrap">
-                    <el-button  size="large" :disabled="state.selected<3" @click="setAlgin('hd')" class="gda-btn-action">水平分布</el-button>
-                    <el-button size="large" :disabled="state.selected<3"  @click="setAlgin('vd')"  class="gda-btn-action">垂直分布</el-button>
+                    <el-button  size="large" :disabled="useSelect<3" @click="setAlgin('hd')" class="gda-btn-action">水平分布</el-button>
+                    <el-button size="large" :disabled="useSelect<3"  @click="setAlgin('vd')"  class="gda-btn-action">垂直分布</el-button>
                 </el-space>
                 
               
@@ -122,25 +122,33 @@ import { ElForm,ElFormItem,ElInput,ElSlider,ElColorPicker,
 
 import { useI18n } from "vue-i18n"
 import  ShortCut  from '@/components/widgets/ShortCut.vue'
-import { ref,onActivated } from 'vue';
+import { ref,onActivated,watch } from 'vue';
 import { App } from 'leafer-ui';
 const { t } = useI18n()
 
-import useEditStore from "@/stores/useEditStore"
-const {editor:canvasApp} = useEditStore()
+import { storeToRefs } from 'pinia'
 
+import useEditStore from "@/stores/useEditStore"
+
+
+const editorStore = useEditStore()
+
+const canvasApp=editorStore.editor
 
 let state=ref({
     locked:false,
-    isGroup:false,
-    selected:0
+    isGroup:false
+})
+
+const {useSelect} = storeToRefs(editorStore)
+
+watch(()=>useSelect.value,(newVal)=>{
+    
 })
 
 onActivated(()=>{
     state.value.locked=(canvasApp.editor.target as any).locked
     state.value.isGroup=(canvasApp.editor.target as any).tag=="Group"
-    state.value.selected=canvasApp.editor.list.length
-    console.info(state.value.selected)
 })
 
 const toGroup=()=>{
@@ -196,21 +204,70 @@ const setAlgin=(placement)=>{
        case "hd":
             if(canvasApp.editor.list.length>=3){
 
-                let hdl1= canvasApp.editor.list.map(m=>m.x).reduce((a,b)=>Math.min(a,b))
-                let hdr1= canvasApp.editor.list.map(m=>m.x+m.width).reduce((a,b)=>Math.max(a,b))
+                let minX=canvasApp.editor.element.x;
+                let maxX=canvasApp.editor.element.x+canvasApp.editor.element.width;
+
+                let eleWidth=0
+
+                canvasApp.editor.list.forEach((m,index,list)=>{
+                    eleWidth+=m.width
+                })
+
+                let space=(maxX-minX-eleWidth)/(canvasApp.editor.list.length-1)
 
                 let listRect=canvasApp.editor.list;
 
+                listRect.sort((a, b) => a.x+a.width - (b.x+b.width));
+
+                let last=listRect[listRect.length-1]
+
                 listRect.sort((a, b) => a.x - b.x);
 
+                let first=listRect[0]
+
+                let currentLeft=first.x
+
+                listRect.forEach((m,index,list)=>{
+                    if(currentLeft>last.x+last.width){
+                        currentLeft=first.x
+                    }
+                    m.x=currentLeft
+                    currentLeft+=m.width+space
+                })
+            }
+          break;  
+          case "vd":
+            if(canvasApp.editor.list.length>=3){
+                
+                let minY=canvasApp.editor.element.y;
+                let maxY=canvasApp.editor.element.y+canvasApp.editor.element.height;
+
+                let eleHeight=0
+
                 canvasApp.editor.list.forEach((m,index,list)=>{
+                    eleHeight+=m.height
+                })
 
-                    console.info(m.x)
+                let space=(maxY-minY-eleHeight)/(canvasApp.editor.list.length-1)
 
-                    // if(index>0&&index<list.length-1){
-                    //         console.info(m)
-                    // }
+                let listRect=canvasApp.editor.list;
 
+                listRect.sort((a, b) => a.y+a.height - (b.y+b.height));
+
+                let last=listRect[listRect.length-1]
+
+                listRect.sort((a, b) => a.y - b.y);
+
+                let first=listRect[0]
+
+                let currentTop=first.y
+
+                listRect.forEach((m,index,list)=>{
+                    if(currentTop>last.y+last.height){
+                        currentTop=first.y
+                    }
+                    m.y=currentTop
+                    currentTop+=m.height+space
                 })
             }
           break;  
@@ -218,11 +275,7 @@ const setAlgin=(placement)=>{
 }
 
 
-defineExpose({
-    set:function(m){
-        console.info(m)
-    }
-})
+
 
 
 </script>

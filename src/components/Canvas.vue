@@ -120,15 +120,20 @@
     let cleft=ref("0px")
     
 
+import { initCustomFormatter } from 'vue'
     const editorStore = useEditStore()
 
-    const {useColor,useBorderWidth,
-        useTool,useToolType,
+    const {
+        useColor,
+        useBorderWidth,
+        useTool,
+        useToolType,
         usePageBgColor,
         useTextStyle,
         useSharpStyle,
         usePageSetting,
-        useImageStyle
+        useImageStyle,
+        useSelect
     } = storeToRefs(editorStore)
 
 
@@ -150,8 +155,11 @@
 
     let windowWidth=ref(0)
 
-    provide("canvasApp",canvasApp)
+    //provide("canvasApp",canvasApp)
 
+    let selectLen=ref({ len:0})
+
+    provide('selectLen',selectLen)
 
     onMounted(() => {
         
@@ -313,6 +321,11 @@
             if(canvasApp.editor.multiple){
                 
                 componen.value = objcomponen.value.GroupPanel
+            
+                
+                useSelect.value=canvasApp.editor.list.length
+
+                
 
                 return;
             }
@@ -1496,12 +1509,14 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         if (type === 'Arrow') {
             if(subType=="one"){
                 Object.assign(defaultOption,{
+                    strokeWidth:2,
                     endArrow:'arrow'
                })
             }else if(subType=="two"){
                 Object.assign(defaultOption,{
                     startArrow:'arrow',
-                    endArrow:'arrow'
+                    endArrow:'arrow',
+                    strokeWidth:2
                })
             }
             return new Arrow({
@@ -1510,7 +1525,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 zIndex,
                 stroke,
                 strokeWidth,
-                height:20,
                 strokeCap: 'round',
                 strokeJoin: 'round',
                 data:{
@@ -1531,7 +1545,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                     strokeWidth:2,
                     startArrow:'mark',
                     endArrow:'mark',
-                    height:20,
                     rotation:Number(subType)
             })
             return new Arrow({
@@ -1558,7 +1571,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         if (type === 'Line') {
         
             
-            Object.assign(defaultOption,{strokeWidth:2,height:20})
+            Object.assign(defaultOption,{strokeWidth:1})
 
             return new Line({
                 id,
