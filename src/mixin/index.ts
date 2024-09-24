@@ -60,7 +60,7 @@ async function uploadFile (file: File | Blob , options,  cb?: any) {
   formData.append('file',file,'blob')
 
   return new Promise((resolve: any, reject: (err: string) => void) => {
-    debugger
+    
     fetch((window.parent as any).sploadImgToTempdes||'/BLL/TempHandler.ashx?action=UploadMarkImage', {
       method: 'POST',
       body: formData

@@ -20,6 +20,7 @@
     "@leafer-in/state": "^1.0.2",
     "@leafer-in/text-editor": "^1.0.2",
     "@leafer-in/view": "^1.0.2",
+    "@palxp/image-extraction": "^1.2.4",
     "cropperjs": "^1.6.2",
     "css-loader": "^7.1.2",
     "element-plus": "^2.8.1",
@@ -37,7 +38,9 @@
     "style-loader": "^4.0.0",
     "vue": "^3.5.6",
     "vue-i18n": "^9.14.0",
-    "vue3-colorpicker": "^2.3.0"
+    "vue3-colorpicker": "^2.3.0",
+    "immer": "^10.1.1",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.25.4",

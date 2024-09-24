@@ -8,19 +8,19 @@
             >
 
             <el-form-item>
-                <ShortCut v-model:="state.locked"></ShortCut>
+                <!-- <ShortCut v-model:="state.locked"></ShortCut> -->
 
 
                 <el-space wrap class="btn-action-group-wrap">
-                    <el-button size="large" @click="toGroup" class="gda-btn-action">成组</el-button>
-                    <el-button size="large" class="gda-btn-action">拆分组</el-button>
+                    <el-button size="large" :disabled="state.isGroup" @click="toGroup" class="gda-btn-action">{{$t("canvas.togroup")}}</el-button>
+                    <el-button size="large" :disabled="!state.isGroup" @click="toUnGroup" class="gda-btn-action">{{$t("canvas.ungroup")}}</el-button>
                 </el-space>
 
             </el-form-item>
 
 
             
-          <el-form-item label="对齐">
+          <el-form-item :label="t('canvas.align')">
             <el-card  style="width: 100%;" shadow="never" :body-class="'gda-btn-action'"  :body-style="{padding:'10px'}">
             
                 <el-row>
@@ -28,10 +28,10 @@
                     <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="左对齐"
+                        :content="t('canvas.leftalign')"
                         placement="top"
                         >
-                        <el-link :underline="false" @click="setAlgin('left')" >
+                        <el-link  :disabled="state.isGroup"  :underline="false" @click="setAlgin('left')" >
                             <i class="iconfont icon8 icon-duiqi-zuoduiqi" ></i>
                             </el-link>
                      </el-tooltip>
@@ -41,10 +41,10 @@
                     <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="水平居中对齐"
+                        :content="t('canvas.centeralign')"
                         placement="top"
                         >
-                        <el-link :underline="false" @click="setAlgin('center')" >  
+                        <el-link   :disabled="state.isGroup"  :underline="false" @click="setAlgin('center')" >  
                             <i class="iconfont icon8 icon-duiqi-juzhongduiqi"></i>
                         </el-link>
                     </el-tooltip>
@@ -53,10 +53,10 @@
                     <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="右对齐"
+                        :content="t('canvas.rightalign')"
                         placement="top"
                         >
-                    <el-link :underline="false" @click="setAlgin('right')" >  
+                    <el-link  :disabled="state.isGroup"  :underline="false" @click="setAlgin('right')" >  
                         <i class="iconfont icon8 icon-duiqi-youduiqi"></i>
                     </el-link>
                 </el-tooltip>
@@ -66,10 +66,10 @@
                     <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="上对齐"
+                        :content="t('canvas.topalign')"
                         placement="top"
                         >
-                        <el-link  :underline="false" @click="setAlgin('top')"  >
+                        <el-link  :disabled="state.isGroup"   :underline="false" @click="setAlgin('top')"  >
                             <i class="iconfont icon8 icon-duiqi-shangduiqi" ></i>
                             </el-link>
                         </el-tooltip>
@@ -78,10 +78,10 @@
                     <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="垂直居中对齐"
+                        :content="t('canvas.middlealign')"
                         placement="top"
                         >
-                    <el-link  :underline="false" @click="setAlgin('vcenter')"   >  
+                    <el-link  :disabled="state.isGroup"  :underline="false" @click="setAlgin('vcenter')"   >  
                         <i class="iconfont icon8 icon-duiqi-chuizhiduiqi"></i>
                     </el-link>
                 </el-tooltip>
@@ -90,10 +90,10 @@
                     <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="下对齐"
+                        :content="t('canvas.bottomalign')"
                         placement="top"
                         >
-                        <el-link  :underline="false" @click="setAlgin('bottom')"   >  
+                        <el-link  :disabled="state.isGroup"   :underline="false" @click="setAlgin('bottom')"   >  
                             <i class="iconfont icon8 icon-duiqi-xiaduiqi"></i>
                         </el-link>
                     </el-tooltip> </el-col>
@@ -101,8 +101,8 @@
                 </el-card>
     
                 <el-space wrap class="btn-action-wrap">
-                    <el-button  size="large" :disabled="useSelect<3" @click="setAlgin('hd')" class="gda-btn-action">水平分布</el-button>
-                    <el-button size="large" :disabled="useSelect<3"  @click="setAlgin('vd')"  class="gda-btn-action">垂直分布</el-button>
+                    <el-button  size="large" :disabled="useSelect<3&&state.isGroup==false" @click="setAlgin('hd')" class="gda-btn-action">{{$t('canvas.horizontaldis')}}</el-button>
+                    <el-button size="large" :disabled="useSelect<3&&state.isGroup==false"  @click="setAlgin('vd')"  class="gda-btn-action">{{$t('canvas.verticaldis')}}</el-button>
                 </el-space>
                 
               
@@ -113,12 +113,7 @@
 </template>
 <script lang="ts" setup>
 
-import { ElForm,ElFormItem,ElInput,ElSlider,ElColorPicker,
-      ElRadioGroup,ElRadio,ElCard,
-      ElButton,ElRow,ElCol,ElSelect,
-      ElOption,ElTooltip,ElLink,
-      ElCheckbox,ElSpace
-      } from 'element-plus'
+import { ElForm,ElFormItem,ElCard,ElButton,ElRow,ElCol,ElTooltip,ElLink,ElSpace} from 'element-plus'
 
 import { useI18n } from "vue-i18n"
 import  ShortCut  from '@/components/widgets/ShortCut.vue'
@@ -154,6 +149,12 @@ onActivated(()=>{
 const toGroup=()=>{
     if(canvasApp.editor.multiple==true){
         canvasApp.editor.group()
+    }
+}
+
+const toUnGroup=()=>{
+    if(canvasApp.editor.multiple==false){
+        canvasApp.editor.ungroup()
     }
 }
 
@@ -290,7 +291,7 @@ const setAlgin=(placement)=>{
     background-color: white;
     padding: 20px;
     bottom: 0px;
-    width: 350px;
+    width: 280px;
     overflow: auto;
    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px;
   }

@@ -79,6 +79,18 @@ export default {
     confirm:'确定',
     cancel:'取消',
     fontload:'字体加载中...',
-
+    togroup:'成组',
+    ungroup:'拆分组',
+    del:'删除',
+    copy:'复制',
+    leftalign:'左对齐',
+    centeralign:'左右居中对齐',
+    rightalign:'右对齐',
+    topalign:'上对齐',
+    bottomalign:'下对齐',
+    middlealign:'垂直居中对齐',
+    horizontaldis:'水平分布',
+    verticaldis:'垂直分布',
+    align:'对齐'
   }
 }

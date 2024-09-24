@@ -13,9 +13,9 @@
 
              <div class="contextmenu__item" @click="toBottom">{{$t("header.tobottom")}}</div>
 
-             <div class="contextmenu__item" v-if="isGroup" @click="toGroup(true)">{{$t("header.group")}}</div>
+             <div class="contextmenu__item" v-if="isGroup" @click="toGroup(true)">{{$t("canvas.togroup")}}</div>
 
-             <div class="contextmenu__item" v-if="isGroup" @click="toGroup(false)">{{$t("header.cancel")}}</div>
+             <div class="contextmenu__item" v-if="isGroup" @click="toGroup(false)">{{$t("canvas.ungroup")}}</div>
 
              <div class="contextmenu__item" @click="doDel">{{$t("header.del")}}</div>
              
@@ -25,7 +25,14 @@
       <component :is="componen"       @handleExportImg="exportImg"> </component>
     </keep-alive>
 
-    
+    <el-tooltip
+    v-model:visible="tipVisible"
+    :content="tipContent"
+    placement="top"
+    trigger="hover"
+    virtual-triggering
+    :virtual-ref="triggerRef"
+  />
 </template>
 
 <script lang="ts">
@@ -59,7 +66,7 @@
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
     import '@leafer-in/view'
-    import { Flow } from '@leafer-in/flow'
+    
     import { ScrollBar } from '@leafer-in/scroll'
 
     import { Ruler } from 'leafer-x-ruler'
@@ -80,6 +87,7 @@
     
     //import Cookies from 'js-cookie'
 
+    import Command from '@/command'
 
     import useEditStore from "@/stores/useEditStore"
 
@@ -91,9 +99,10 @@
     
     import { useI18n } from "vue-i18n"
 
+    import { useCreateButton } from '@/hooks/useCreateButton'
+    
 
     const { t } = useI18n()
-
 
     let componen = shallowRef(null);
     const PagePanel = defineAsyncComponent(() => import("./panel/PagePanel.vue"));
@@ -118,9 +127,31 @@
    
     let ctop=ref("0px")
     let cleft=ref("0px")
+
+    //画板上按钮提示
+    const tipContent=ref("")
+    const tipVisible = ref(false)
+    const triggerRef = ref({
+        getBoundingClientRect() {
+            return tipPosition.value
+        }
+    })
+
+    const tipPosition = ref({
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+    })
+
+    const tipContentModel={
+        toGroup:t("canvas.togroup"),
+        unGroup:t("canvas.ungroup"),
+        copy:t("canvas.copy"),
+        del:t("canvas.del")
+    };
     
 
-import { initCustomFormatter } from 'vue'
     const editorStore = useEditStore()
 
     const {
@@ -155,7 +186,6 @@ import { initCustomFormatter } from 'vue'
 
     let windowWidth=ref(0)
 
-    //provide("canvasApp",canvasApp)
 
     let selectLen=ref({ len:0})
 
@@ -173,6 +203,8 @@ import { initCustomFormatter } from 'vue'
         windowHeight.value=window.innerHeight;
         windowWidth.value=window.innerWidth;
 
+
+        
         // canvasApp = new App({
         //     view: 'main-canvas'
         // })
@@ -208,6 +240,8 @@ import { initCustomFormatter } from 'vue'
             // 通过 app.editor = new Editor(); 时，不需要添加 editor 属性，会有问题
             // editor:{}
         })
+
+      
 
         canvasApp.tree = canvasApp.addLeafer();
         canvasApp.sky = canvasApp.addLeafer({type:'draw', usePartRender: false});
@@ -248,36 +282,15 @@ import { initCustomFormatter } from 'vue'
         });
         canvasApp.sky.add(canvasApp.editor)
 
-
-       
-
         const scroll = new ScrollBar(canvasApp, { padding: 100 }) 
      
-        //canvasApp.config.move.dragEmpty=true
-        
-        
         const ruler = new Ruler(canvasApp)
 
-        // 添加自定义主题  
-        // ruler.addTheme('custom1', {
-        // backgroundColor: '#6cb0ab',
-        // textColor: '#a45454',
-        // borderColor: '#6f4593',
-        // highlightColor: 'rgba(22,93,255,0.75)'
-        // })
 
-        // // 切换主题  
-        // ruler.changeTheme('custom1')
-
-        // // 启用、禁用  
-        // ruler.enabled = true
+        
 
         editorStore.setApp(canvasApp);
 
-
-        // canvasApp.on(ZoomEvent.ZOOM, function (e: ZoomEvent) {
-        //     //console.info(e.scale)
-        // })
 
          canvasApp.tree.on(ResizeEvent.RESIZE, () => {
 
@@ -318,24 +331,48 @@ import { initCustomFormatter } from 'vue'
 
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
 
-            if(canvasApp.editor.multiple){
-                
-                componen.value = objcomponen.value.GroupPanel
-            
-                
-                useSelect.value=canvasApp.editor.list.length
-
-                
-
-                return;
-            }
 
             if(e.list.length==0){
                 canvasApp.editor.target=null
                 componen.value = objcomponen.value.PagePanel
-               
                return;
             }
+
+            if(canvasApp.editor.multiple){
+
+                componen.value = objcomponen.value.GroupPanel
+                useSelect.value=canvasApp.editor.list.length
+                canvasApp.editor.buttons.children[0].children.find(m=>m.name=="toGroup").visible=true
+                canvasApp.editor.buttons.children[0].children.find(m=>m.name=="unGroup").visible=false
+                canvasApp.editor.buttons.children[0].children.find(m=>m.name=="toGroup").width=32
+                canvasApp.editor.buttons.children[0].width=96
+                canvasApp.editor.buttons.children[0].height=40
+                canvasApp.editor.buttons.children[0].padding=8
+
+                return;
+
+            }else{
+               
+                canvasApp.editor.buttons.children[0].children.find(m=>m.name=="toGroup").visible=false
+                canvasApp.editor.buttons.children[0].children.find(m=>m.name=="toGroup").width=0
+              
+
+                if(canvasApp.editor.target.tag=="Group"){
+
+                    canvasApp.editor.buttons.children[0].children.find(m=>m.name=="unGroup").visible=true
+                    canvasApp.editor.buttons.children[0].width=96
+                    canvasApp.editor.buttons.children[0].height=40
+                    canvasApp.editor.buttons.children[0].padding=8
+                }else{
+                    canvasApp.editor.buttons.children[0].width=64
+                    canvasApp.editor.buttons.children[0].height=40
+                    canvasApp.editor.buttons.children[0].padding=8
+                    canvasApp.editor.buttons.children[0].children.find(m=>m.name=="unGroup").visible=false
+
+                }
+            }
+
+            
             if(e.list[0].tag=="Frame"){
                 canvasApp.editor.target=null
                 componen.value = objcomponen.value.PagePanel
@@ -474,18 +511,6 @@ import { initCustomFormatter } from 'vue'
                 componen.value = objcomponen.value.PagePanel
             }
         })
-
-
-        // canvasApp.editor.on(PointerEvent.DOUBLE_TAP,  (e:PointerEvent)=> {
-        //     //debugger
-        //     if(canvasApp.editor.editing==false){ return }
-
-        //     if(e.current.target.tag=="Box"&&e.current.target.name.startsWith("Text")){
-        //        canvasApp.editor.openInnerEditor(e.current.target.children[0])
-        //     }
-        // }, true)
-
-
         canvasApp.editor.on(InnerEditorEvent.CLOSE, function (e:InnerEditorEvent) {
          
             if(e.editTarget.parent){
@@ -494,9 +519,6 @@ import { initCustomFormatter } from 'vue'
             
         })
 
-        // canvasApp.editor.on(EditorScaleEvent.SCALE, function (e:EditorScaleEvent) {
-               
-        // })
 
         canvasApp.editor.on(PointerEvent.MENU,function(e){
 
@@ -518,99 +540,37 @@ import { initCustomFormatter } from 'vue'
         })
 
  
-         const button = new  Flow({// 添加移除按钮
-             around: 'center',
-             fill:"#ffffff",
-             //flowAlign:'center',
-             cornerRadius: 5,
-             //gap:'auto',
-             cursor: 'pointer',
-             //height:32,
-             shadow: {
-                x: 1,
-                y: 1,
-                blur: 20,
-                color: 'rgba(0, 0, 0, 0.25)',
-                box: true
-            },
-            padding:8
-         })
-         
-         //del
-        const btnDel =Box.one({
-            hoverStyle: {
-                fill: [
-                    {type:'solid',color:'rgba(0,0,0, 0.1)'},
-                    {
-                type: 'image',
-                url: Platform.toURL('<svg  width="48" height="48" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M160 256H96a32 32 0 0 1 0-64h256V95.936a32 32 0 0 1 32-32h256a32 32 0 0 1 32 32V192h256a32 32 0 1 1 0 64h-64v672a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32zm448-64v-64H416v64zM224 896h576V256H224zm192-128a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32m192 0a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32"></path></svg>', 'svg'),
-                mode: 'fit',
-                padding:4
-            }]
-            },
-            fill: {
-                type: 'image',
-                url: Platform.toURL('<svg  width="48" height="48" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M160 256H96a32 32 0 0 1 0-64h256V95.936a32 32 0 0 1 32-32h256a32 32 0 0 1 32 32V192h256a32 32 0 1 1 0 64h-64v672a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32zm448-64v-64H416v64zM224 896h576V256H224zm192-128a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32m192 0a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32"></path></svg>', 'svg'),
-                mode:'fit',
-                padding:4
-            },
-            width:26,
-            height:26,
-            cornerRadius:5,
-            around: 'center',
+        let {button} =useCreateButton(canvasApp,editorStore)
+  
+        button.on(PointerEvent.OVER,(e)=>{
+            if(e.target.tag=="Flow"){
+                return false
+            }
+            let name=e.target.name;
+            let target=(e.target.worldBoxBounds)  
+            tipVisible.value=true
+            tipContent.value=tipContentModel[name]
+            tipPosition.value = DOMRect.fromRect({
+                    width: 0,
+                    height: 0,
+                    x: target.x+16,
+                    y: target.y+60
+            })
         })
 
-         button.add(btnDel)
-          //copy
-        const btnCopy =Box.one({
-            hoverStyle: {
-                fill: [
-                    {type:'solid',color:'rgba(0,0,0, 0.1)'},
-                    {
-                type: 'image',
-                url: Platform.toURL('<svg  width="48" height="48" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z"></path><path fill="currentColor" d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64"></path></svg>', 'svg'),
-                mode: 'fit',
-                padding:4
-            }]
-            },
-            fill: {
-                type: 'image',
-                url: Platform.toURL('<svg  width="48" height="48"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M768 832a128 128 0 0 1-128 128H192A128 128 0 0 1 64 832V384a128 128 0 0 1 128-128v64a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64z"></path><path fill="currentColor" d="M384 128a64 64 0 0 0-64 64v448a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64V192a64 64 0 0 0-64-64zm0-64h448a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H384a128 128 0 0 1-128-128V192A128 128 0 0 1 384 64"></path></svg>', 'svg'),
-                mode:'fit',
-                padding:4
-            },
-            width:26,
-            height:26,
-            cornerRadius:5,
-            around: 'center',
+        button.on(PointerEvent.OUT,(e)=>{
+            tipVisible.value=false
+            tipPosition.value = DOMRect.fromRect({
+                    width: 0,
+                    height: 0,
+                    x: 0,
+                    y: 0
+            })
         })
 
-         button.add(btnCopy)
+
          canvasApp.editor.buttons.add(button)
 
-         btnDel.on(PointerEvent.TAP, () => { // 点击删除元素，并取消选择
-             canvasApp.editor.list.forEach(rect => {
-             editorStore.delShape(rect.id as string)
-                 rect.remove()
-            })
-             canvasApp.editor.target = undefined
-         })
-
-
-         btnCopy.on(PointerEvent.TAP, () => { // 点击删除元素，并取消选择
-             canvasApp.editor.list.forEach(rect => {
-                var obj= rect.clone()
-                obj.id=nanoid()
-                obj.x=obj.x+10
-                obj.y=obj.y+10
-                obj.data=JSON.parse(JSON.stringify(obj.data))
-                editorStore.addShape(obj.id as string)
-                canvasApp.findOne("Frame").add(obj)
-                canvasApp.editor.target=obj
-            })
-         })
-
-         
 
         if(settingJson&&settingJson.setting.initData){
 
@@ -618,6 +578,7 @@ import { initCustomFormatter } from 'vue'
 
             frame=new Frame(setting)
 
+            frame.id=nanoid()
             frame.x=0
 
             frame.y=0
@@ -632,11 +593,14 @@ import { initCustomFormatter } from 'vue'
 
             canvasApp.tree.add(frame)
 
+           
+
         }else{
 
 
 
             frame = new Frame({
+                id:nanoid(),
                 editable:false,
                 disabled:false,
                 hitSelf:true,
@@ -650,11 +614,14 @@ import { initCustomFormatter } from 'vue'
             
             canvasApp.tree.add(frame)
 
+          
+
             if(settingJson&&settingJson.imgUrl){
                 addBgImg(settingJson.imgUrl)
                 canvasApp.editor.target=null
             }
            
+
         }
 
 
@@ -669,6 +636,9 @@ import { initCustomFormatter } from 'vue'
 
         }
         
+       // const redoCom = new Command(canvasApp)
+
+        //redoCom.change()
     })
 
     watch(()=>useColor.value,(newVal)=>{

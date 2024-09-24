@@ -434,8 +434,8 @@ const setZoom=(parm)=>{
  </div>
  <div class="zoom">
   <el-button-group >
-    <el-button size="large" round :icon="Plus" @click="setZoom('in')"/>
-    <el-button size="large">
+    <el-button round :icon="Plus" @click="setZoom('in')"/>
+    <el-button >
       <el-dropdown @command="handleZoomCommand">
         <span>{{pageZoom.title}}</span>
         <template #dropdown>
@@ -445,7 +445,7 @@ const setZoom=(parm)=>{
         </template>
        </el-dropdown>
       </el-button>
-    <el-button size="large" round  :icon="Minus"  @click="setZoom('out')"/>
+    <el-button  round  :icon="Minus"  @click="setZoom('out')"/>
   </el-button-group>
  </div>
 
@@ -526,9 +526,9 @@ const setZoom=(parm)=>{
 
 .zoom{
   position: fixed;
-  bottom: 40px;
-  right: 300px;
-  z-index: 20008;
+  bottom: 10px;
+  right: 310px;
+  z-index: 2008;
 }
 .mateitem{
   margin-bottom: 10px;

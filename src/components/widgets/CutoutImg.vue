@@ -30,11 +30,11 @@
       </el-form>
        <div v-show="state.rawImage"  class="c-compare scan-effect" 
         :style="{ width: state.offsetWidth ? state.offsetWidth + 'px' : '100%','--value':state.percent+'%' }">
-          <img v-show="state.bgImage" class="c-compare__left" :src="state.bgImage" alt="结果图像"/>
+          <img v-show="state.cutImage" class="c-compare__left" :src="state.cutImage" alt="result img"/>
           <img ref="raw" @load.once="onImageLoad" class="c-compare__right" :src="state.rawImage" alt="B/W" />
-          <input type="range" v-show="state.bgImage" class="c-rng c-compare__range" min="0" max="100"  v-model="state.percent"
+          <input type="range" v-show="state.cutImage" class="c-rng c-compare__range" min="0" max="100"  v-model="state.percent"
             />
-          <div class="scroller scroller-top" v-show="state.bgImage"  :style="{left: state.percent+'%'}">
+          <div class="scroller scroller-top" v-show="state.cutImage"  :style="{left: state.percent+'%'}">
               <svg class="scroller__thumb" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
                   <polygon points="0 50 37 68 37 32 0 50" style="fill:#FFAB91"></polygon>
                   <polygon points="100 50 64 32 64 68 100 50" style="fill:#FFAB91"></polygon>
@@ -44,12 +44,18 @@
   </div>
       <template #footer>
           <div class="dialog-footer">
-              <el-button  @click="close"> {{$t("canvas.cancel")}} </el-button>
+            
+              <el-button v-show="state.cutImage" type="primary" @click="edit">
+                  进入编辑模式
+              </el-button>
+              <!-- <el-button  @click="close"> {{$t("canvas.cancel")}} </el-button> -->
               <el-button type="primary" @click="cutOutImageDone">
-              {{$t("canvas.confirm")}} 
+                 {{$t("canvas.confirm")}} 
               </el-button>
           </div>
       </template>
+
+      <ImageExtraction ref="matting" />
   </el-dialog>
 
 </template>
@@ -59,7 +65,7 @@
 
   import { useI18n } from "vue-i18n"
   const { t } = useI18n()
-
+  import ImageExtraction from '../widgets/ImageExtraction/index.vue'
 
   import {mixins} from "@/mixin/index"
   import { ElMessage } from "element-plus";
@@ -74,7 +80,7 @@
   export type TImageCreateBgState = {
       show: boolean;
       rawImage: string;
-      bgImage: string;
+      cutImage: string;
       offsetWidth: number;
       percent: number;
       progress: number;
@@ -83,18 +89,26 @@
       loading: boolean;
       createing:boolean
  }
-
+ const matting = ref<typeof ImageExtraction | null>(null)
   const close = ()=>{
   // 请关闭弹框
   dialogVisible.value = false;
 
   }
 
+  const edit = () => {
+  if (!matting.value) return
+  matting.value.open(state.rawImage, state.cutImage, (base64: string) => {
+        state.cutImage = base64
+        state.percent = 0
+        requestAnimationFrame(run)
+  })
+}
  
  const state = reactive<TImageCreateBgState>({
       show: false,
       rawImage: "",//new URL("@/assets/koutu.png",import.meta.url).href,
-      bgImage:"",//new URL("@/assets/createbg.png",import.meta.url).href,
+      cutImage:"",//new URL("@/assets/createbg.png",import.meta.url).href,
       offsetWidth: 0,
       percent: 0,
       progress: 0,
@@ -113,7 +127,7 @@
 
   const openedCreateBgImg=()=>{
       state.rawImage=imageSrc.value
-      state.bgImage=''
+      state.cutImage=''
       state.percent=0
  }
 
@@ -134,7 +148,7 @@
 
       if(cutdata.code==0){
 
-        state.bgImage=cutdata.data[0]
+        state.cutImage=cutdata.data[0]
         requestAnimationFrame(run)
         state.createing=false
 
@@ -148,7 +162,7 @@
 
       state.createing=true
       state.percent=0
-      state.bgImage=''
+      state.cutImage=''
 
 
       //上传后再生成
@@ -186,7 +200,7 @@
   }
 
   const closeedCreateBgImg=()=>{
-      state.bgImage=''
+      state.cutImage=''
       state.rawImage=''
       state.percent=0
   }
@@ -196,7 +210,7 @@
   const cutOutImageDone = () => {
 
       emit('updateImageSrc', {
-            cutoutImg:state.bgImage
+            cutoutImg:state.cutImage
       });
   }
 </script>
