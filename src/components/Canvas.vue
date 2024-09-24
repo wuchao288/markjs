@@ -22,7 +22,7 @@
        </div>
        
     <keep-alive>
-      <component ref="componentthis" :is="componen"       @handleExportImg="exportImg"> </component>
+      <component :is="componen"       @handleExportImg="exportImg"> </component>
     </keep-alive>
 
     
@@ -109,7 +109,6 @@
         GroupPanel
     });
 
-  let componentthis=ref()
 
     componen.value = objcomponen.value.PagePanel
 
