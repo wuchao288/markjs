@@ -65,7 +65,7 @@ let  sharpType =ref<SharpTypeItem>(SharpTypeList[0])
 let  borderWidthType =ref<BorderWidthItem>(BorderWidthList[1])
 
 
-const {useColor,useBorderWidth,usePageMove} = storeToRefs(editorStore)
+const {useBorderWidth,usePageMove,redoIndex} = storeToRefs(editorStore)
 
 let actionUrl=ref<string>((window.parent as any).sploadImgToTempdes||'/BLL/TempHandler.ashx?action=UploadMarkImage')
 
@@ -307,6 +307,17 @@ const setZoom=(parm)=>{
 
 }
 
+const appRedo=()=>{
+  let canvasApp=editorStore.editor
+  canvasApp.tree.emit("redo.redo",{})
+}
+
+const appUndo=()=>{
+  let canvasApp=editorStore.editor
+  canvasApp.tree.emit("redo.undo",{})
+}
+
+
 </script>
 
 <template>
@@ -314,9 +325,41 @@ const setZoom=(parm)=>{
      <div class="action">
          <ul>
           <li>
-            <el-button @click="handleMateImport">
-              <span class="iconfont icon icon-daorutupian"></span>
-              {{$t('header.addmaterial')}}</el-button>
+            <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        :content="t('header.addmaterial')"
+                        placement="top"
+                        >
+            <el-button  type="primary"  @click="handleMateImport">
+              <span class="iconfont icon icon-daorutupian" style="color: white;"></span>
+              </el-button>
+            </el-tooltip>
+         </li>
+         <li>
+          <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        :content="t('header.undo')"
+                        placement="top"
+                        >
+            <el-button :disabled="redoIndex==0"  @click="appUndo">
+                <i class="iconfont  icon-chexiao1"></i>
+            </el-button>
+        </el-tooltip>
+         </li>
+         <li>
+          <el-tooltip
+               
+                        class="box-item"
+                        effect="dark"
+                        :content="t('header.redo')"
+                        placement="top"
+                        >
+          <el-button    @click="appRedo">
+              <i class="iconfont icon-zhongzuo-jihuo"></i>
+          </el-button>
+        </el-tooltip>
          </li>
           <li>
             <el-button @click="handleSharp('Text','normal')">
@@ -327,7 +370,7 @@ const setZoom=(parm)=>{
 
           <li>
           <el-button @click="handleSharp('Line','')">
-            <span class="iconfont icon icon-xianduan-zhixian"></span>
+            <span class="iconfont  icon-xianduan-zhixian"></span>
             {{$t('header.line')}}
           </el-button>
          </li>
@@ -474,15 +517,15 @@ const setZoom=(parm)=>{
 
             <el-row :gutter="16">
                   <el-col :span="12"   >
-                    <div  v-for="item in  ImageEffectList.filter((m,index)=> { return index%2==0 })" 
+                    <div :title="item.id"  v-for="item in  ImageEffectList.filter((m,index)=> { return index%2==0 })" 
                     :key="item.id" class="mateitem" >
-                      <el-image @click="handleAddMateImg(item)" class="mateitem-img"  :src="item.preview"></el-image>
+                      <el-image @click="handleAddMateImg(item)" class="mateitem-img" :src="item.preview"></el-image>
                     </div>
                   </el-col>
                   <el-col :span="12"   >
-                    <div v-for="item in  ImageEffectList.filter((m,index)=> { return index%2==1 })" :key="item.id" class="mateitem" 
+                    <div :title="item.id"  v-for="item in  ImageEffectList.filter((m,index)=> { return index%2==1 })" :key="item.id" class="mateitem" 
                      >
-                      <el-image @click="handleAddMateImg(item)" class="mateitem-img"  :src="item.preview"></el-image>
+                      <el-image @click="handleAddMateImg(item)" class="mateitem-img"   :src="item.preview"></el-image>
                     </div>
                   </el-col>
                </el-row>

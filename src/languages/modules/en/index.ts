@@ -70,7 +70,9 @@ export default {
     "cancel":"Ungroup",
     "texteffect":"Text effects",
     "imageeffect":"Widget",
-    "del":"Delete"
+    "del":"Delete",
+    "undo":'撤销',
+    "redo":'重做'
   },
   canvas:{
     "loading":"Processing, please wait...",

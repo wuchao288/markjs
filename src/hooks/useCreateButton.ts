@@ -141,6 +141,7 @@ export function useCreateButton(canvasApp:App,editorStore) {
             rect.remove()
        })
         canvasApp.editor.target = undefined
+        
     })
 
 
@@ -154,6 +155,7 @@ export function useCreateButton(canvasApp:App,editorStore) {
            editorStore.addShape(obj.id as string)
            canvasApp.findOne("Frame").add(obj)
            canvasApp.editor.target=obj
+           canvasApp.findOne("Frame").emit("redo.add",{})
        })
     })
 

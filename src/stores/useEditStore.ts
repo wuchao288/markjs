@@ -6,6 +6,7 @@ import { Store, defineStore } from 'pinia'
 import {IPointData,IUI,IShadowEffect}  from '@leafer-ui/interface'
 
 export type TPageSetting={
+
   pageSizeId:number,
   pageMove:boolean,
   pageZoom:number,
@@ -84,6 +85,7 @@ type TStoreBaseState = {
   useToolType:string
   shapes:Map<string,object>
   useSelect:number,
+  redoIndex:number,
   usePageMove:boolean,
   useColor:string
   usePageBgColor:string
@@ -115,6 +117,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     scale: 1,
     editor:null,
     useTool:"",
+    redoIndex:0,
     useToolType:"",
     shapes:new Map(),
     useColor:'rgba(0, 0, 0, 1)',

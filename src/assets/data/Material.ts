@@ -249,8 +249,95 @@ export const  TextEffectItemList=[
   "scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,
   "fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/17-1.png",import.meta.url).href,
   "mode":"strench"},"data":{"original":new URL("@/assets/images/mate/texteffect/17-1.png",import.meta.url).href,"sizeData":null,"cropData":null}},{"tag":"Text","resizeFontSize":true,"fill":"#6F9EB2","text":"調節脚","fontFamily":"アプリ明朝","fontSize":79,"fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"XJXv5nQNIOOyCwhKimaXL","name":"Text","visible":true,"zIndex":1,"x":176.0275589295079,"y":60.42138992165215,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
-}
+},
+{
+  preview:new URL("@/assets/images/mate/texteffect/20.png",import.meta.url).href,
+  url:'',
+  id:"10020",
+  data:{"tag":"Group","x":97,"y":281,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,
+  "children":[{"tag":"Rect","id":"yCZXWi9z89rUocbqxqqt-","name":"image","locked":false,"zIndex":1,"x":203,"y":19,"width":406,
+  "height":38,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,
+  "fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/20.png",import.meta.url).href,"mode":"strench"},
+  "data":{"original":new URL("@/assets/images/mate/texteffect/20-1.png",import.meta.url).href,"sizeData":null,"cropData":null}},
+  {"tag":"Text","resizeFontSize":true,"fill":"#000000","text":"水洗いできるフィルターで  いつでも清潔","fontFamily":"アプリ明朝",
+  "fontSize":19.35777919265272,"letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"W7FeK-oBFXg4sTWgZ7PF8",
+  "name":"Text","visible":true,"zIndex":1,"x":15.6799041489449,"y":0.28428782214680837,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
+},
 
+{
+  preview:new URL("@/assets/images/mate/texteffect/22.png",import.meta.url).href,
+  url:'',
+  id:"10022",
+  data:{"tag":"Group","x":20.21665740188098,"y":214.4584653879241,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"9wmeLKtDY9HCbhPP31Dq4","name":"image","locked":false,"zIndex":1,"x":272.49999999999994,"y":69.50000000000001,"width":545,"height":139,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,
+  "fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/22-1.jpg",import.meta.url).href,"mode":"strench"},
+  "data":{"original":new URL("@/assets/images/mate/texteffect/22-1.jpg",import.meta.url).href,
+  "sizeData":null,"cropData":null}},{"tag":"Text","resizeFontSize":true,
+  "fill":"#FFFFFF","text":"お手入れもカンタン","fontFamily":"アプリ明朝","fontSize":54,
+  "fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},
+  "id":"LTuXj1wHhaLDL3JzFsqs4","name":"Text","visible":true,"zIndex":1,"x":18.85102548017153,
+  "y":25.937117489406262,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,
+  "skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]
+  }
+ },
+ {
+  preview:new URL("@/assets/images/mate/texteffect/21.png",import.meta.url).href,
+  url:'',
+  id:"10021",
+  data:{"tag":"Group","x":179.63908098477935,"y":210.92094371789028,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,
+  "editable":true,"hitChildren":false,"children":[{"tag":"Ellipse","id":"e2nwZUu1kVfRiEkvMowkS","name":"Ellipse",
+  "visible":true,"locked":false,"zIndex":3,"x":-5.684341886080802e-14,"y":-2.842170943040401e-14,"width":265,"height":262,
+  "scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#2a4361"}],
+  "strokeWidth":2,"dashPattern":[],"cornerRadius":0,"data":{"fillData":{"activeColorKey":"pure","gradientColor":
+  "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#2a4361"}}},
+  {"tag":"Ellipse","id":"JopEDg0ykJq3K2T4z9Pn-","name":"Ellipse","visible":true,"locked":false,
+  "zIndex":3,"x":28.563126813292513,"y":27.645703869141954,"width":208,"height":206,"scaleX":1,"scaleY":1,"rotation":0,
+  "skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#2a4361"}],"stroke":"#FFFFFF",
+  "strokeWidth":"2","dashPattern":[],"cornerRadius":0,"data":{"fillData":{"activeColorKey":"pure",
+  "gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#2a4361"}}},
+  {"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"手元重量\n0.45kg","fontFamily":"アプリ明朝","fontSize":36,
+  "letterSpacing":0,"lineHeight":{"type":"percent","value":1.5},"id":"qh_0bIiR5kN3IqRSa1AVJ","name":"Text","visible":true,
+  "zIndex":4,"x":55.689380439878846,"y":69.05827978887322,"scaleX":1,"scaleY":1,"rotation":0,"skewX":0,"skewY":0,
+  "padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
+},
+ {
+  preview:new URL("@/assets/images/mate/texteffect/23.png",import.meta.url).href,
+  url:'',
+  id:"10023",
+  data:{"tag":"Group","x":226.01584892935432,"y":210.87506322711175,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"QlX8IGpZKJcDomJpJxr9B","name":"Rect","visible":true,"locked":false,"zIndex":1,"x":-5.684341886080802e-14,"y":1.4210854715202004e-14,"width":182,"height":87,"scaleX":0.9999999999999998,"scaleY":0.9999999999999998,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#ffffff"}],"strokeWidth":2,"dashPattern":[],"cornerRadius":"6","data":{"fillData":{"activeColorKey":"pure","gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#ffffff"}}},{"tag":"Rect","id":"oDtyEby_aP247Jzt8pfo3","name":"Rect","visible":true,"locked":false,"zIndex":1,"x":6.29067610858192,"y":6.020907098297215,"width":169,"height":29,"scaleX":0.9999999999999998,"scaleY":0.9999999999999998,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#67bed3"}],"strokeWidth":200,"dashPattern":[],"cornerRadius":"6","data":{"fillData":{"activeColorKey":"pure","gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#67bed3"}}},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"Point.01","fontFamily":"アプリ明朝","fontSize":13,"letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"D-3vk0YRuF3qZNcdZrldz","name":"Text","visible":true,"zIndex":3,"x":62.43310220488743,"y":6.575619625695538,"scaleX":0.9999999999999998,"scaleY":0.9999999999999998,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""},{"tag":"Text","resizeFontSize":true,"fill":"#000000","text":"高い節水機能","fontFamily":"アプリ明朝","fontSize":23,"fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"ZZLkS8pKU1j4JgGib-G5E","name":"Text","visible":true,"zIndex":3,"x":11.607595895342598,"y":42.20367560276516,"scaleX":0.9999999999999998,"scaleY":0.9999999999999998,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":"","data":{}}]}
+ },
+ {
+  preview:new URL("@/assets/images/mate/texteffect/24.png",import.meta.url).href,
+  url:'',
+  id:"10024",
+  data:
+  {"tag":"Group","x":22.5,"y":263,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,
+  "editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"swFMtYH3DLnfyBpdGckhf",
+  "name":"image","locked":false,"zIndex":1,"x":277.50000000000006,"y":37.000000000000064,"width":555,
+  "height":74,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"around":"center",
+  "editable":true,"fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/24-1.png",import.meta.url).href,"mode":"strench"},
+  "data":{"original":new URL("@/assets/images/mate/texteffect/24-1.png",import.meta.url).href,
+  "sizeData":null,"cropData":null}},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"槽洗浄コース",
+  "fontFamily":"アプリ明朝","fontSize":41,"letterSpacing":0,
+  "lineHeight":{"type":"percent","value":"1.50"},"id":"CFVMWud-zBebOS5AKkhm5","name":"Text","visible":true,"zIndex":1,"x":158.2283763277694,"y":4.2230652503793635,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
+}
+, {
+  preview:new URL("@/assets/images/mate/texteffect/25.png",import.meta.url).href,
+  url:'',
+  id:"10025",
+  data:{"tag":"Group","x":51.61229135053111,"y":356.00986342943855,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"uXEEuNS3AM60pv00hSLbk","name":"image","locked":false,"zIndex":2,"x":262.50000000000006,"y":40.50000000000001,"width":525,"height":81,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,
+  "fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/25-1.png",import.meta.url).href,"mode":"strench"},
+  "data":{"original":new URL("@/assets/images/mate/texteffect/25-1.png",import.meta.url).href,"sizeData":null,"cropData":null}},
+  {"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"独自の乾燥技術","fontFamily":"アプリ明朝","fontSize":47,"fontWeight":"normal","letterSpacing":0,"lineHeight":{"type":"percent","value":1.5},"id":"7tbanihs7k_85ZhyLfSXF","name":"Text","visible":true,"zIndex":3,"x":108.17526555386951,"y":1.349772382397589,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
+ }
+ ,
+ , {
+  preview:new URL("@/assets/images/mate/texteffect/26.png",import.meta.url).href,
+  url:'',
+  id:"10026",
+  data:{"tag":"Group","x":49.499999999999886,"y":266.0000000000001,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,"rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"IAhph_WtZuM8RN_js35sQ","name":"image","locked":false,"zIndex":1,"x":250.50000000000017,"y":34.00000000000001,"width":501,"height":68,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"around":"center","editable":true,
+  "fill":{"type":"image","url":new URL("@/assets/images/mate/texteffect/26-1.png",import.meta.url).href,
+  "mode":"strench"},"data":{"original":new URL("@/assets/images/mate/texteffect/26-1.png",import.meta.url).href,"sizeData":null,"cropData":null}},{"tag":"Text","resizeFontSize":true,"fill":"#FFFFFF","text":"洗剤投入ケース（液体/粉末）","fontFamily":"アプリ明朝","fontSize":30,"letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"dv3XDqqdE5DvHlJ1s11Gt","name":"Text","visible":true,"zIndex":1,"x":52.76059689345482,"y":7.755436236731555,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""}]}
+ }
 ] as TextEffectItem[]
 
 
@@ -337,10 +424,43 @@ export const ImageEffectList=[
     id:"1012",
     type:"img"
   },
+
+
   {
-    preview:new URL("@/assets/images/mate/imageeffect/13.png",import.meta.url).href,
-    url:new URL("@/assets/images/mate/imageeffect/13.png",import.meta.url).href,
-    id:"1013",
+    preview:new URL("@/assets/images/mate/imageeffect/20-1.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/20-1.png",import.meta.url).href,
+    id:"1020",
+    type:"img"
+  },
+
+
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/22-1.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/22-1.png",import.meta.url).href,
+    id:"1022",
+    type:"img"
+  },
+
+
+
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/24-1.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/24-1.png",import.meta.url).href,
+    id:"1024",
+    type:"img"
+  },
+
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/25-1.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/25-1.png",import.meta.url).href,
+    id:"1025",
+    type:"img"
+  },
+
+  {
+    preview:new URL("@/assets/images/mate/imageeffect/26-1.png",import.meta.url).href,
+    url:new URL("@/assets/images/mate/imageeffect/26-1.png",import.meta.url).href,
+    id:"1026",
     type:"img"
   },
 

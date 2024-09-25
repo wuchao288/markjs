@@ -76,8 +76,6 @@
   let sizeData=(toRaw(props.sizeData))
   let cropData=(toRaw(props.cropData))
 
-  console.info("openedCropImg")
-
   nextTick(()=>{
      cropper = new Cropper(imageRef.value, {
       aspectRatio: props.aspectRatio,

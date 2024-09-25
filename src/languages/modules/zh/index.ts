@@ -72,7 +72,9 @@ export default {
     cancel:'取消编组',
     texteffect:'文字效果',
     imageeffect:'小部件',
-    del:'删除'
+    del:'删除',
+    undo:'撤销',
+    redo:'重做'
   },
   canvas:{
     loading:'正在处理请等待...',

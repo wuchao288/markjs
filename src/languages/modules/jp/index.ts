@@ -69,7 +69,9 @@ export default {
     "cancel":"グループ解除",
     "texteffect":"テキストエフェクト",
     "imageeffect":"ウィジェット",
-    "del":"削除"
+    "del":"削除",
+    "undo":'撤销',
+    "redo":'重做'
   },
   canvas:{
     "loading":"処理中です。お待ちください...",

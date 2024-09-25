@@ -75,7 +75,10 @@ const copy=()=>{
             editorStore.addShape(obj.id as string)
             app.findOne("Frame").add(obj)
             app.editor.target=obj
+            app.findOne("Frame").emit("redo.add",{})
     })
+
+
 }
 
 const lockSharp=()=>{

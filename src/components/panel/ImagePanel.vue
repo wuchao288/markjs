@@ -163,6 +163,7 @@
         useImageStyle.value.fill.url=obj.createBgImg
         canvasApp.editor.target.data.action="createbg"
         dialogVisible.value=false
+
     }
 
     onMounted(()=>{
@@ -230,6 +231,8 @@
       imageCropSrc.value=""
 
       dialogCropVisible.value=false
+
+
    }
 
 

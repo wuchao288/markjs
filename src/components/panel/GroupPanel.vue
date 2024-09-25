@@ -150,12 +150,15 @@ const toGroup=()=>{
     if(canvasApp.editor.multiple==true){
         canvasApp.editor.group()
     }
+    canvasApp.tree.findOne("Frame").emit('update',{})
 }
 
 const toUnGroup=()=>{
     if(canvasApp.editor.multiple==false){
         canvasApp.editor.ungroup()
     }
+
+    canvasApp.tree.findOne("Frame").emit('update',{})
 }
 
 const setAlgin=(placement)=>{
@@ -273,10 +276,9 @@ const setAlgin=(placement)=>{
             }
           break;  
      }
+
+     canvasApp.tree.findOne("Frame").emit('update',{})
 }
-
-
-
 
 
 </script>

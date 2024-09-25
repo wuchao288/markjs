@@ -8,6 +8,7 @@
       <el-form-item :label="t('stylepanel.pagesize')">
         
         <el-select  v-model="usePageSetting.pageSizeId" placeholder="Select" style="width: 240px">
+
         <el-option
           v-for="item in PageSizeList"
           :key="item.id"
@@ -31,6 +32,20 @@
          v-model:active-key="usePageSetting.pageBgSet.backgroundColor.activeColorKey"
          @activeKeyChange="activeKeyChange" format="hex6" lang="En" shape="circle" useType="both"
          v-model:gradientColor="usePageSetting.pageBgSet.backgroundColor.gradientColor" />
+
+
+         <hr style="margin-bottom: 20px;"/>
+         <el-row class="bg-color-wrap">
+            <el-col @click="usePageSetting.pageBgSet.backgroundColor.pureColor=item" :style="{backgroundColor:item}" :span="7"  class="grid-content" 
+             :class="usePageSetting.pageBgSet.backgroundColor.pureColor==item?'bgselected':''"  v-for="item in predeBgColors"
+          :key="item"
+          :label="item"
+          :value="item">
+        
+
+
+        </el-col>
+         </el-row>
 
 
         </el-tab-pane>
@@ -165,6 +180,25 @@
       'rgba(0,0,0,0)'
    ])
   
+
+  const predeBgColors=ref([
+  '#FFFFFF',
+  '#8B1B1B', 
+  '#000000',  
+  '#7AADF0',  
+  '#F4C245',  
+  '#F7DBAB', 
+  '#649E59',  
+  '#469588',  
+  '#C24826',  
+  '#5ABDED',  
+  '#6B79EE',  
+  '#754FED',  
+  '#260F87',  
+  '#EAEAEA'
+
+  ])
+
 const handleSetImage=(url)=>{
   usePageSetting.value.pageBgSet.backgroundImage = url
   
@@ -280,8 +314,34 @@ const  changeActiveName=(activeName)=>{
 
 }
 
+
+
+.bg-color-wrap{
+  gap: 10px;
+}
+
+.bg-color-wrap .grid-content{
+    border-radius: 8px;
+    height: 40px;
+    width: 40px;
+    border: 1px solid transparent;
+}
+
+.bg-color-wrap .grid-content:hover{
+   border-width: 2px;
+   border-color: rgba(85, 85, 255, 0.5);
+   cursor: pointer;
+}
+
+.bg-color-wrap .grid-content:first-of-type{
+  border-color: rgba(85, 85, 255, 1);
+}
+
 .bgselected{
   border:2px red dashed
 }
 
+.bg-color-wrap .grid-content.bgselected{
+  border:2px red dashed
+}
 </style>

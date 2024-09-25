@@ -164,7 +164,8 @@
         useSharpStyle,
         usePageSetting,
         useImageStyle,
-        useSelect
+        useSelect,
+        redoIndex
     } = storeToRefs(editorStore)
 
 
@@ -182,12 +183,15 @@
 
     let frame:Frame
 
+    let  redoCom:Command
+
     let windowHeight=ref(0)
 
     let windowWidth=ref(0)
 
 
     let selectLen=ref({ len:0})
+
 
     provide('selectLen',selectLen)
 
@@ -198,40 +202,10 @@
         appWrap.style.height= (window.innerHeight- 60)+"px"
         appWrap.style.marginTop="60px"
 
-        var settingJson=window.parent.getMarkJson?window.parent.getMarkJson():undefined;
+        var settingJson=(window.parent as any).getMarkJson?(window.parent as any).getMarkJson():undefined;
 
         windowHeight.value=window.innerHeight;
         windowWidth.value=window.innerWidth;
-
-
-        
-        // canvasApp = new App({
-        //     view: 'main-canvas'
-        // })
-        
-        // canvasApp.editor = new Editor({
-        //         buttonsFixed:true,
-        //         buttonsDirection:'top',
-        //         // lockRatio: 'corner',
-        //         // stroke: '#3f99f7',
-        //         // skewable: false,
-        //         // // hover: true,
-        //         // flipable:false,
-        //         // resizeable:true,
-        //         // mask:false,
-        //         // rotateGap:15,
-        //         // middlePoint: { cornerRadius: 100, width: 20, height: 6 },
-        //         // rotatePoint: {
-        //         //     width: 20,
-        //         //     height: 20,
-        //         //     fill: {
-        //         //         type: 'image',
-        //         //         url: rotatePng,
-        //         //     }
-        //         // }
-        //     });
-        // canvasApp.sky.add(canvasApp.editor)
-
 
           // 实例应用
         canvasApp = new App({
@@ -241,7 +215,6 @@
             // editor:{}
         })
 
-      
 
         canvasApp.tree = canvasApp.addLeafer();
         canvasApp.sky = canvasApp.addLeafer({type:'draw', usePartRender: false});
@@ -286,18 +259,14 @@
      
         const ruler = new Ruler(canvasApp)
 
-
-        
-
         editorStore.setApp(canvasApp);
 
 
-         canvasApp.tree.on(ResizeEvent.RESIZE, () => {
+        canvasApp.tree.on(ResizeEvent.RESIZE, () => {
 
-            if(canvasApp.tree.scale){
-             editorStore.setScale(canvasApp.tree.scale);
+             if(canvasApp.tree.scale){
+                editorStore.setScale(canvasApp.tree.scale);
              }
-
         });
 
 
@@ -572,6 +541,8 @@
          canvasApp.editor.buttons.add(button)
 
 
+         
+
         if(settingJson&&settingJson.setting.initData){
 
             let setting=JSON.parse(settingJson.setting.initData)
@@ -623,7 +594,9 @@
            
 
         }
+        redoCom=  new Command(canvasApp)
 
+        frame.emit("add")
 
         canvasApp.config.zoom.max=4
         canvasApp.config.zoom.min=0.25
@@ -636,56 +609,12 @@
 
         }
         
-       // const redoCom = new Command(canvasApp)
 
-        //redoCom.change()
-    })
-
-    watch(()=>useColor.value,(newVal)=>{
-        ////SquareFill.Ellipse,Arrow-one,Arrow-two,Mark,Line,Text-normal,Text-rect,Text-radius
-        canvasApp.editor.list.forEach(m=>{
-            if(["Rect","Ellipse","Arrow","Line"].includes(m.tag)){
-               m.stroke=newVal
-            }else if(["Text"].includes(m.tag)){
-                m.fill=newVal
-            }else if(["Box"].includes(m.tag)){
-                m.stroke=newVal
-
-                setChild(m,newVal)
-
-                function  setChild(item,color){
-                     if(item.tag=="Text"){
-                        item.fill=color;
-                     }
-                     if(item.children){
-                        item.children.forEach(element => {
-                            setChild(element,color)
-                        });
-                     }
-                }
-            }
+        frame.on("redo.update",(data)=>{
+            redoIndex.value=data.current
         })
-        
     })
 
-
-    watch(()=>useBorderWidth.value,(newVal)=>{
-
-        ////SquareFill.Ellipse,Arrow-one,Arrow-two,Mark,Line,Text-normal,Text-rect,Text-radius
-        canvasApp.editor.list.forEach(m=>{
-            if(["Rect","Ellipse","Arrow","Line"].includes(m.tag)){
-                
-               m.strokeWidth=newVal
-            }else if(["Text"].includes(m.tag)){
-                //m.fill=newVal
-            }else if(["Box"].includes(m.tag)){
-
-                m.strokeWidth=newVal
-            }
-
-        })
-        
-    })
 
     watch(()=>usePageSetting.value.pageSizeId,(value)=>{
         
@@ -699,24 +628,12 @@
 
         canvasApp.tree.zoom("fit", 100)
 
+        frame.emit('update',{})
+
     })
 
-    function angleToCoordinates(angleInDegrees) {
-      // 将角度转换为弧度
-        const angleInRadians = (angleInDegrees * Math.PI) / 180;
-
-        // 计算x和y坐标
-        let x = Math.cos(angleInRadians);
-        let y = Math.sin(angleInRadians);
-
-        console.log({ x: x, y: y });
-
-        // 返回坐标对象
-        return {  x: x, y: y };
-    }
-
     watch([()=>usePageSetting.value.pageBgClass,()=>usePageSetting.value.pageBgSet],(newValues, oldValues)=>{
-        
+        console.info(1111)
         if(newValues[0]=="backgroundColor"){
             if(newValues[1].backgroundColor){
 
@@ -746,10 +663,10 @@
                                     stops: [{ offset: (match[3]*1)/100, color: match[2] }, { offset: (match[5]*1)/100, color: match[4] }]}]
                                 
                             }catch{
-                                frame.fill="#ffffff"
+                                frame.fill=[{type:'solid',color:"#FFFFF"}]
                             }
                             }else{
-                                frame.fill="#ffffff"
+                                frame.fill=[{type:'solid',color:"#FFFFF"}]
                             }
                         }else {
 
@@ -767,26 +684,26 @@
 
                             }catch{
 
-                                frame.fill="#ffffff"
+                                frame.fill=[{type:'solid',color:"#FFFFF"}]
 
                             }
                             }else{
-                                frame.fill="#ffffff"
+                                frame.fill=[{type:'solid',color:"#FFFFF"}]
                             }
                         }
                     
                 }else{
-                    frame.fill="#ffffff"
+                    frame.fill=[{type:'solid',color:"#FFFFF"}]
                 }
 
                 }else{
-                    frame.fill="#ffffff"
+                    frame.fill=[{type:'solid',color:"#FFFFF"}]
                 }
 
 
             }else{
 
-                frame.fill="#ffffff"
+                frame.fill=[{type:'solid',color:"#FFFFF"}]
             }
         }else{
 
@@ -802,6 +719,7 @@
             }
         }
 
+        frame.emit('update',{})
     },{deep:true})
 
 
@@ -811,6 +729,7 @@
             elem.cornerRadius=value0
         })
 
+        frame.emit('update',{})
     })
 
 
@@ -820,6 +739,8 @@
             elem.height=value0
         })
 
+        
+        frame.emit('update',{})
     })
 
     watch(()=>useImageStyle.value.width,(value0)=>{
@@ -828,6 +749,7 @@
             elem.width=value0
         })
 
+        frame.emit('update',{})
     })
 
     
@@ -837,6 +759,7 @@
             elem.opacity=value0
         })
 
+        frame.emit('update',{})
     })
 
 
@@ -864,10 +787,11 @@
                 canvasApp.editor.target.data.cropData=null
             }
             //canvasApp.editor.target.data.original=newValue
-
-         }else{
-
+            frame.emit('update',{})
          }
+
+         
+      
     })
 
     watch(()=>useTextStyle.value.fontFamily,async (newValue, oldValue)=>{
@@ -889,6 +813,8 @@
 
         let text= canvasApp.editor.target as Text
         text.fontFamily=newValue
+
+        frame.emit('update',{})
     })
 
 
@@ -897,7 +823,10 @@
         if(oldValue!=newValue&&oldValue!=""){
             let text= canvasApp.editor.target as Text
             text.fill=newValue
+
+            frame.emit('update',{})
         }
+
    })
 
    watch(()=>useTextStyle.value.fontSize, (newValue, oldValue)=>{
@@ -905,6 +834,8 @@
     if(oldValue!=newValue&&oldValue!=""){
         let text= canvasApp.editor.target as Text
         text.fontSize=newValue
+
+        frame.emit('update',{})
     }
  })
 
@@ -915,6 +846,8 @@
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.text=newValue
+
+     frame.emit('update',{})
  }
 })
 
@@ -923,6 +856,7 @@ watch(()=>useTextStyle.value.stroke, (newValue, oldValue)=>{
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.stroke=newValue
+     frame.emit('update',{})
  }
 })
 
@@ -931,6 +865,7 @@ watch(()=>useTextStyle.value.strokeWidth, (newValue, oldValue)=>{
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.strokeWidth=newValue
+     frame.emit('update',{})
  }
 })
 watch(()=>useTextStyle.value.letterSpacing, (newValue, oldValue)=>{
@@ -938,6 +873,7 @@ watch(()=>useTextStyle.value.letterSpacing, (newValue, oldValue)=>{
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.letterSpacing=newValue
+     frame.emit('update',{})
  }
 })
 
@@ -948,7 +884,7 @@ watch(()=>useTextStyle.value.lineHeight.value, (newValue, oldValue)=>{
         type:"percent",
         value:newValue
     }
-
+    frame.emit('update',{})
 })
 
 watch(()=>useTextStyle.value.textDecoration, (newValue, oldValue)=>{
@@ -956,13 +892,15 @@ watch(()=>useTextStyle.value.textDecoration, (newValue, oldValue)=>{
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.textDecoration=newValue
+     frame.emit('update',{})
  }
 })
 
 watch(()=>useTextStyle.value.bold, (newValue, oldValue)=>{
 
-let text= canvasApp.editor.target as Text
-text.fontWeight= newValue?"bold":"normal"
+    let text= canvasApp.editor.target as Text
+    text.fontWeight= newValue?"bold":"normal"
+    frame.emit('update',{})
 
 })
 
@@ -970,6 +908,8 @@ watch(()=>useTextStyle.value.italic, (newValue, oldValue)=>{
 
      let text= canvasApp.editor.target as Text
      text.italic=newValue
+
+     frame.emit('update',{})
 })
 
 watch(()=>useTextStyle.value.lineStyle, (newValue, oldValue)=>{
@@ -981,7 +921,7 @@ watch(()=>useTextStyle.value.lineStyle, (newValue, oldValue)=>{
                 }else{
                     text.dashPattern=[];
                 }
- 
+                frame.emit('update',{})
 })
 
 watch(()=>useTextStyle.value.isShadow, (newValue, oldValue)=>{
@@ -993,6 +933,8 @@ watch(()=>useTextStyle.value.isShadow, (newValue, oldValue)=>{
     }else{
         text.shadow=""
     }
+
+    frame.emit('update',{})
 })
 
 watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
@@ -1004,65 +946,11 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
  }else{
      text.shadow=""
  }
+
+ frame.emit('update',{})
 },{deep:true})
 
 
-
-
-    // watch(()=>useTextStyle.value,async (value)=>{
-
-    //     let msg= ElMessage({
-    //             showClose: true,
-    //             duration:0,
-    //             type: 'success',
-    //             message: t("canvas.fontload"),
-    //         })
-    //      let font= StyleFontList.find(m=>m.value==value.fontFamily) 
-    //      await mixins.loadFont(font.value,font.url)
-    //      msg.close()
-
-
-       
-
-
-
-               
-    //             let text= canvasApp.editor.target as Text
-
-    //              text.fill=value.fill
-    //              text.fontSize=value.fontSize
-    //              text.fontWeight=value.fontWeight as IFontWeight
-    //              text.text=value.text
-    //               text.stroke=value.stroke
-    //               text.strokeWidth=value.strokeWidth
-
-
-    //              text.letterSpacing=value.letterSpacing
-
-            
-    //              text.lineHeight=value.lineHeight
-
-    //              text.fontFamily=value.fontFamily
-
-
-    //              text.textDecoration=value.textDecoration
-    //             // //'none' | 'under' | 'delete';
-    //              text.italic=value.italic
-
-    //             if(value.lineStyle=="dashed"){
-    //                 text.dashPattern=[6,6];
-    //             }else{
-    //                 text.dashPattern=[];
-    //             }
-
-    //             if(value.isShadow){
-    //                 text.shadow=value.shadow
-    //             }else{
-    //                 text.shadow=""
-    //             }
-            
-
-    // },{ deep: true })
 
 
     watch(()=>useSharpStyle.value,(value)=>{
@@ -1115,10 +1003,10 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                                      offset: (match[3]*1)/100, color: match[2] }, 
                                 { offset: (match[5]*1)/100, color: match[4] }]}]
                             }catch{
-                                elem.fill="#ffffff"
+                                elem.fill=[{type:'solid',color:"#FFFFF"}]
                             }
                             }else{
-                                elem.fill="#ffffff"
+                                elem.fill=[{type:'solid',color:"#FFFFF"}]
                             }
                     }else {
 
@@ -1136,20 +1024,20 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
                            }catch{
 
-                             elem.fill="#ffffff"
+                             elem.fill=[{type:'solid',color:"#FFFFF"}]
 
                            }
                         }else{
-                            elem.fill="#ffffff"
+                            elem.fill=[{type:'solid',color:"#FFFFF"}]
                         }
                     }
                     
                 }else{
-                    elem.fill="#ffffff"
+                    elem.fill=[{type:'solid',color:"#FFFFF"}]
                 }
 
             }else{
-                elem.fill="#ffffff"
+                elem.fill=[{type:'solid',color:"#FFFFF"}]
             }
 
            
@@ -1177,6 +1065,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
          }
      })
+
+     frame.emit('update',{})
  },{ deep: true })
     
 
@@ -1233,6 +1123,9 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         })
 
         frame.add(rectImg)
+
+        frame.emit("redo.add",{})
+
         canvasApp.editor.target=rectImg
 
    }
@@ -1251,18 +1144,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
         let text=canvasApp.editor.list[0].toString();
         
-        // let group = new Group()
-        // group.children=canvasApp.editor.list;
 
-        // group.editable= true
-        // group.hitChildren= false
-        // group.around= 'center'
-
-        // frame.add(group)
-
-        // text = group.toString()
-
-        // canvasApp.editor.ungroup()
 
         const blob = new Blob([text], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
@@ -1290,6 +1172,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         
         frame.add(group)
 
+        frame.emit("redo.add",{})
+        
         ElMessage({
             message: 'Success!',
             type: 'success'
@@ -1380,6 +1264,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
             rect.remove()
         })
         canvasApp.editor.target = undefined
+
+        frame.emit('update',{})
     }
    
     document.addEventListener('keydown', function(event) {
@@ -1731,12 +1617,15 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
    const handleAddImg=(img:any)=>{
       addBgImg(img)
+      redoCom.change()
    }
    const handleAddMateImg=(img:any)=>{
       if(img.type=="img"){
         addBgImg(img.url)
 
       }
+
+      redoCom.change()
    }
 
    
@@ -1757,6 +1646,13 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
         canvasApp.editor.target=newSharp
 
+        frame.emit("redo.add",{})
+
+        ElMessage({
+            message: 'Success!',
+            type: 'success'
+        })
+
     }
 
     const handleClearAll=()=>{
@@ -1775,6 +1671,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         }
 
         editorStore.clearShape()
+
+        frame.emit('update',{})
     }
 
 
