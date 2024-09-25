@@ -433,25 +433,46 @@ const appUndo=()=>{
               :on-change="handleAvatarSuccess"
             >
               <template #trigger>
-               
-                <el-button type="primary" :title="t('header.uploadimg')"> 
+                <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        :content="t('header.uploadimg')"
+                        placement="top"
+                        >
+                <el-button type="primary"> 
                   <span class="iconfont icon icon-shangchuantupian1" style="color: white;"></span> 
                   <span class="bgsize"> {{$t('header.uploadimg')}}</span>
                   </el-button>
+                  </el-tooltip>
               </template>
             </el-upload>
          </li>
          <li>
-          <el-button type="danger" :title="t('header.clear')" @click="handleClearAll">
+
+          <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        :content="t('header.clear')"
+                        placement="top"
+                        >
+
+          <el-button type="danger"  @click="handleClearAll">
             <span class="iconfont icon icon-shanchu" style="color: white;"></span>
             <span class="bgsize"> {{$t('header.clear')}} </span>
           </el-button>
+
+        </el-tooltip>
          </li>
-         <li>
+         <li><el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        :content="t('header.download')"
+                        placement="top"
+                        >
           <el-button :title="t('header.download')" @click="handleDownImg" >
             <span class="iconfont icon icon-xiazaitupian"></span>
-            <span class="bgsize"> {{$t('header.download')}}  </span>
-          </el-button>
+          </el-button>    
+         </el-tooltip>
          </li>
          <li>
           <el-button type="primary" :title="t('header.save')" @click="handleSaveImg">
