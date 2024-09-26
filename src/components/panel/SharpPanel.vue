@@ -40,9 +40,9 @@
       </el-form-item>
 
       <el-form-item :label="t('stylepanel.stroke')">
-        <el-color-picker v-model="useSharpStyle.stroke"  :predefine="predefineColors" />
+        <!-- <el-color-picker v-model="useSharpStyle.stroke"  :predefine="predefineColors" /> -->
 
-        
+        <input type="color" v-model="useSharpStyle.stroke" />
 
       </el-form-item>
 
@@ -131,7 +131,7 @@
   const  activeKeyChange=function(value){
     useSharpStyle.value.activeColorKey=value
   }
-  
+
   let IsEyeDropper=ref('EyeDropper' in window)
 
   const selectColor=async ()=>{

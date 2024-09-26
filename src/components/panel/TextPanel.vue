@@ -59,7 +59,10 @@
        <el-row>
           <el-col :span="12">
             <el-form-item :label="t('stylepanel.color')">
-              <el-color-picker v-model="useTextStyle.fill"  :predefine="predefineColors" />
+              <!-- <el-color-picker v-model="useTextStyle.fill"  :predefine="predefineColors" /> -->
+
+              <input type="color" v-model="useTextStyle.fill" />
+
             </el-form-item>
           </el-col>
           
@@ -191,7 +194,7 @@
 
 
       <el-form-item :label="t('stylepanel.strokewidth')">
-        <el-slider v-model="useTextStyle.strokeWidth"  :max="10"  :min="0" />
+        <el-slider v-model="useTextStyle.strokeWidth"  :max="20"  :min="0" />
       </el-form-item>
 
       <el-form-item :label="t('stylepanel.linestyle')" v-if="useTextStyle.strokeWidth>0">
@@ -202,7 +205,10 @@
       </el-form-item>
 
       <el-form-item :label="t('stylepanel.stroke')" v-if="useTextStyle.strokeWidth>0">
-        <el-color-picker v-model="useTextStyle.stroke"  :predefine="predefineColors" />
+        <!-- <el-color-picker v-model="useTextStyle.stroke"  :predefine="predefineColors" /> -->
+
+        <input type="color" v-model="useTextStyle.stroke" />
+
       </el-form-item>
 
 
