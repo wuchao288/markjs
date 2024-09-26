@@ -633,7 +633,7 @@
     })
 
     watch([()=>usePageSetting.value.pageBgClass,()=>usePageSetting.value.pageBgSet],(newValues, oldValues)=>{
-        console.info(1111)
+       
         if(newValues[0]=="backgroundColor"){
             if(newValues[1].backgroundColor){
 
@@ -772,8 +772,8 @@
             canvasApp.editor.width=img.width
             canvasApp.editor.height=img.height
 
-            //useImageStyle.value.width=img.width
-            //useImageStyle.value.height=img.height
+            useImageStyle.value.width=img.width
+            useImageStyle.value.height=img.height
 
             canvasApp.editor.target.fill={
                 type: 'image',

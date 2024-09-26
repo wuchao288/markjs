@@ -38,9 +38,10 @@ export default {
     cutout:'抠图',
     filter:'美化',
     formatmsg:'Picture must be JPG/PNG format!',
-    imgsizemsg:'Picture size can not exceed {0}MB',
+    imgsizemsg:'Picture size can not exceed {max} MB',
     shortcut:"快捷操作",
-    createbg:"生成背景"
+    createbg:"生成背景",
+    createlineimg:"生成线稿"
   },  
   header:{
     addmaterial:'导入素材',
@@ -70,6 +71,7 @@ export default {
     anglemark45:'45度标注',
     group:'编组',
     cancel:'取消编组',
+    movecanvas:'パンツールをオン/オフ',
     texteffect:'文字效果',
     imageeffect:'小部件',
     del:'删除',
@@ -93,6 +95,16 @@ export default {
     middlealign:'垂直居中对齐',
     horizontaldis:'水平分布',
     verticaldis:'垂直分布',
-    align:'对齐'
+    align:'对齐',
+    createbgword:'背景提示词',
+    createbg:'生成背景',
+    enter:'确认应用',
+    reserve:'保留',
+    erase:'擦除',
+    penszie:'画笔尺寸',
+    penhardness:'画笔尺寸',
+    startcut:"开始扣图",
+    startedit:"进入编辑模式"
+    
   }
 }

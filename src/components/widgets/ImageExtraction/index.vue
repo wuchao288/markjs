@@ -5,26 +5,26 @@
  * @LastEditors: ShawnPhang <https://m.palxp.cn>, Jeremy Yu <https://github.com/JeremyYu-cn>
  * @Date: 2024-03-04 09:50:00
 -->
-<template>
+<template> 
   <div>
     <el-dialog v-model="state.show" align-center width="90%" @close="state.showMatting = false">
       <template #header>
         <div class="tool-wrap">
-          <el-button type="primary" plain @click="done">确认应用</el-button>
+          <el-button type="primary" plain @click="done">{{$t("canvas.enter")}}</el-button>
           <el-radio-group v-model="state.isErasing" style="margin-left: 35px">
-            <el-radio :value="false" size="large"> <b>修补画笔</b> <i class="icon sd-xiubu" /></el-radio>
-            <el-radio :value="true" size="large"> <b>擦除画笔</b> <i class="icon sd-cachu" /></el-radio>
+            <el-radio :value="false" size="large"> <b>{{$t("canvas.reserve")}}</b> <i class="icon sd-xiubu" /></el-radio>
+            <el-radio :value="true" size="large"> <b>{{$t("canvas.erase")}}</b> <i class="icon sd-cachu" /></el-radio>
           </el-radio-group>
           <number-slider
             v-model="state.radius" class="slider-wrap"
-            label="画笔尺寸" :showInput="false"
+            :label="t('canvas.penszie')" :showInput="false"
             labelWidth="90px" 
             :maxValue="state.constants?.RADIUS_SLIDER_MAX" :minValue="state.constants?.RADIUS_SLIDER_MIN" 
             :step="state.constants?.RADIUS_SLIDER_STEP"
           />
           <number-slider
             v-model="state.hardness" class="slider-wrap"
-            label="画笔硬度" :showInput="false"
+            :label="t('canvas.penhardness')" :showInput="false"
             labelWidth="90px" 
             :maxValue="state.constants?.HARDNESS_SLIDER_MAX" :minValue="state.constants?.HARDNESS_SLIDER_MIN"
             :step="state.constants?.HARDNESS_SLIDER_STEP"
@@ -41,6 +41,10 @@ import { reactive, toRefs, nextTick, DefineComponent } from 'vue'
 import matting, { MattingType } from '@palxp/image-extraction'
 import { ElRadioGroup, ElRadio } from 'element-plus'
 import numberSlider from '@/components/widgets/modules/numberSlider.vue'
+
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 type TState = {
   show: boolean;

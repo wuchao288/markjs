@@ -2,7 +2,7 @@
   
   <el-dialog v-model="dialogCropVisible" :close-on-click-modal="false" :destroy-on-close="false" :title="t('stylepanel.crop')"
      :width="800" 
-      @closed="closedCropImg"  @opened="openedCropImg">
+      @closed="closedCropImg" :append-to-body="true"  @opened="openedCropImg">
     <div v-loading="state.isUploading">
      <img ref="imageRef" :src="imageSrc"   alt="image" style="object-fit: contain;">
     </div>
@@ -73,6 +73,9 @@
 
  const openedCropImg=()=>{
 
+  console.info(dialogCropVisible.value)
+  console.info("openedCropImg")
+
   let sizeData=(toRaw(props.sizeData))
   let cropData=(toRaw(props.cropData))
 
@@ -110,7 +113,7 @@
  }
 
  const closedCropImg=()=>{
-  cropper.destroy()
+  cropper?.destroy()
  }
 
   //定义方法

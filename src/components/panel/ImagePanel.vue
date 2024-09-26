@@ -105,7 +105,10 @@
       </el-form-item>
     </el-form>
     </div>
-   <CreateBg v-model:dialogVisible="dialogVisible"  v-model:imageSrc="imgSrc"  @close-win="closeWin"  @update-image-src="updateBgImageDone"/>
+    <CreateBg v-model:dialogVisible="dialogVisible"  
+   v-model:imageSrc="imgSrc" 
+    @close-win="closeWin" 
+     @update-image-src="updateBgImageDone"/>
 
    <CropperImg
       :image-src="imageCropSrc" 
@@ -115,7 +118,7 @@
         @update-image-src="updateCropImageSrc" />
 
 
-        <CutoutImg  
+         <CutoutImg  
         v-model:dialogVisible="dialogCutVisible"  
          v-model:imageSrc="imageCutSrc"
            @update-image-src="updateCutImageDone"/>
@@ -123,140 +126,119 @@
 
 <script setup lang="ts">
 
-    import { onMounted, ref,watch} from 'vue'
+     import { onMounted, ref,watch} from 'vue'
 
-    import {ElProgress,ElDialog,ElUpload,ElCard,ElMessage,ElRow,ElCol, ElForm,ElFormItem,ElButton,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
+     import {ElProgress,ElDialog,ElUpload,ElCard,ElMessage,ElRow,ElCol, ElForm,ElFormItem,ElButton,ElSlider,ElColorPicker,ElSpace,ElInputNumber  } from 'element-plus'
 
-    import useEditStore from "@/stores/useEditStore"
+     import useEditStore from "@/stores/useEditStore"
 
-    import {TImageSetting} from "@/stores/useEditStore"
+     import {TImageSetting} from "@/stores/useEditStore"
     
-    import { storeToRefs } from 'pinia'
-    import { useI18n } from "vue-i18n"
-    const { t } = useI18n()
-    import type { UploadProps } from 'element-plus'
-    const editorStore = useEditStore()
+     import { storeToRefs } from 'pinia'
+     import { useI18n } from "vue-i18n"
+     const { t } = useI18n()
+     import type { UploadProps } from 'element-plus'
+     const editorStore = useEditStore()
 
-    import  ShortCut  from '@/components/widgets/ShortCut.vue'
-    import  CreateBg  from '@/components/widgets/CreateBg.vue'
-    import  CropperImg  from '@/components/widgets/CropperImg.vue'
-    import  CutoutImg  from '@/components/widgets/CutoutImg.vue'
+     import  ShortCut  from '@/components/widgets/ShortCut.vue'
+     import  CreateBg  from '@/components/widgets/CreateBg.vue'
+     import  CropperImg  from '@/components/widgets/CropperImg.vue'
+     import  CutoutImg  from '@/components/widgets/CutoutImg.vue'
     
 
-    import { mixins } from "@/mixin/index";
 
-    const {useImageStyle} = storeToRefs(editorStore)
+     import { mixins } from "@/mixin/index";
+
+     const {useImageStyle} = storeToRefs(editorStore)
 
     
-    const emit = defineEmits([
-        'handleExportImg'
-    ])
+     const emit = defineEmits([
+         'handleExportImg'
+     ])
 
-    let imgSrc=ref("")
+      let imgSrc=ref("")
 
-    let dialogVisible=ref(false)
+      let dialogVisible=ref(false)
 
 
-    const updateBgImageDone=(obj)=>{
+      const updateBgImageDone=(obj)=>{
 
-        let canvasApp=editorStore.editor;
-        useImageStyle.value.fill.url=obj.createBgImg
-        canvasApp.editor.target.data.action="createbg"
-        dialogVisible.value=false
+          let canvasApp=editorStore.editor;
+          useImageStyle.value.fill.url=obj.createBgImg
+         canvasApp.editor.target.data.action="createbg"
+          dialogVisible.value=false
 
-    }
+     }
 
-    onMounted(()=>{
-      
-    })
+
 
 
     const format=()=>{return ""}
 
-    const handleCreateBg=()=>{
+     const handleCreateBg=()=>{
       
-      dialogVisible.value=true
-      imgSrc.value=editorStore.editor.editor.target?.fill?.url
-    }
+       dialogVisible.value=true
+        imgSrc.value=editorStore.editor.editor.target?.fill?.url
+      }
 
     const closeWin=()=>{
-      dialogVisible.value=false
-    }
+        dialogVisible.value=false
+  }
 
-    let sizeData=ref()
-    let cropData=ref()
-    let imageCropSrc=ref('')
-    let dialogCropVisible=ref(false)
+     let sizeData=ref()
+     let cropData=ref()
+     let imageCropSrc=ref('')
+     let dialogCropVisible=ref(false)
 
-    const  handleCrop=()=>{
+      const  handleCrop=()=>{
 
       let canvasApp=editorStore.editor;
 
-      dialogCropVisible.value=true
-      imageCropSrc.value=editorStore.editor.editor.target.data.original
+       dialogCropVisible.value=true
+       imageCropSrc.value=editorStore.editor.editor.target.data.original
 
       sizeData.value= canvasApp.editor.target.data.sizeData
-      cropData.value= canvasApp.editor.target.data.cropData
+       cropData.value= canvasApp.editor.target.data.cropData
     }
 
 
-    //点击裁剪按钮
-    const updateCropImageSrc = (updateImageData) => {
-    
-      
-    //const { x, y, width, height } = updateImageData.size;
-
+  //   //点击裁剪按钮
+     const updateCropImageSrc = (updateImageData) => {
       let canvasApp=editorStore.editor;
 
       canvasApp.editor.target.data.sizeData=updateImageData.sizeData
-      canvasApp.editor.target.data.cropData=updateImageData.cropData
-      canvasApp.editor.target.data.action="crop" //裁剪不换原图
-    // 因为裁剪数据不能超过原始尺寸，这里向下取整确保不会超过原始尺寸
-    // elementData.cropSize = {
-    //     x: ~~x,
-    //     y: ~~y,
-    //     width: ~~width,
-    //     height: ~~height,
-    // };
-    // const scalex = elementData.width / elementData.cropSize.width;
-    // const scaley = elementData.height / elementData.cropSize.height;
-    // const scale = Math.min(scalex, scaley);
+     canvasApp.editor.target.data.cropData=updateImageData.cropData
+       canvasApp.editor.target.data.action="crop" //裁剪不换原图
 
-    // // 设置新的宽高
-    // elementData.width = ~~(elementData.cropSize.width * scale);
-    // elementData.height = ~~(elementData.cropSize.height * scale);
+       useImageStyle.value.fill.url=updateImageData.croppedImage
+       imageCropSrc.value=""
 
-     
-      useImageStyle.value.fill.url=updateImageData.croppedImage
-      imageCropSrc.value=""
+       dialogCropVisible.value=false
 
-      dialogCropVisible.value=false
 
+    }
+
+
+   let dialogCutVisible=ref(false)
+   let imageCutSrc=ref('')
+
+   const  handleCutout=()=>{
+
+     dialogCutVisible.value=true
+     let canvasApp=editorStore.editor;
+     imageCutSrc.value=canvasApp.editor.target.fill.url
 
    }
-
-
-  let dialogCutVisible=ref(false)
-
-  let imageCutSrc=ref('')
-
-  const  handleCutout=()=>{
-
-    dialogCutVisible.value=true
-    let canvasApp=editorStore.editor;
-    imageCutSrc.value=canvasApp.editor.target.fill.url
-
-  }
 
   const updateCutImageDone=(updateImageData)=>{
 
      let canvasApp=editorStore.editor;
       canvasApp.editor.target.data.action="cutout" 
       useImageStyle.value.fill.url=updateImageData.cutoutImg
-      imageCutSrc.value=""
+     imageCutSrc.value=""
 
-      dialogCutVisible.value=false
-  }
+       dialogCutVisible.value=false
+   }
    
 
 
@@ -276,13 +258,13 @@
           ElMessage.error(t("stylepanel.formatmsg"))//'Picture must be JPG/PNG format!'
           return false
         } else if (rawFile.size / 1024 / 1024 > 3) {
-          ElMessage.error(t("stylepanel.imgsizemsg",3))//'Picture size can not exceed 3MB!'
+          ElMessage.error(t("stylepanel.imgsizemsg",{max:3}))//'Picture size can not exceed 3MB!'
           return false
         }
 
         if(window==window.parent){
           useImageStyle.value.fill.url=URL.createObjectURL(uploadFile.raw!)
-          return
+          return false
         }
 
         mixins.uploadFile(rawFile,{}).then((data:string)=>{
@@ -321,17 +303,17 @@
 
    
 
-   const  handleExportImg=()=>{
-      emit("handleExportImg")
+  const  handleExportImg=()=>{
+     emit("handleExportImg")
    }
 
 
 
 
 
-   const  handleFilter=()=>{
+    const  handleFilter=()=>{
     
-  }
+   }
 
 
 </script>

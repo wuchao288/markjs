@@ -138,14 +138,14 @@ const handleAvatarSuccess: UploadProps['onChange'] = (
     ElMessage.error(t("stylepanel.formatmsg"))//'Picture must be JPG/PNG format!'
     return false
   } else if (rawFile.size / 1024 / 1024 > 3) {
-    ElMessage.error(t("stylepanel.imgsizemsg",3))//'Picture size can not exceed 3MB!'
+    ElMessage.error(t("stylepanel.imgsizemsg",{max:3}))//'Picture size can not exceed 3MB!'
     return false
   }
 
   if(window==window.parent){
-      //let url=URL.createObjectURL(uploadFile.raw!)
-      //emit('handleAddImg',url)
-      //return false
+      let url=URL.createObjectURL(uploadFile.raw!)
+      emit('handleAddImg',url)
+      return false
   }
 
   mixins.uploadFile(rawFile,{}).then((data)=>{

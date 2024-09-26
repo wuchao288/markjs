@@ -30,7 +30,7 @@
         <color-picker
          v-model:pureColor="usePageSetting.pageBgSet.backgroundColor.pureColor"  
          v-model:active-key="usePageSetting.pageBgSet.backgroundColor.activeColorKey"
-         @activeKeyChange="activeKeyChange" format="hex6" lang="En" shape="circle" useType="both"
+         @activeKeyChange="activeKeyChange" format="hex8" lang="En" shape="circle" useType="both"
          v-model:gradientColor="usePageSetting.pageBgSet.backgroundColor.gradientColor" />
 
 
@@ -229,7 +229,7 @@ const  changeActiveName=(activeName)=>{
           ElMessage.error(t("stylepanel.formatmsg"))//'Picture must be JPG/PNG format!'
           return false
         } else if (rawFile.size / 1024 / 1024 > 3) {
-          ElMessage.error(t("stylepanel.imgsizemsg",3))//'Picture size can not exceed 3MB!'
+          ElMessage.error(t("stylepanel.imgsizemsg",{max:3}))//'Picture size can not exceed 3MB!'
           return false
         }
 

@@ -35,9 +35,10 @@ export default {
     "cutout":"切り抜き",
     "filter":"美化",
     "formatmsg":"画像はJPGまたはPNG形式でなければなりません！",
-    "imgsizemsg":"画像サイズは{0}MBを超えてはいけません。",
+    "imgsizemsg":"画像サイズは{max}MBを超えてはいけません。",
     "shortcut":"ショートカット操作",
-    "createbg":"背景の生成"
+    "createbg":"背景の生成",
+    "createlineimg":"生成线稿"
   }, 
   header:{
     "addmaterial":"素材インポート",
@@ -67,11 +68,13 @@ export default {
     "anglemark45":"斜頸バー",
     "group":"グループ化",
     "cancel":"グループ解除",
+    "movecanvas":'パンツールをオン/オフ',
     "texteffect":"テキストエフェクト",
     "imageeffect":"ウィジェット",
     "del":"削除",
     "undo":'撤销',
-    "redo":'重做'
+    "redo":'重做',
+
   },
   canvas:{
     "loading":"処理中です。お待ちください...",
@@ -90,6 +93,16 @@ export default {
     "middlealign":'垂直居中对齐',
     "horizontaldis":'水平分布',
     "verticaldis":'垂直分布',
-    "align":'对齐'
+    "align":'对齐',
+    "createbgword":'背景提示词',
+    "createbg":'生成背景',
+    "enter":'确认应用',
+    "reserve":'保留',
+    "erase":'擦除',
+    "penszie":'画笔尺寸',
+    "penhardness":'画笔尺寸',
+    "startcut":"开始扣图",
+    "startedit":"进入编辑模式"
+    
   }
 }

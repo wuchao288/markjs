@@ -15,7 +15,7 @@
         <el-form label-position="left" label-width="auto">
             <el-space fill>
             <el-alert type="info" show-icon :closable="false">
-                <p>
+                <!-- <p>
                 "背景提示词"，各种语言都支持，但英文效果最好，字符串最高为1024。
                 </p>
                 <p>
@@ -23,15 +23,17 @@
                 </p>
                 <p>
                     消耗：每次成功调用，消耗3算粒
-                </p>
+                </p> -->
+
+                
             </el-alert>
-            <el-form-item :style="{marginButtom:'0px'}" label="背景提示词">
+            <el-form-item :style="{marginButtom:'0px'}" :label="t('canvas.createbgword')">
                 <el-row :gutter="20">
                 <el-col :span="16">
                     <el-input v-model="state.prompt"/>
                 </el-col>
                 <el-col :span="8">
-                    <el-button type="primary" :disbled="state.createing"  @click="createBg">生成背景</el-button>
+                    <el-button type="primary" :disbled="state.createing"  @click="createBg">{{$t('canvas.createbg')}}</el-button>
                 </el-col>
                 </el-row>
             </el-form-item>
@@ -39,7 +41,7 @@
         </el-form>
          <div v-show="state.rawImage"  class="c-compare scan-effect" 
           :style="{ width: state.offsetWidth ? state.offsetWidth + 'px' : '100%','--value':state.percent+'%' }">
-            <img v-show="state.bgImage" class="c-compare__left" :src="state.bgImage" alt="结果图像"/>
+            <img v-show="state.bgImage" class="c-compare__left" :src="state.bgImage" alt="result"/>
             <img ref="raw" @load.once="onImageLoad" class="c-compare__right" :src="state.rawImage" alt="B/W" />
             <input type="range" v-show="state.bgImage" class="c-rng c-compare__range" min="0" max="100"  v-model="state.percent"
               />
@@ -138,7 +140,7 @@
         formData.append("fileUrl",fileUrl)
         
         state.createing=true
-        return   fetch((window.parent as any).cutOutImg||'/BLL/TempHandler.ashx?action=CreateBg', {
+        return   fetch((window.parent as any).createBg||'/BLL/TempHandler.ashx?action=CreateBg', {
                 method: 'POST',
                 body: formData
             })

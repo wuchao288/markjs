@@ -16,13 +16,13 @@
           <el-space fill>
           <el-alert type="info" show-icon :closable="false">
               <p>
-                  消耗：每次消耗1算粒
+                  <!-- 消耗：每次消耗1算粒 -->
               </p>
           </el-alert>
           <el-form-item :style="{marginButtom:'0px'}" >
               <el-row :gutter="20">
                   <el-col :span="8">
-                      <el-button type="primary" :disbled="state.createing"  @click="CutCouImg">开始扣图</el-button>
+                      <el-button type="primary" :disbled="state.createing"  @click="CutCouImg">{{$t("canvas.startcut")}}</el-button>
                   </el-col>
               </el-row>
           </el-form-item>
@@ -46,7 +46,7 @@
           <div class="dialog-footer">
             
               <el-button v-show="state.cutImage" type="primary" @click="edit">
-                  进入编辑模式
+                {{$t("canvas.startedit")}}
               </el-button>
               <!-- <el-button  @click="close"> {{$t("canvas.cancel")}} </el-button> -->
               <el-button type="primary" @click="cutOutImageDone">

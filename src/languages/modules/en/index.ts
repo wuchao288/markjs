@@ -36,9 +36,10 @@ export default {
     "cutout":"Remove background",
     "filter":"Beautify",
     "formatmsg":"Picture must be in JPG or PNG format!",
-    "imgsizemsg":"Picture size cannot exceed {0} MB.",
+    "imgsizemsg":"Picture size cannot exceed {max} MB.",
     "shortcut":"Quick operation",
-    "createbg":"Generate Background"
+    "createbg":"Generate Background",
+    "createlineimg":"生成线稿"
   },  
   header:{
     "addmaterial":"Import material",
@@ -68,21 +69,22 @@ export default {
     "anglemark45":"45-degree annotation",
     "group":"Group",
     "cancel":"Ungroup",
+    "movecanvas":'Move Canvas',
     "texteffect":"Text effects",
     "imageeffect":"Widget",
     "del":"Delete",
-    "undo":'撤销',
-    "redo":'重做'
+    "undo":'Undo',
+    "redo":'Redo'
   },
   canvas:{
     "loading":"Processing, please wait...",
     "confirm":"Confirm",
     "cancel":"Cancel",
     "fontload":"Loading font...",
-    "togroup":'成组',
-    "ungroup":'拆分组',
-    "del":'删除',
-    "copy":'复制',
+    "togroup":'Group',
+    "ungroup":'Ungroup',
+    "del":'Delete',
+    "copy":'Copy',
     "leftalign":'左对齐',
     "centeralign":'左右居中对齐',
     "rightalign":'右对齐',
@@ -91,6 +93,15 @@ export default {
     "middlealign":'垂直居中对齐',
     "horizontaldis":'水平分布',
     "verticaldis":'垂直分布',
-    "align":'对齐'
+    "align":'对齐',
+    "createbgword":'背景提示词',
+    "createbg":'生成背景',
+    "enter":'确认应用',
+    "reserve":'保留',
+    "erase":'擦除',
+    "penszie":'画笔尺寸',
+    "penhardness":'画笔尺寸',
+    "startcut":"开始扣图",
+    "startedit":"进入编辑模式"
   }
 }
