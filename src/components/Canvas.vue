@@ -100,6 +100,7 @@
     import { useI18n } from "vue-i18n"
 
     import { useCreateButton } from '@/hooks/useCreateButton'
+import { json } from 'stream/consumers'
     
 
     const { t } = useI18n()
@@ -1142,19 +1143,51 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
             return
         }
 
-        let text=canvasApp.editor.list[0].toString();
-        
 
+        ElMessageBox.prompt('输入编号,比如 200x1, 300x1', 'Tip', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            inputPattern:/^\d{5,}$/,
+            inputErrorMessage: '输入编号',
+        })
+            .then(({ value }) => {
+                let text=
+                    JSON.stringify( {
+                        preview:'new URL("@/assets/images/mate/texteffect/'+value+'.png",import.meta.url).href',
+                        url:'',
+                        id:value,
+                        data:canvasApp.editor.list[0].toJSON()
+                    })
 
-        const blob = new Blob([text], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-        
-        const link = document.createElement("a");
-        link.href = url;
-        link.download =new Date().getTime() +".txt";
-        link.click();
+                    // 编写正则表达式
+                    const regex = /blob:[^"]+/;
+
+                    // 使用正则表达式搜索
+                    const match = text.match(regex);
+
+                    if(match!=null){
+                        text=  text.replaceAll(match[0],'new URL("@/assets/images/mate/texteffect/'+value+'-1.png",import.meta.url).href')
+                    }
+
+                    
+                    const blob = new Blob([text], { type: "text/plain" });
+                    const url = URL.createObjectURL(blob);
+                    
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download =value +".txt";
+                    link.click();
         
         URL.revokeObjectURL(url);
+            })
+            .catch(() => {
+            ElMessage({
+                type: 'info',
+                message: 'Input canceled',
+            })
+    })
+
+        
      
        
    }
