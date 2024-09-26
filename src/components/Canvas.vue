@@ -916,12 +916,12 @@ watch(()=>useTextStyle.value.lineStyle, (newValue, oldValue)=>{
  
 
      let text= canvasApp.editor.target as Text
-           if(newValue.lineStyle=="dashed"){
-                    text.dashPattern=[6,6];
-                }else{
-                    text.dashPattern=[];
-                }
-                frame.emit('update',{})
+     if(newValue=="dashed"){
+             text.dashPattern=[6,6];
+        }else{
+            text.dashPattern=[];
+      }
+       frame.emit('update',{})
 })
 
 watch(()=>useTextStyle.value.isShadow, (newValue, oldValue)=>{
