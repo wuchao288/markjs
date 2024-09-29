@@ -54,11 +54,11 @@ export default (app:App,event) => {
                       y: pageHeight/2-heightx/2
               }) 
 
-              rectImg.on(PointerEvent.MENU,function(e){
-                  //menuVisible.value=true
-                  //cleft.value=e.x+"px"
-                  //ctop.value=e.y+"px"
-              })
+              // rectImg.on(PointerEvent.MENU,function(e){
+              //     //menuVisible.value=true
+              //     //cleft.value=e.x+"px"
+              //     //ctop.value=e.y+"px"
+              // })
 
               frame.add(rectImg)
 

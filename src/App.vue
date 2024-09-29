@@ -30,7 +30,12 @@ onMounted(() => {
 
 // 配置语言,否则element默认是英语
 const locale = computed(() => {
-  return lang == 'ja_jp' ? ja : (lang=='en_us'?en:zhCn)
+
+ 
+  console.info(lang)
+  let lg= lang == 'jp' ? ja : (lang=='en'?en:zhCn)
+  console.info(lg)
+  return lg
 })
 </script>
 

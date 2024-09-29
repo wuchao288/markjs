@@ -771,11 +771,25 @@
 
             let img=await getImage(newValue)
 
-            canvasApp.editor.width=img.width
-            canvasApp.editor.height=img.height
+            let widthx=img.width  
+            let heightx=img.height  
 
-            useImageStyle.value.width=img.width
-            useImageStyle.value.height=img.height
+            if(widthx>pageWidth.value){
+                widthx= pageWidth.value*0.8
+                heightx=(widthx*img.height)/img.width
+            }
+
+            if(heightx>pageHeight.value){
+                heightx= pageHeight.value*0.8
+                widthx=(heightx*img.width)/img.height
+            }
+
+            canvasApp.editor.width=widthx
+            canvasApp.editor.height=heightx
+
+
+            useImageStyle.value.width=widthx
+            useImageStyle.value.height=heightx
 
             canvasApp.editor.target.fill={
                 type: 'image',
@@ -1119,11 +1133,11 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 y: pageHeight.value/2-heightx/2
         }) 
 
-        rectImg.on(PointerEvent.MENU,function(e){
-            menuVisible.value=true
-            cleft.value=e.x+"px"
-            ctop.value=e.y+"px"
-        })
+        // rectImg.on(PointerEvent.MENU,function(e){
+        //     menuVisible.value=true
+        //     cleft.value=e.x+"px"
+        //     ctop.value=e.y+"px"
+        // })
 
         frame.add(rectImg)
 

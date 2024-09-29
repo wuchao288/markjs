@@ -3,7 +3,7 @@
   <el-dialog v-model="dialogCropVisible" :close-on-click-modal="false" :destroy-on-close="false" :title="t('stylepanel.crop')"
      :width="800" 
       @closed="closedCropImg" :append-to-body="true"  @opened="openedCropImg">
-    <div v-loading="state.isUploading">
+    <div v-loading="state.isUploading" :style="{maxHeight:'80vh'}">
      <img ref="imageRef" :src="imageSrc"   alt="image" style="object-fit: contain;">
     </div>
         <template #footer>
@@ -104,12 +104,6 @@
    },50)
   })
 
-    
-   
-
-   
-
-    
  }
 
  const closedCropImg=()=>{

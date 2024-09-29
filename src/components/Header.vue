@@ -211,10 +211,10 @@ const handleClearAll = () => {
 
   ElMessageBox.confirm(
     t("header.clearmsg"),
-    '確認',
+    t("canvas.confirm"),
     {
-      confirmButtonText: 'OK',
-      cancelButtonText: 'Cancel',
+      // confirmButtonText: 'OK',
+      // cancelButtonText: 'Cancel',
       type: 'warning',
     }
   )

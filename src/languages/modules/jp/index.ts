@@ -77,7 +77,7 @@ export default {
   },
   canvas:{
     "loading":"処理中です。お待ちください...",
-    "confirm":"確定",
+    "confirm":"確認",
     "cancel":"キャンセル",
     "fontload":"フォントを読み込んでいます...",
     "togroup":'グループ化',
@@ -103,6 +103,7 @@ export default {
     "penhardness":'ブラシ硬さ',
     "startcut":'切り取り開始',
     "startedit":'編集モードに入る',
-    "paste":'貼り付け'
+    "paste":'貼り付け',
+    "iptprompt":"背景提示語を入力してください！"
   }
 }

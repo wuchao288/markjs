@@ -106,6 +106,7 @@ export default {
     penhardness:'画笔尺寸',
     startcut:"开始扣图",
     startedit:"进入编辑模式",
-    paste:"粘贴"
+    paste:"粘贴",
+    iptprompt:"请输入背景提示词！"
   }
 }

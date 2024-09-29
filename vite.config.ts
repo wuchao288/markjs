@@ -65,6 +65,11 @@ export default defineConfig(
           target: 'http://localhost:9290',
           changeOrigin: true,
           rewrite: (path) => path.replace(new RegExp('^'), '')
+        },
+        '/resources': {
+          target: 'http://localhost:9290',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(new RegExp('^'), '')
         }
       }
     },

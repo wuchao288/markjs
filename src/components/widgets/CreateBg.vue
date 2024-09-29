@@ -30,7 +30,7 @@
             <el-form-item :style="{marginButtom:'0px'}" :label="t('canvas.createbgword')">
                 <el-row :gutter="20">
                 <el-col :span="16">
-                    <el-input v-model="state.prompt"/>
+                    <el-input  v-model.trim="state.prompt"/>
                 </el-col>
                 <el-col :span="8">
                     <el-button type="primary" :disbled="state.createing"  @click="createBg">{{$t('canvas.createbg')}}</el-button>
@@ -66,7 +66,7 @@
   </template>
   <script setup  lang="ts">
 
-    import {reactive,ref,nextTick,defineProps,computed} from "vue";
+    import {reactive,ref,nextTick,defineProps,computed,markRaw } from "vue";
 
     import { useI18n } from "vue-i18n"
     const { t } = useI18n()
@@ -129,6 +129,7 @@
         state.bgImage=''
         state.prompt=''
         state.percent=0
+        state.createing=false
    }
 
 
@@ -172,10 +173,22 @@
 
    const  createBg=async ()=>{
 
+        if(!state.prompt){
+          ElMessageBox.alert(t("canvas.iptprompt"), 'Warning', {
+            //confirmButtonText: t("canvas.confirm"),
+            type: 'warning'
+          })
+          return false
+        }
+
         state.createing=true
         state.percent=0
         state.bgImage=''
 
+
+        if(state.prompt){
+
+        }
         // setTimeout(function(){
         //     state.bgImage=new URL("@/assets/createbg.png",import.meta.url).href
         //     requestAnimationFrame(run)
@@ -201,6 +214,13 @@
                     ElMessage.error("Create Img Error!")
             })
 
+            if(result.code!=0){
+             
+              state.createing=false
+              ElMessage.error(result.msg)
+            }
+
+
             state.bgImage=result.data[0]
 
             requestAnimationFrame(run)
@@ -214,8 +234,13 @@
                   state.createing=false
                   console.error(error)
                   ElMessage.error("Create Img Error!")
-          })
+            })
 
+            if(result.code!=0){
+             
+              state.createing=false
+              ElMessage.error(result.msg)
+           }
             state.bgImage=result.data[0]
 
             requestAnimationFrame(run)
