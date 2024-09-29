@@ -71,7 +71,7 @@ export default {
     anglemark45:'45度标注',
     group:'编组',
     cancel:'取消编组',
-    movecanvas:'パンツールをオン/オフ',
+    movecanvas:'平移画板',
     texteffect:'文字效果',
     imageeffect:'小部件',
     del:'删除',
@@ -87,6 +87,7 @@ export default {
     ungroup:'拆分组',
     del:'删除',
     copy:'复制',
+    clone:'创建副本',
     leftalign:'左对齐',
     centeralign:'左右居中对齐',
     rightalign:'右对齐',
@@ -104,7 +105,7 @@ export default {
     penszie:'画笔尺寸',
     penhardness:'画笔尺寸',
     startcut:"开始扣图",
-    startedit:"进入编辑模式"
-    
+    startedit:"进入编辑模式",
+    paste:"粘贴"
   }
 }

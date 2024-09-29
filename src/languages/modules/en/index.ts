@@ -85,6 +85,7 @@ export default {
     "ungroup":'Ungroup',
     "del":'Delete',
     "copy":'Copy',
+    "clone":'Clone',
     "leftalign":'左对齐',
     "centeralign":'左右居中对齐',
     "rightalign":'右对齐',
@@ -102,6 +103,7 @@ export default {
     "penszie":'画笔尺寸',
     "penhardness":'画笔尺寸',
     "startcut":"开始扣图",
-    "startedit":"进入编辑模式"
+    "startedit":"进入编辑模式",
+    "paste":'Paste'
   }
 }

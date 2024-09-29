@@ -84,6 +84,7 @@ export default {
     "ungroup":'グループ解除',
     "del":'削除',
     "copy":'コピー',
+    "clone":'クローン作成',
     "leftalign":'左揃え',
     "centeralign":'左右中央揃え',
     "rightalign":'右揃え',
@@ -101,6 +102,7 @@ export default {
     "penszie":'ブラシサイズ',
     "penhardness":'ブラシ硬さ',
     "startcut":'切り取り開始',
-    "startedit":'編集モードに入る'
+    "startedit":'編集モードに入る',
+    "paste":'貼り付け'
   }
 }

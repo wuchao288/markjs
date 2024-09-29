@@ -116,7 +116,7 @@
 import { ElForm,ElFormItem,ElCard,ElButton,ElRow,ElCol,ElTooltip,ElLink,ElSpace} from 'element-plus'
 
 import { useI18n } from "vue-i18n"
-import  ShortCut  from '@/components/widgets/ShortCut.vue'
+
 import { ref,onActivated,watch } from 'vue';
 import { App } from 'leafer-ui';
 const { t } = useI18n()
@@ -163,22 +163,33 @@ const toUnGroup=()=>{
 
 const setAlgin=(placement)=>{
 
+    console.info(canvasApp.editor.element)
+
      switch (placement) {
         case "left":
-            let l= canvasApp.editor.list.map(m=>m.x).reduce((a,b)=>Math.min(a,b))
+           
+            //let l= canvasApp.editor.list.map(m=>m.x).reduce((a,b)=>Math.min(a,b))
+
+            let l=canvasApp.editor.element.x
             canvasApp.editor.list.forEach((m)=>{
                 m.x=l
             })
             break;
         case "right":
-           let r= canvasApp.editor.list.map(m=>m.x+m.width).reduce((a,b)=>Math.max(a,b))
+           //let r= canvasApp.editor.list.map(m=>m.x+m.width).reduce((a,b)=>Math.max(a,b))
+            let r=canvasApp.editor.element.x+canvasApp.editor.element.width
             canvasApp.editor.list.forEach((m)=>{
                 m.x=r-m.width
             })
             break;  
         case "center":
-           let l1= canvasApp.editor.list.map(m=>m.x).reduce((a,b)=>Math.min(a,b))
-           let r1= canvasApp.editor.list.map(m=>m.x+m.width).reduce((a,b)=>Math.max(a,b))
+
+           //let l1= canvasApp.editor.list.map(m=>m.x).reduce((a,b)=>Math.min(a,b))
+           //let r1= canvasApp.editor.list.map(m=>m.x+m.width).reduce((a,b)=>Math.max(a,b))
+
+           let l1=canvasApp.editor.element.x
+           let r1=canvasApp.editor.element.x+canvasApp.editor.element.width
+
            let center=(r1-l1)/2+l1
            canvasApp.editor.list.forEach((m)=>{
                 m.x=center-(m.width/2)
@@ -186,20 +197,31 @@ const setAlgin=(placement)=>{
             break;  
 
       case "top":
-            let t= canvasApp.editor.list.map(m=>m.y).reduce((a,b)=>Math.min(a,b))
+            //let t= canvasApp.editor.list.map(m=>m.y).reduce((a,b)=>Math.min(a,b))
+
+            let t=canvasApp.editor.element.y
+
             canvasApp.editor.list.forEach((m)=>{
                 m.y=t
             })
             break;
         case "bottom":
-           let b= canvasApp.editor.list.map(m=>m.y+m.height).reduce((a,b)=>Math.max(a,b))
+            //let b= canvasApp.editor.list.map(m=>m.y+m.height).reduce((a,b)=>Math.max(a,b))
+
+            let b=canvasApp.editor.element.y+canvasApp.editor.element.height
+
             canvasApp.editor.list.forEach((m)=>{
                 m.y=b-m.height
             })
             break;  
         case "vcenter":
-           let t1= canvasApp.editor.list.map(m=>m.y).reduce((a,b)=>Math.min(a,b))
-           let b1= canvasApp.editor.list.map(m=>m.y+m.height).reduce((a,b)=>Math.max(a,b))
+
+           let t1=canvasApp.editor.element.y
+           let b1=canvasApp.editor.element.y+canvasApp.editor.element.height
+
+        //    let t1= canvasApp.editor.list.map(m=>m.y).reduce((a,b)=>Math.min(a,b))
+        //    let b1= canvasApp.editor.list.map(m=>m.y+m.height).reduce((a,b)=>Math.max(a,b))
+
            let vcenter=(b1-t1)/2+t1
            canvasApp.editor.list.forEach((m)=>{
                 m.y=vcenter-(m.height/2)
@@ -276,7 +298,7 @@ const setAlgin=(placement)=>{
             }
           break;  
      }
-
+     canvasApp.editor.updateEditBox()
      canvasApp.tree.findOne("Frame").emit('update',{})
 }
 

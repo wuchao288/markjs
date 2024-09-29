@@ -16,6 +16,7 @@ const pinia = createPinia()
 const app = createApp(App)
 
 
+
 app.directive('aria-hidden', (el, binding) => {
     if(binding.value) {
       el.setAttribute('aria-hidden', 'true');
@@ -24,7 +25,6 @@ app.directive('aria-hidden', (el, binding) => {
     }
   });
 
-  app.config.globalProperties.$canvasApp={}
 
 app.use(pinia)
 

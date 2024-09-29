@@ -48,6 +48,9 @@ import { storeToRefs } from 'pinia'
 
 import { mixins } from "@/mixin/index";
 
+import { App,Box,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,Group,Platform} from 'leafer-ui'
+
+import  {nanoid} from  'nanoid'
 
 const editorStore = useEditStore()
 
@@ -63,7 +66,7 @@ let  markType =ref<MarkTypeItem>(MarkTypeList[0])
 let  sharpType =ref<SharpTypeItem>(SharpTypeList[0])
 
 let  borderWidthType =ref<BorderWidthItem>(BorderWidthList[1])
-
+  
 
 const {useBorderWidth,usePageMove,redoIndex} = storeToRefs(editorStore)
 
@@ -318,6 +321,42 @@ const appUndo=()=>{
 }
 
 
+const  handleImportJson=(data)=>{
+  let canvasApp=editorStore.editor
+
+  let frame=canvasApp.tree.findOne("Frame")
+
+  const group = new Group(data)
+
+        group.zIndex=editorStore.shapes.size + 1
+        group.around='top-left'
+        group.id=nanoid()
+
+        group.x=0; //pageWidth.value/2+group.width/2
+        group.y=0;// pageHeight.value/2+group.height/2
+        
+        frame.add(group)
+
+        ElMessage({
+            message: 'Success!',
+            type: 'success'
+        })
+}
+
+const handleJsonSuccess: UploadProps['onChange'] = (
+  uploadFile
+) => {
+
+  let rawFile=(uploadFile.raw)
+  console.info(uploadFile)
+  var reader=new FileReader()
+  reader.onload=function(e){
+   var content=e.target.result 
+   handleImportJson(JSON.parse(content))
+  }
+  reader.readAsText(rawFile)
+}
+
 </script>
 
 <template>
@@ -419,7 +458,16 @@ const appUndo=()=>{
               </el-dropdown>
          </li>
          <li>
+           <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        :content="t('header.movecanvas')"
+                        placement="top"
+                        >
+
           <el-button :icon="Pointer"  plain @click="usePageMove=!usePageMove" circle :type="usePageMove?'primary':''" />
+
+          </el-tooltip>
          </li>
         
          <li>&nbsp;&nbsp;</li>
@@ -487,11 +535,29 @@ const appUndo=()=>{
           </el-button>
          </li>
          <li v-if="isTest">
+          <el-upload
+              :show-file-list="false"
+              :auto-upload="false"
+              :action="actionUrl"
+              :data="{FileName:'blob'}"
+               name="blob2"
+              :on-change="handleJsonSuccess"
+            >
+              <template #trigger>
+               
+                <el-button type="primary"> 
+                  导入JSON
+                  </el-button>
+              </template>
+            </el-upload>
+          
+         </li>
+         <li v-if="isTest">
           <el-button @click="handleExportPng">
               导出效果图
           </el-button>
          </li>
-        
+         
          </ul>
      </div>
      
@@ -600,6 +666,9 @@ const appUndo=()=>{
   border:1px solid #ccc;
   box-shadow: var(--el-box-shadow-light);
   border-radius: 5px;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%), linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%);
+    background-position: 0 0, 14px 14px;
+    background-size: 28px 28px;
 }
 
 .mateitem:hover{

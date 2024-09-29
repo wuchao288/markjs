@@ -1,12 +1,19 @@
 
 //https://github.com/tnfe/limu
-import {  DragEvent, KeyEvent,ChildEvent, App } from 'leafer-ui'
+import {  DragEvent, KeyEvent,ChildEvent,DropEvent, App } from 'leafer-ui'
 import {produce, enablePatches, applyPatches, Patch,setAutoFreeze  } from "immer"
 import { InnerEditorEvent } from 'leafer-editor'
 import _ from 'lodash'
 import { IKeyEvent } from '@leafer-ui/interface'
 
 import * as jsondiffpatch from 'jsondiffpatch';
+
+import useWidgetStore from "@/stores/useWidgetStore"
+import useEditStore from "@/stores/useEditStore"
+
+
+
+import handlePaste from '@/mixin/handlePaste';
 
 
 type Queue = { [key: number]: { redo: Patch[], undo: Patch[] } }
@@ -15,8 +22,11 @@ function isPlainValue(data:any){
   return !(Object.prototype.toString.call(data) === '[object Object]' || Array.isArray(data))
 }
 
-
 export default class Command {
+
+  
+
+
   current = -1 // 前进后退的索引值
   maxQueueValue = 50 // 最大存放数
   queue: Queue = {} //  存放所有的操作命令
@@ -26,6 +36,7 @@ export default class Command {
     setAutoFreeze(false)
 
     enablePatches()
+
     this.listen()
   }
   listen() {
@@ -36,22 +47,13 @@ export default class Command {
     // 直接监听ChildEvent.ADD不合适，比如文字的添加/线段的绘制，都是当前绘制完成后才发布add事件
     this.app.tree.on('add', this.change)
 
-     frame.on("redo.add", (e)=>{
+    frame.on("redo.add", this.change)
 
-        this.change()
-      })
-
-    frame.on("add", (e)=>{
-
-      this.change()
-    })
+    frame.on("add", this.change)
 
     frame.on('remove', this.change)
 
-    frame.on('update', ()=>{
-      console.info("update")
-      this.change()
-    })
+    frame.on('update', this.change)
 
 
     this.app.tree.on("redo.redo",this.redo)
@@ -68,16 +70,74 @@ export default class Command {
     this.app.editor.on(DragEvent.END, this.change)
     // 监听键盘事件
     this.app.on(KeyEvent.DOWN, this.onKeydown)
+
+
+    document.addEventListener("paste",this.onPaste)
+    document.addEventListener("drop",this.onDrop)
+
+   
   }
   destroy() {
+
+    let frame=this.app.tree.findOne("Frame")
+
+    frame.off("redo.add", this.change)
+    frame.off("add", this.change)
+    frame.off('remove', this.change)
+    frame.off('update', this.change)
+    this.app.tree.off("redo.redo",this.redo)
+    this.app.tree.off("redo.undo",this.undo)
+
     this.app.editor.off(InnerEditorEvent.CLOSE, this.change)
     this.app.tree.off('add', this.change)
     this.app.tree.off('remove', this.change)
     this.app.tree.off('update', this.change)
     this.app.editor.off(DragEvent.END, this.change)
     this.app.off(KeyEvent.DOWN, this.onKeydown)
+
+    document.removeEventListener("paste",this.onPaste)
+  }
+
+  onDrop=(event)=>{
+   
+    
+
+      var fileList = event.dataTransfer.files; //获取文件对象  
+      //检测是否是拖拽文件到页面的操作          
+      if(fileList.length == 0){              
+        return false;          
+      }           
+      //创建一个url连接,供src属性引用
+      var fileurl = window.URL.createObjectURL(fileList[0]);   		
+      
+      console.info(fileList[0])
+      
+      if(fileList[0].type.indexOf('image') === 0){  //如果是图片
+        var str="<img width='200px' height='200px' src='"+fileurl+"'>";
+        document.getElementById('drop_area').innerHTML=str; 				
+      }
+
+  }
+
+  onPaste= (event)=>{
+   
+    
+    handlePaste(this.app,event).then(() => {
+
+      
+      const widgetStore = useWidgetStore()
+
+      if (widgetStore.dCopyElement.length> 0) {
+
+           widgetStore.pasteWidget(this.app)
+      } 
+     
+    })
+
   }
   onKeydown = (event: IKeyEvent) => {
+
+
     if (
       event.origin?.target instanceof HTMLInputElement ||
       event.origin?.target instanceof HTMLTextAreaElement
@@ -86,6 +146,9 @@ export default class Command {
       // event.stopDefault && event.stopDefault()
       return
     }
+
+    
+
     const { key, shiftKey, altKey, ctrlKey, metaKey } = event
     const keyString: string[] = []
     if (ctrlKey || metaKey) keyString.push('ctrl')
@@ -102,8 +165,39 @@ export default class Command {
       this.undo()
     } else if (keyName === 'ctrl+shift+z'||keyName === 'ctrl+y') {
       this.redo()
-    }
+    }else if (keyName === 'ctrl+c') {
+
+       const widgetStore = useWidgetStore()
+
+       if(this.app.editor.list.length>0){
+          
+          widgetStore.copyWidget((this.app.editor.list.map(m=>m.clone())))
+
+        }
+    }else if (keyName === 'ctrl+v') {
+
+      //    handlePaste(this.app,null).then(() => {
+
+      //      const widgetStore = useWidgetStore()
+
+
+      //      if (widgetStore.dCopyElement.length> 0) {
+
+      //           widgetStore.pasteWidget(this.app)
+      //      } 
+         
+      //  })
+    
+  }else if(keyName==='backspace'){
+         this.app.editor.list.forEach(rect => {
+            useEditStore().delShape(rect.id as string)
+            rect.remove()
+        })
+        this.app.editor.target = undefined
+        let frame=this.app.tree.findOne("Frame")
+        frame.emit('update',{})
   }
+ }
   change = () => {
     
     let frame=this.app.tree.findOne("Frame")
@@ -138,8 +232,6 @@ export default class Command {
   }
 
   redo = () => {
-
-    console.info("redo")
 
     let frame=this.app.tree.findOne("Frame")
 

@@ -66,7 +66,7 @@
     import '@leafer-in/editor' // 导入图形编辑器插件
     import '@leafer-in/text-editor'
     import '@leafer-in/view'
-    
+    import { EditTool } from '@leafer-in/editor'
     import { ScrollBar } from '@leafer-in/scroll'
 
     import { Ruler } from 'leafer-x-ruler'
@@ -84,24 +84,25 @@
 
     import { PageSizeItem, PageSizeList, } from '@/assets/data/PageSetting'
     import { StyleFontList} from '@/assets/data/Material'
-    
-    //import Cookies from 'js-cookie'
 
-    import Command from '@/command'
+    import { storeToRefs } from 'pinia'
 
     import useEditStore from "@/stores/useEditStore"
 
+ 
+
+ 
     import  {nanoid} from  'nanoid'
     import '@leafer-in/state'
-    import { storeToRefs } from 'pinia'
+
     import { InnerEditorEvent ,Editor,EditorEvent,EditorScaleEvent} from '@leafer-in/editor'
     import { ElMessage, ElMessageBox } from 'element-plus'
     
     import { useI18n } from "vue-i18n"
 
     import { useCreateButton } from '@/hooks/useCreateButton'
-import { json } from 'stream/consumers'
-    
+
+    import Command from '@/command'
 
     const { t } = useI18n()
 
@@ -148,7 +149,7 @@ import { json } from 'stream/consumers'
     const tipContentModel={
         toGroup:t("canvas.togroup"),
         unGroup:t("canvas.ungroup"),
-        copy:t("canvas.copy"),
+        copy:t("canvas.clone"),
         del:t("canvas.del")
     };
     
@@ -1079,24 +1080,25 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
            return;
         }
 
-        
         let img=await getImage(imgUrl)
         
- 
-      
-
         let widthx=img.width  
         let heightx=img.height  
 
         if(widthx>pageWidth.value){
             widthx= pageWidth.value*0.8
-            heightx=((pageWidth.value*0.8)*img.height)/img.width
+            heightx=(widthx*img.height)/img.width
+        }
+
+        if(heightx>pageHeight.value){
+            heightx= pageHeight.value*0.8
+            widthx=(heightx*img.width)/img.height
         }
 
         const rectImg = new Rect({
                 id:id,
                 name:'image',
-                around: 'center',
+                //around: 'center',
                 data:{
                     action:'',
                     original:imgUrl,
@@ -1113,8 +1115,8 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 locked:false,
                 width:widthx,
                 height:heightx,
-                x: pageWidth.value/2,
-                y: pageHeight.value/2
+                x: pageWidth.value/2-widthx/2,
+                y: pageHeight.value/2-heightx/2
         }) 
 
         rectImg.on(PointerEvent.MENU,function(e){
@@ -1125,8 +1127,6 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
         frame.add(rectImg)
 
-        frame.emit("redo.add",{})
-
         canvasApp.editor.target=rectImg
 
    }
@@ -1134,12 +1134,12 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
    const handleExportJson=()=>{
 
         if(canvasApp.editor.list.length!=1){
-                ElMessage.warning("只能选择一个编组元素导出，多个元素请右键-编组后导出！")
+                ElMessage.warning("只能选择一个编组元素导出，多个元素请-编组后导出！")
                 return
         }
 
         if(canvasApp.editor.list[0].tag!="Group"){
-            ElMessage.warning("只能选择一个编组元素导出，多个元素请右键-编组后导出！")
+            ElMessage.warning("只能选择一个编组元素导出，多个元素请-编组后导出！")
             return
         }
 
@@ -1147,18 +1147,19 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
         ElMessageBox.prompt('输入编号,比如 200x1, 300x1', 'Tip', {
             confirmButtonText: 'OK',
             cancelButtonText: 'Cancel',
-            inputPattern:/^\d{5,}$/,
-            inputErrorMessage: '输入编号',
+            inputPattern:/^\d{4,}$/,
+            inputErrorMessage: '输入编号,最少4位',
         })
             .then(({ value }) => {
-                let text=
-                    JSON.stringify( {
-                        preview:'new URL("@/assets/images/mate/texteffect/'+value+'.png",import.meta.url).href',
-                        url:'',
-                        id:value,
-                        data:canvasApp.editor.list[0].toJSON()
-                    })
-
+                let textJson=
+                    {
+                       "preview":`${'new URL("@/assets/images/mate/texteffect/'+value+'.png",import.meta.url).href'}`,
+                        "url":'',
+                        "id":`${value}`,
+                        "data":canvasApp.editor.list[0].toJSON()
+                    }
+            
+                   let text=JSON.stringify(textJson)
                     // 编写正则表达式
                     const regex = /blob:[^"]+/;
 
@@ -1178,10 +1179,10 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                     link.download =value +".txt";
                     link.click();
         
-        URL.revokeObjectURL(url);
+                   URL.revokeObjectURL(url);
             })
             .catch(() => {
-            ElMessage({
+              ElMessage({
                 type: 'info',
                 message: 'Input canceled',
             })
@@ -1197,11 +1198,11 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
     
         const group = new Group(item.data)
         group.zIndex=editorStore.shapes.size + 1
-        group.around='center'
+        group.around='top-left'
         group.id=nanoid()
 
-        group.x= pageWidth.value/2
-        group.y= pageHeight.value/2
+        group.x=0; //pageWidth.value/2+group.width/2
+        group.y=0;// pageHeight.value/2+group.height/2
         
         frame.add(group)
 
@@ -1650,7 +1651,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
    const handleAddImg=(img:any)=>{
       addBgImg(img)
-      redoCom.change()
+      //redoCom.change()
    }
    const handleAddMateImg=(img:any)=>{
       if(img.type=="img"){
@@ -1658,7 +1659,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
       }
 
-      redoCom.change()
+      //redoCom.change()
    }
 
    

@@ -152,7 +152,25 @@ async function loadImg(url:string) {
     }).then(async res=>await res.blob())
     
 }
+ const getImage =async (imgItem: string | File): Promise<HTMLImageElement> => {
+   
+  const img = new Image()
+  // 改变图片的src
+  const url = window.URL || window.webkitURL
+  img.src = typeof imgItem === 'string' ? imgItem : url.createObjectURL(imgItem)
 
+  return new Promise((resolve) => {
+      // 判断是否有缓存
+      if (img.complete) {
+          resolve(img)
+      } else {
+      // 加载完成执行
+      img.onload = function () {
+          resolve(img)
+      }
+    }
+  })
+}
 
 // 计算两点之间的角度（弧度）
 export function calculateAngle(x1, y1, x2, y2) {
@@ -193,5 +211,6 @@ export const mixins ={
     throttle,
     loadFont,
     loadImg,
+    getImage,
     uploadFile
 }

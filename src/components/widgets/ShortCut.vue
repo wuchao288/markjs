@@ -5,7 +5,7 @@
         <el-tooltip
         class="box-item"
         effect="dark"
-        content="Lock"
+        content="t('canvas.lock')"
         placement="top-start"
       >
         <el-button  @click="lockSharp" :icon="!locked?Unlock:Lock"  />
@@ -22,7 +22,7 @@
     <el-tooltip
         class="box-item"
         effect="dark"
-        content="Copy"
+        :content="t('canvas.copy')"
         placement="top-start"
       >
         <el-button  @click="copy" :icon="CopyDocument" />
@@ -31,7 +31,7 @@
     <el-tooltip
         class="box-item"
         effect="dark"
-        content="Delete"
+        content="t('canvas.del')"
         placement="top-start"
       >
         <el-button  :icon="Delete" @click="deleteSharp" />
