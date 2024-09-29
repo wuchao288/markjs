@@ -1,10 +1,10 @@
 <template>
     <div id="main-right" >
-        <el-form
-      class="form"
-      label-position="top"
-      label-width="50px"
-    >
+   <el-form
+              class="form"
+              label-position="top"
+              label-width="50px"
+            >
 
     <el-form-item :label="t('stylepanel.size')">
         <el-space>
@@ -67,6 +67,15 @@
                     {{$t("stylepanel.createbg")}}
                   </el-button>
             </el-col>  
+
+
+            <el-col :span="24">
+                <el-button @click="handleCreateSketch">
+                    <i class="iconfont icon icon-shengchenglunkuo"></i>
+                    {{$t("stylepanel.createlineimg")}}
+                  </el-button>
+            </el-col>  
+
          </el-row>
       </el-form-item>
       
@@ -122,6 +131,12 @@
         v-model:dialogVisible="dialogCutVisible"  
          v-model:imageSrc="imageCutSrc"
            @update-image-src="updateCutImageDone"/>
+
+
+           <CreateSketch  
+             v-model:dialogVisible="dialogSketchVisible"  
+              v-model:imageSrc="imageSketchSrc"
+               @update-image-src="updateSketchDone"/>
 </template>
 
 <script setup lang="ts">
@@ -144,7 +159,8 @@
      import  CreateBg  from '@/components/widgets/CreateBg.vue'
      import  CropperImg  from '@/components/widgets/CropperImg.vue'
      import  CutoutImg  from '@/components/widgets/CutoutImg.vue'
-    
+
+     import  CreateSketch  from  '@/components/widgets/CreateSketch.vue'
 
 
      import { mixins } from "@/mixin/index";
@@ -204,10 +220,10 @@
 
   //   //点击裁剪按钮
      const updateCropImageSrc = (updateImageData) => {
-      let canvasApp=editorStore.editor;
+       let canvasApp=editorStore.editor;
 
-      canvasApp.editor.target.data.sizeData=updateImageData.sizeData
-     canvasApp.editor.target.data.cropData=updateImageData.cropData
+        canvasApp.editor.target.data.sizeData=updateImageData.sizeData
+       canvasApp.editor.target.data.cropData=updateImageData.cropData
        canvasApp.editor.target.data.action="crop" //裁剪不换原图
 
        useImageStyle.value.fill.url=updateImageData.croppedImage
@@ -276,8 +292,25 @@
         return true
    }
 
+    /*生成线稿*/
+   let dialogSketchVisible=ref(false)
+   let imageSketchSrc=ref('')
 
+   const updateSketchDone=(updateImageData)=>{
 
+      let canvasApp=editorStore.editor
+      useImageStyle.value.fill.url=updateImageData.sketchImage
+      imageSketchSrc.value=""
+      dialogSketchVisible.value=false
+
+   }
+    
+    const  handleCreateSketch=()=>{
+       dialogSketchVisible.value=true
+       let canvasApp=editorStore.editor;
+       imageSketchSrc.value=canvasApp.editor.target.fill.url
+    }
+    
 
     const predefineColors = ref([
       '#ff4500',

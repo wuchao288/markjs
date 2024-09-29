@@ -257,6 +257,7 @@
     const closeedCreateBgImg=()=>{
         state.bgImage=''
         state.rawImage=''
+        state.createing=false
     }
 
    
