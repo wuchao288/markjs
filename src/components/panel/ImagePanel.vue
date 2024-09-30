@@ -160,7 +160,7 @@
      import  CropperImg  from '@/components/widgets/CropperImg.vue'
      import  CutoutImg  from '@/components/widgets/CutoutImg.vue'
 
-     import  CreateSketch  from  '@/components/widgets/CreateSketch.vue'
+     import  CreateSketch  from  '@/components/widgets/CreateSketch/Index.vue'
 
 
      import { mixins } from "@/mixin/index";

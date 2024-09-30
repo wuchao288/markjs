@@ -104,6 +104,19 @@ export default {
     "startcut":'切り取り開始',
     "startedit":'編集モードに入る',
     "paste":'貼り付け',
-    "iptprompt":"背景提示語を入力してください！"
+    "iptprompt":"背景提示語を入力してください！",
+    "jixi":"極細",
+    "jingxi": "精細",
+    "yiban": "一般",
+    "shaochu": "やや粗い",
+    "chaochu": "超粗い",
+    "jichu": "極粗",
+    "fudiao": "浮き彫り",
+    "xiaogao": "線画",
+    "xianjiqz": "線の強弱",
+    "xiandzsl": "ライトトーン",
+    "jianggao": "ノイズ除去"
   }
 }
+
+

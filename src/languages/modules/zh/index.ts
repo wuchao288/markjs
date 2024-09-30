@@ -107,6 +107,17 @@ export default {
     startcut:"开始扣图",
     startedit:"进入编辑模式",
     paste:"粘贴",
-    iptprompt:"请输入背景提示词！"
+    iptprompt:"请输入背景提示词！",
+    jixi:"极细",
+    jingxi: "精细",
+    yiban: "一般",
+    shaochu: "稍粗",
+    chaochu: "超粗",
+    jichu: "极粗",
+    fudiao: "浮雕",
+    xiaogao: "线稿",
+    xianjiqz: "线迹轻重",
+    xiandzsl: "线调子数量",
+    jianggao: "降噪"
   }
 }

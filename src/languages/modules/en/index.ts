@@ -105,6 +105,17 @@ export default {
     "startcut":"Start capturing images",
     "startedit":"Enter editing mode",
     "paste":'Paste',
-    "iptprompt":"Please enter background prompt words！"
+    "iptprompt":"Please enter background prompt words！",
+    jixi:"Ultra fine",
+    jingxi: "Fine",
+    yiban: "General",
+    shaochu: "Slightly coarse",
+    chaochu: "Super coarse",
+    jichu: "Ultra coarse",
+    fudiao: "Emboss",
+    xiaogao: "Line drawing",
+    xianjiqz: "Line weight",
+    xiandzsl: "Number of line tones",
+    jianggao: "Noise reduction"
   }
 }

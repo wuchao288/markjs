@@ -9,8 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     Canvas: typeof import('./src/components/Canvas.vue')['default']
     CreateBg: typeof import('./src/components/widgets/CreateBg.vue')['default']
-    CreateS: typeof import('./src/components/widgets/CreateS.vue')['default']
-    CreateSketch: typeof import('./src/components/widgets/CreateSketch.vue')['default']
     CropperImg: typeof import('./src/components/widgets/CropperImg.vue')['default']
     CutoutImg: typeof import('./src/components/widgets/CutoutImg.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
@@ -25,7 +23,6 @@ declare module 'vue' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElLink: typeof import('element-plus/es')['ElLink']
     ElRadio: typeof import('element-plus/es')['ElRadio']
-    ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSlider: typeof import('element-plus/es')['ElSlider']

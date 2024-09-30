@@ -1,88 +1,4 @@
-<template>
-  
-    <el-dialog  v-model="dialogVisible"
-      :close-on-click-modal="false"
-      :destroy-on-close="false"
-      :append-to-body="true"
-      :title="t('stylepanel.createlineimg')"
-      width="1024" 
-      @cloesed="closeed"
-      @open="opened"
->
-     <el-row class="el-row" style="overflow: hidden;">
-        <el-col class="el-col"  :span="18">
-            <div class="content" :style="{maxHeight:contentHeight+'px'}" v-loading="state.createing">
-                <div v-show="state.rawImage"  class="c-compare scan-effect" 
-                :style="{ width: state.offsetWidth ? state.offsetWidth + 'px' : '100%','--value':state.percent+'%' }">
-                    <img ref="sketch" v-show="state.sketchImage" class="c-compare__left" :src="state.sketchImage" alt="result"/>
-                    <img ref="raw" @load.once="onImageLoad" class="c-compare__right" :src="state.rawImage" alt="B/W" />
-                    <input type="range" v-show="state.sketchImage" class="c-rng c-compare__range" min="0" max="100"  v-model="state.percent"
-                    />
-                    <div class="scroller scroller-top" v-show="state.sketchImage"  :style="{left: state.percent+'%'}">
-                        <svg class="scroller__thumb" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
-                            <polygon points="0 50 37 68 37 32 0 50" style="fill:#FFAB91"></polygon>
-                            <polygon points="100 50 64 32 64 68 100 50" style="fill:#FFAB91"></polygon>
-                        </svg>
-                    </div> 
-                </div> 
-            </div>
-        </el-col>
-        <el-col class="el-col el-col-form"  :span="6">
-            
-            <el-form
-              class="form"
-              label-position="top"
-              label-width="50px"
-            >
 
-                <el-form-item label="风格">
-                    <el-radio-group v-model="state.convoluteName">
-                        <el-radio v-for="(value,key,index) in Convolutes"  :label="key" :value="key" />
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item>
-                    <el-space>
-                    <el-switch
-                    v-model="state.denoise" @change="_louvre(50)"
-                    active-text="降噪"
-                />
-               
-                <el-switch
-                    v-model="state.kuma"
-                    active-text="Kiss" @change="_louvre(50)"
-                />
-            </el-space>
-                    <!-- <ui-switch v-model="state.denoise" @input="_louvre(50)">降噪</ui-switch>
-					<ui-switch v-model="state.kuma" @input="_louvre(50)">Kiss</ui-switch> -->
-					<!-- <ui-switch v-model="style.shade" :disabled="!style.kuma" @input="_louvre(50)">调子</ui-switch> -->
-					<!-- <ui-switch v-model="state.watermark" @input="_louvre(50)">水印</ui-switch>
-					<ui-switch v-model="state.hajimei" :disabled="!style.watermark" @input="_louvre(50)">初回</ui-switch> -->
-                </el-form-item>
-
-                <el-form-item label="线迹轻重">
-                    <el-slider v-model="state.darkCut" :min="20" :max="200" :step="1"/>
-                </el-form-item>
-
-                <el-form-item label="线调子数量">
-                    <el-slider v-model="state.shadeLimit" :min="20" :max="200" :step="1"/>
-                </el-form-item>
-           </el-form>
-        </el-col>
-     </el-row>
-   
-        <template #footer>
-            <div class="dialog-footer">
-                <el-button  @click="close"> {{$t("canvas.cancel")}} </el-button>
-                <el-button type="primary" @click="createBgImageDone">
-                {{$t("canvas.confirm")}} 
-                </el-button>
-            </div>
-        </template>
-    </el-dialog>
-  
-  </template>
-
-<script lang="ts">
 const randRange = (a, b) => Math.floor(Math.random() * (b - a) + a);
 
 const inputImageEl = document.querySelector('#input');
@@ -104,7 +20,11 @@ const canvasShadeMin = document.createElement('canvas');
 const canvasMin = document.createElement('canvas');
 const pencilTextureCanvas = document.createElement('canvas');
 
-const louvre = async ({img, outputCanvas, config, callback}) => {
+  const louvre = async ({img, outputCanvas, config}) => {
+
+
+	debugger
+
 	if (!img || !config) return;
 
 	const configString = [
@@ -172,7 +92,9 @@ const louvre = async ({img, outputCanvas, config, callback}) => {
 	canvas.width = _width;
 	canvas.height = _height;
 
-
+	// ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+	// ctx.globalAlpha = 1
+	// ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
 	ctx.drawImage(
 		img,
@@ -184,6 +106,10 @@ const louvre = async ({img, outputCanvas, config, callback}) => {
 	);
 	// ctx.font = '200px sans-serif'
 	// ctx.fillText('123233',50,200);
+
+	//ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+    //ctx.globalAlpha = 1
+
 
 	let pixel = ctx.getImageData(0, 0, _width, _height);
 
@@ -537,24 +463,28 @@ const louvre = async ({img, outputCanvas, config, callback}) => {
 
 	outputCanvas.width = _width;
 	outputCanvas.height = _height;
-	outputCtx.fillStyle = '#FFF';
+	outputCtx.fillStyle = '#000';
 	outputCtx.fillRect(0,0,_width,_height);
+
+
+
 	outputCtx.drawImage(
 		canvas,
 		0,0,_width,_height
 	);
+
 
 	console.timeEnd('louvre');
 	// return canvas.toDataURL('image/png');
 	
 };
 
-let loadImage = (url,onOver)=>{
+ let loadImage = (url,onOver)=>{
 	const el = new Image();
 	el.onload = _=>onOver(el);
 	el.src = url;
 };
-let loadImagePromise = async url=>{
+ let loadImagePromise = async url=>{
 	return new Promise(function(resolve, reject){
 		setTimeout(function(){
 			const el = new Image();
@@ -567,18 +497,19 @@ let loadImagePromise = async url=>{
 
 let watermarkImageEl;
 let pencilTextureEl;
-const louvreInit = onOver=>{
-	loadImage('pencil-texture.jpg',el=>{
+ const louvreInit = onOver=>{
+	loadImage(new URL("@/assets/images/pencil-texture.jpg",import.meta.url).href,el=>{
 		pencilTextureEl = el;
-		loadImage('one-last-image-logo2.png',el=>{
-			watermarkImageEl = el;
-			onOver();
-		});
+		onOver();
+		// loadImage('one-last-image-logo2.png',el=>{
+		// 	watermarkImageEl = el;
+		// 	onOver();
+		// });
 	});
 };
 
 
-let convolute = (pixels, weights, ctx) => {
+ let convolute = (pixels, weights, ctx) => {
 	const side = Math.round(Math.sqrt(weights.length));
 	const halfSide = Math.floor(side / 2);
 
@@ -628,7 +559,6 @@ let convolute = (pixels, weights, ctx) => {
 
 
 
-
  const convoluteY = (pixels, weights, ctx) => {
 	const side = Math.round( Math.sqrt( weights.length ) );
 	const halfSide = Math.floor(side / 2);
@@ -675,338 +605,12 @@ let convolute = (pixels, weights, ctx) => {
 	// }
 	return output;
 };
-</script>
-
-  <script setup  lang="ts">
-
-    import {reactive,ref,nextTick,defineProps,computed,markRaw } from "vue";
-
-    import { useI18n } from "vue-i18n"
-    const { t } = useI18n()
 
 
-    let dialogVisible= defineModel("dialogVisible",{type:Boolean})
-
-    let imageSrc= defineModel("imageSrc",{type:String})
-
-    const emit = defineEmits(['updateImageSrc','closeWin'])
-
-    let  contentHeight=ref(660)
-
-
-    let sketch=ref()
-
-
-    export type TImageCreateBgState = {
-        show: boolean;
-        rawImage: string;
-        sketchImage: string;
-        offsetWidth: number;
-        percent: number;
-        progress: number;
-        progressText: string;
-        toolModel: boolean;
-        loading: boolean;
-        createing:boolean;
-        darkCut:number;
-        shadeLimit:number;
-        convoluteName:string;//风格
-        denoise:boolean; //降噪
-        kuma:boolean;  //Kiss
-        // watermark:string;
-        // hajimei:string;
-        T:number;
-   }
-  
-    const close = ()=>{
-    // 请关闭弹框
-    dialogVisible.value = false;
-
-    }
-    //https://lab.magiconch.com/one-last-image/
-    const init= _=>{
-        state.loading = false;
-        louvreInit( _=>{
-            img = sketch.$refs;
-            img.onload = app.setImageAndDraw;
-            if(img.complete) img.onload();
-        });
-   }
-
-    const _louvre=(ms=300)=>{
-        state.createing = true
-        clearTimeout(state.T)
-        state.T = setTimeout(louvre,ms)
-    }
-
-    const  louvre=()=>{
-        state.createing = true;
-			nextTick(async _=>{
-				await louvre({
-					img: sketch,
-					outputCanvas: app.$refs['canvas'],
-					config: {
-						...app.style,
-						Convolutes,
-					}
-				});
-				state.createing = false;
-			})
-    }
-
-    const creatConvoluteCenterHigh = (w,centerV)=>{
-	const arr = [];
-	const c = Math.floor((w*w)/2);
-
-	for(let x = 0; x < w; x++){
-		for(let y = 0; y < w; y++){
-			let i = x * w + y;
-			arr[i] = -1;
-
-			if(i===c){
-				arr[i] = centerV;
-			}
-		}
-	}
-	return arr;
+export const util ={
+    louvre,
+    loadImagePromise,
+    louvreInit,
+    convolute,
+    convoluteY
 }
-const creatConvoluteAverage = (w)=>new Array(w*w).fill(1/(w*w))
-
-    const Convolutes = {
-	// '右倾': [
-	// 	0, -1, 0,
-	// 	-1, 2, 2,
-	// 	0, -1, 0
-	// ],
-	// '左倾': [
-	// 	0, -1, 0,
-	// 	3, 2, -2,
-	// 	0, -1, 0
-	// ],
-	// '极细':   creatConvoluteAverage(3),
-	'精细':  creatConvoluteAverage(5),
-	'一般':  creatConvoluteAverage(7),
-	'稍粗':  creatConvoluteAverage(9),
-	'超粗':  creatConvoluteAverage(11),
-	'极粗':  creatConvoluteAverage(13),
-	// '12421': [
-	// 	-3,2,-3,
-	// 	 2,4, 2,
-	// 	-3,2,-3,
-	// ],
-	// '9,-1,8': [
-	// 	-1 ,-1 ,-1 ,
-	// 	-1 , 9 ,-1 ,
-	// 	-1 ,-1 ,-1 ,
-	// ],
-	// '25,-1,24':creatConvoluteCenterHigh(5,24),
-	// '25,-1,25': creatConvoluteCenterHigh(5,25),
-	// '25,-1,26': [
-	// 	-1 , -1 , -1 , -1 , -1 ,
-	// 	-1 , -1 , -1 , -1 , -1 ,
-	// 	-1 , -1 , 26 , -1 , -1 ,
-	// 	-1 , -1 , -1 , -1 , -1 ,
-	// 	-1 , -1 , -1 , -1 , -1 ,
-	// ],
-	// '-1,0,16': [
-	// 	-1 , -1 , -1 , -1 , -1 ,
-	// 	-1 ,  0 ,  0 ,  0 , -1 ,
-	// 	-1 ,  0 , 17 ,  0 , -1 ,
-	// 	-1 ,  0 ,  0 ,  0 , -1 ,
-	// 	-1 , -1 , -1 , -1 , -1 ,
-	// ],
-	'浮雕': [
-		1, 1, 1,
-		1, 1, -1,
-		-1, -1, -1
-	],
-	'线稿':  null,
-}
-   
-   const state = reactive<TImageCreateBgState>({
-        show: false,
-        rawImage: "",//new URL("@/assets/koutu.png",import.meta.url).href,
-        sketchImage:"",//new URL("@/assets/createbg.png",import.meta.url).href,
-        offsetWidth: 0,
-        percent: 0,
-        progress: 0,
-        progressText: '',
-        toolModel: true,
-        loading: false,
-        createing:false,
-        darkCut:118,
-        shadeLimit:180,
-        convoluteName:'一般',
-        denoise:true,
-        kuma:true,
-        T:0
-   })
-
-   let raw=ref(null);
-  
-    function  onImageLoad(){
-
-        state.offsetWidth = (raw.value as HTMLElement).offsetWidth
-    }
-
-    const closeed=()=>{
-        state.rawImage=""
-        state.sketchImage=''
-        state.percent=0
-        state.createing=false
-    }
-
-    const opened=()=>{
-        state.rawImage=imageSrc.value
-        state.sketchImage=''
-        state.percent=0
-        state.createing=false
-        
-        if(window.innerHeight<contentHeight.value){
-            contentHeight.value=window.innerHeight*0.9
-        }
-    }
-
-    const createBgImageDone = () => {
-
-        emit('updateImageSrc', {
-            sketchImage:state.sketchImage
-        });
-    }
-  </script>
-
-<style scoped  lang="less">
-    .content {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-    }
-
-    .el-col-form{
-        padding: 16px;
-        box-shadow: -1px -4px 0.4rem 0px #0000004d;
-    }
-
-    .scan-effect {
-        position: relative;
-        //height: 50vh;
-        overflow: hidden;
-        background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%), linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%);
-        background-position: 0 0, 14px 14px;
-        background-size: 28px 28px;
-        img {
-            height: 100%;
-            object-fit: contain;
-            position: absolute;
-        }
-   }
-
-:deep(.el-space__item:last-of-type .el-form-item){
-    margin-bottom: 0px;
-}
-.c-compare {
-  --h: 9;
-  --m: 1rem 0;
-  --w: 16;
-  --thumb-bgc: #FFAB91;
-  --thumb-bgc-focus: hsla(0, 70%, 70%, 0.7);
-  --thumb-w: 0.3rem;
-
-  margin: var(--m);
-  position: relative;
-}
-.c-compare::after {
-  content: "";
-  display: block;
-  padding-bottom: calc((var(--h) / var(--w)) * 100%);
-}
-.c-compare__left,
-.c-compare__right {
-  height: 100%;
-  object-fit: contain;
-  position: absolute;
-  width: 100%;
-}
-.c-compare__left {
-  clip-path: polygon(0% 0%, var(--value) 0%, var(--value) 100%, 0% 100%);
-}
-.c-compare__right {
-  clip-path: polygon(100% 0%, var(--value) 0%, var(--value) 100%, 100% 100%);
-}
-.c-compare__range {
-  background-color: transparent;
-  box-sizing: border-box;
-  font-family: inherit;
-  height: 100%;
-  margin: 0;
-  outline: none;
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
-.c-compare__range::-moz-range-thumb {
-  background-color: var(--thumb-bgc);
-  cursor: ew-resize;
-  height: 100%;  
-  width: var(--thumb-w);
-}
-.c-compare__range::-webkit-slider-thumb {
-  background-color: var(--thumb-bgc);
-  cursor: ew-resize;
-  height: 100%;  
-  width: var(--thumb-w);
-}
-.c-compare__range:focus::-webkit-slider-thumb {
-  background-color: var(--thumb-bgc-focus);
-  box-shadow: 0 0 0 3px var(--thumb-bgc);
-}
-.c-compare__range:focus::-moz-range-thumb {
-  background-color: var(--thumb-bgc-focus);
-  box-shadow: 0 0 0 3px var(--thumb-bgc);
-}
-.c-compare__range::-moz-range-track {
-  background: transparent;
-  background-size: 100%;
-  box-sizing: border-box;
-}
-.c-compare__range::-webkit-slider-runnable-track {
-  background: transparent;
-  background-size: 100%;
-  box-sizing: border-box;
-  height: 100%;
-}
-.c-compare__range,
-.c-compare__range::-webkit-slider-runnable-track,
-.c-compare__range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-}
-.scroller {
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    left: 100px;
-    top: 50%;
-    transform: translateY(-50%) translateX(-25px);
-    border-radius: 50%;
-    background-color: #fff;
-    opacity: 0.9;
-    transition: opacity 0.12s ease-in-out;
-    pointer-events: auto;
-    cursor: pointer;
-    box-shadow: 3.5px 0px 7px rgba(100, 100, 100, 0.2);
-    pointer-events: none;
-}
-
-.scroller-top>.scroller__thumb {
-    border: 5px solid #FFAB91;
-}
-
-.scroller__thumb {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    padding: 7px;
-}
-</style>
