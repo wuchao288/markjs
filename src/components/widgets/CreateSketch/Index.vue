@@ -59,12 +59,12 @@
                         v-model="style.denoise" @change="_louvre(50)"
                         :active-text="t('canvas.jianggao')"
                     />
-             
+               
                 <el-switch
                     v-model="style.kuma"
                     active-text="Kiss" @change="_louvre(50)"
-                />
-            </el-space>
+                /> </el-space>
+          
                     <!-- <ui-switch v-model="state.denoise" @input="_louvre(50)">降噪</ui-switch>
 					<ui-switch v-model="state.kuma" @input="_louvre(50)">Kiss</ui-switch> -->
 					<!-- <ui-switch v-model="style.shade" :disabled="!style.kuma" @input="_louvre(50)">调子</ui-switch> -->
@@ -101,14 +101,15 @@
 
     import {reactive,ref,nextTick,defineProps,computed,markRaw ,watch} from "vue"
 
-    import { util } from "@/components/widgets/CreateSketch/method";
+    import { util } from "@/components/widgets/CreateSketch/method"
 
     import { useI18n } from "vue-i18n"
 
     import { mixins } from "@/mixin/index"
 
-    import { ElMessage } from "element-plus";
+    import { ElMessage } from "element-plus"
 
+    import  clearblankimg from "@/components/widgets/CreateSketch/clearBlank"
 
 
     const { t } = useI18n()
@@ -214,7 +215,7 @@
         shadeLight: 80,
         // s:80,
         // l:50,
-        shade: true,
+        shade: false,
         kuma: false,
         hajimei: false,
         watermark: false,
@@ -289,6 +290,8 @@
 
         data.value.previewWidth = previewWidth;
         data.value.previewHeight = previewHeight;
+
+
         await louvre();
 	}
 
@@ -376,14 +379,19 @@
     }
 
     const opened=()=>{
-        state.rawImage=imageSrc.value
+       
         state.sketchImage=''
         state.percent=0
         state.createing=false
         state.uploading=false
-        defaultImageURL.value=imageSrc.value
-
+        state.rawImage=imageSrc.value
         init()
+        // clearblankimg(imageSrc.value).then((url)=>{
+        //     state.rawImage=url
+        //     init()
+        // })
+
+        
 
     }
 

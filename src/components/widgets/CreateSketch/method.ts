@@ -1,16 +1,4 @@
 
-const randRange = (a, b) => Math.floor(Math.random() * (b - a) + a);
-
-const inputImageEl = document.querySelector('#input');
-
-
-
-let width = 640;
-let height = 480;
-let scale = width / height;
-
-
-
 let lastConfigString = null;
 
 const canvas = document.createElement('canvas');
@@ -21,10 +9,6 @@ const canvasMin = document.createElement('canvas');
 const pencilTextureCanvas = document.createElement('canvas');
 
   const louvre = async ({img, outputCanvas, config}) => {
-
-
-	debugger
-
 	if (!img || !config) return;
 
 	const configString = [
@@ -43,11 +27,6 @@ const pencilTextureCanvas = document.createElement('canvas');
 
 	let oriScale = oriWidth / oriHeight;
 
-
-
-	// const _width  = Math.floor( width  / config.zoom );
-	// const _height = Math.floor( height / config.zoom );
-
 	let _width  = Math.round( oriWidth   / config.zoom );
 	let _height = Math.round( oriHeight  / config.zoom );
 
@@ -56,8 +35,6 @@ const pencilTextureCanvas = document.createElement('canvas');
 		_height = _height * maxWidth / _width
 		_width = maxWidth
 	}
-	// const _width = 800;
-	// const _height = 800;
 
 
 	let cutLeft = 0;
@@ -92,9 +69,7 @@ const pencilTextureCanvas = document.createElement('canvas');
 	canvas.width = _width;
 	canvas.height = _height;
 
-	// ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-	// ctx.globalAlpha = 1
-	// ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
 
 	ctx.drawImage(
 		img,
@@ -104,37 +79,20 @@ const pencilTextureCanvas = document.createElement('canvas');
 		setLeft, setTop,
 		setWidth, setHeight
 	);
-	// ctx.font = '200px sans-serif'
-	// ctx.fillText('123233',50,200);
-
-	//ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-    //ctx.globalAlpha = 1
 
 
 	let pixel = ctx.getImageData(0, 0, _width, _height);
 
-
-
 	let pixelData = pixel.data;
 
-	// 测试图像数据读取正常与否
-	// alert(pixel.data.slice(0,10);
-
-
 	for (let i = 0; i < pixelData.length; i += 4) {
-		// let yuv = rgb2yuv(
-		// 	pixelData[i],
-		// 	pixelData[i + 1],
-		// 	pixelData[i + 2],
-		// );
+
 		const r = pixelData[i];
 		const g = pixelData[i + 1];
 		const b = pixelData[i + 2];
 		
 		let y = r * .299000 + g * .587000 + b * .114000;
 		y = Math.floor(y);
-
-		// if(i%10000) console.log(y);
 
 		pixelData[i    ] = y;
 		pixelData[i + 1] = y;
@@ -149,6 +107,7 @@ const pencilTextureCanvas = document.createElement('canvas');
 	let pencilTexturePixel;
 	if(config.shade){
 
+		console.info(config.shade)
 		// 载入纹理
 		pencilTextureCanvas.width = _width;
 		pencilTextureCanvas.height = _height;
@@ -240,8 +199,6 @@ const pencilTextureCanvas = document.createElement('canvas');
 			pixelData[i + 2] = y;
 		}
 
-		// ctx.putImageData(pixel, 0, 0);
-		// pixel = ctx.getImageData(0, 0, _width, _height);
 	}
 
 
@@ -257,22 +214,15 @@ const pencilTextureCanvas = document.createElement('canvas');
 		);
 	}
 	
+
 	const convoluteMatrix = config.Convolutes[config.convoluteName];
+	
+
 	let pixel1 = convoluteMatrix ? convoluteY(
 		pixel,
 		convoluteMatrix,
 		ctx
 	) : pixel;
-
-	// if(config.contrast){
-	// 	for (let i = 0; i < pixel1.data.length; i +=4) {
-	// 		let r = (pixel1.data[i]-128) * config.contrast + 128;
-	// 		pixel1.data[i  ] = r;
-	// 		pixel1.data[i+1] = r;
-	// 		pixel1.data[i+2] = r;
-	// 		pixel1.data[i+3] = 255;
-	// 	}
-	// }
 
 	if(convoluteMatrix && config.convolute1Diff){
 		let pixel2 = config.convoluteName2 ? convoluteY(
@@ -300,7 +250,12 @@ const pencilTextureCanvas = document.createElement('canvas');
 
 
 	if(convoluteMatrix)
+
 	if(config.lightCut || config.darkCut){
+
+		
+		console.info("config.lightCut",config.lightCut)
+
 		const scale = 255 / (255 - config.lightCut - config.darkCut);
 		for (let i = 0; i < pixelData.length; i += 4) {
 			let y = pixelData[i];
@@ -318,13 +273,10 @@ const pencilTextureCanvas = document.createElement('canvas');
 
 	if(config.kuma){
 
+		console.info("config.kuma",config.kuma)
+
 		const hStart = 30;
 		const hEnd = -184;
-	
-		// const be = bezier(0.57, 0.01, 0.43, 0.99);
-		// const s = config.s/100;
-	
-	
 		const gradient = ctx.createLinearGradient(0,0, _width,_height);
 	
 		gradient.addColorStop(0, '#fbba30');
@@ -345,36 +297,7 @@ const pencilTextureCanvas = document.createElement('canvas');
 			let _h = Math.floor(p/_width);
 			let _w = p % _width;
 	
-			/*
-			
-			// const 
-			// hScale = hScale * hScale;
-	
-			let hScale = (_h + _w)/(_width + _height);
-	
-			hScale = hScale * hScale;
-			hScale = be(hScale);
-	
-			// let h = Math.floor((hStart + (hScale) * (hEnd - hStart)));
-			let [h] = rgb2hsl([
-				gradientPixel.data[i + 0],
-				gradientPixel.data[i + 1],
-				gradientPixel.data[i + 2],
-			]);
-			const l = y/255;
-			const rgb = hsl2rgb([h, s, l * (1 - config.l/100) + (config.l/100)]);
-	
-			if(i%5677===0){
-				// console.log(h,y,l,l * (config.l/100) + (1 - config.l/100))
-				// console.log((_h + _w)/(_width + _height),hScale)
-			}
-	
-			pixelData[i+0 ] = rgb[0];
-			pixelData[i+1 ] = rgb[1];
-			pixelData[i+2 ] = rgb[2];
-			pixelData[i+3 ] = 255;
-			*/
-	
+
 			pixelData[i+0 ] = gradientPixel.data[i + 0];
 			pixelData[i+1 ] = gradientPixel.data[i + 1];
 			pixelData[i+2 ] = gradientPixel.data[i + 2];
@@ -391,21 +314,32 @@ const pencilTextureCanvas = document.createElement('canvas');
 	
 	}
 
+	var rgba = [255,255,255,255];
+	// 容差大小
+	var tolerance = 80;
 
-	// for(let i = 0;i < pixelData.length;i += 4){
+	for (var index = 0; index < pixel.data.length; index += 4) {
+		var r = pixel.data[index];
+		var g = pixel.data[index + 1];
+		var b = pixel.data[index + 2];
+		
+		if (Math.sqrt(
+			(r - rgba[0]) * (r - rgba[0]) + 
+			(g - rgba[1]) * (g - rgba[1]) + 
+			(b - rgba[2]) * (b - rgba[2])) <= tolerance
+		) {
+			pixel.data[index] = 0;
+			pixel.data[index + 1] = 0;
+			pixel.data[index + 2] = 0;
+			pixel.data[index + 3] = 0;
+		} else {
+			pixel.data[index] = r;
+			pixel.data[index + 1] = g;
+			pixel.data[index + 2] = b;
+			pixel.data[index + 3] = pixel.data[index + 3];
+		}
+	}
 
-	// 	let _rgb = yuv2rgb(
-	// 		pixelData[i],
-	// 		pixelData[i+1],
-	// 		pixelData[i+2],
-	// 	);
-
-	// 	pixelData[i   ] = _rgb[0];
-	// 	pixelData[i+1 ] = _rgb[1];
-	// 	pixelData[i+2 ] = _rgb[2];
-	// }
-
-	// blurC();
 	ctx.putImageData(pixel, 0, 0);
 
 	const ctxMin = canvasMin.getContext('2d');
@@ -428,46 +362,12 @@ const pencilTextureCanvas = document.createElement('canvas');
 		0,0,_width,_height
 	);
 
-	// one-last-image-logo-color.png
-	if(config.watermark){
-		// const watermarkImageEl = await loadImagePromise('one-last-image-logo2.png');
-
-		const watermarkImageWidth = watermarkImageEl.naturalWidth;
-		const watermarkImageHeight = watermarkImageEl.naturalHeight / 2;
-		let setWidth = _width * 0.3;
-		let setHeight = setWidth / watermarkImageWidth * watermarkImageHeight;
-	
-		if( _width / _height  > 1.1 ){
-			setHeight = _height * 0.15;
-			setWidth = setHeight / watermarkImageHeight * watermarkImageWidth;
-		}
-	
-		let cutTop = 0;
-	
-		if(config.hajimei){
-			cutTop = watermarkImageHeight;
-		}
-	
-		let setLeft = _width - setWidth - setHeight * 0.2;
-		let setTop = _height - setHeight - setHeight * 0.16;
-		ctx.drawImage(
-			watermarkImageEl,
-			0,cutTop,
-			watermarkImageWidth,watermarkImageHeight,
-			setLeft, setTop,
-			setWidth, setHeight
-		);
-	}
-
 	const outputCtx = outputCanvas.getContext('2d');
 
 	outputCanvas.width = _width;
 	outputCanvas.height = _height;
-	outputCtx.fillStyle = '#000';
-	outputCtx.fillRect(0,0,_width,_height);
-
-
-
+	//outputCtx.fillStyle = '#FFF';
+	//outputCtx.fillRect(0,0,_width,_height);
 	outputCtx.drawImage(
 		canvas,
 		0,0,_width,_height
@@ -475,8 +375,6 @@ const pencilTextureCanvas = document.createElement('canvas');
 
 
 	console.timeEnd('louvre');
-	// return canvas.toDataURL('image/png');
-	
 };
 
  let loadImage = (url,onOver)=>{
@@ -501,10 +399,7 @@ let pencilTextureEl;
 	loadImage(new URL("@/assets/images/pencil-texture.jpg",import.meta.url).href,el=>{
 		pencilTextureEl = el;
 		onOver();
-		// loadImage('one-last-image-logo2.png',el=>{
-		// 	watermarkImageEl = el;
-		// 	onOver();
-		// });
+		
 	});
 };
 
