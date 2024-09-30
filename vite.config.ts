@@ -33,6 +33,7 @@ export default defineConfig(
         resolvers: [ElementPlusResolver()],
       }),
       Components({
+        directoryAsNamespace: true,
         resolvers: [ElementPlusResolver()],
       })
     ],

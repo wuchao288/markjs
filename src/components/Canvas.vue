@@ -1222,6 +1222,9 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
         frame.emit("redo.add",{})
         
+
+        canvasApp.editor.target=group
+
         ElMessage({
             message: 'Success!',
             type: 'success'
