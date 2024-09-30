@@ -49,7 +49,7 @@
                 {{$t("canvas.startedit")}}
               </el-button>
               <!-- <el-button  @click="close"> {{$t("canvas.cancel")}} </el-button> -->
-              <el-button type="primary" @click="cutOutImageDone">
+              <el-button type="primary"  @click="cutOutImageDone">
                  {{$t("canvas.confirm")}} 
               </el-button>
           </div>
@@ -208,10 +208,12 @@
  
 
   const cutOutImageDone = () => {
-
-      emit('updateImageSrc', {
-            cutoutImg:state.cutImage
-      });
+      if(state.cutImage!=""){
+          emit('updateImageSrc', {
+              cutoutImg:state.cutImage
+        });
+      }
+      dialogVisible.value=false
   }
 </script>
 

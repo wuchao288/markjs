@@ -181,7 +181,7 @@
 
           let canvasApp=editorStore.editor;
           useImageStyle.value.fill.url=obj.createBgImg
-         canvasApp.editor.target.data.action="createbg"
+          canvasApp.editor.target.data.action="createbg"
           dialogVisible.value=false
 
      }
@@ -302,12 +302,13 @@
       useImageStyle.value.fill.url=updateImageData.sketchImage
       imageSketchSrc.value=""
       dialogSketchVisible.value=false
-
+      canvasApp.editor.target.data.action="sketch"
    }
     
     const  handleCreateSketch=()=>{
        dialogSketchVisible.value=true
        let canvasApp=editorStore.editor;
+     
        imageSketchSrc.value=canvasApp.editor.target.fill.url
     }
     
