@@ -11,23 +11,11 @@ declare module 'vue' {
     CanvasLeft: typeof import('./src/components/CanvasLeft/Index.vue')['default']
     CanvasLeftLabel: typeof import('./src/components/CanvasLeft/Label/index.vue')['default']
     CanvasLeftMenu: typeof import('./src/components/CanvasLeft/Menu/index.vue')['default']
-    ElAlert: typeof import('element-plus/es')['ElAlert']
-    ElButton: typeof import('element-plus/es')['ElButton']
     ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
-    ElCol: typeof import('element-plus/es')['ElCol']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
-    ElForm: typeof import('element-plus/es')['ElForm']
-    ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElImage: typeof import('element-plus/es')['ElImage']
-    ElInput: typeof import('element-plus/es')['ElInput']
     ElLink: typeof import('element-plus/es')['ElLink']
-    ElRadio: typeof import('element-plus/es')['ElRadio']
-    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
-    ElRow: typeof import('element-plus/es')['ElRow']
-    ElSlider: typeof import('element-plus/es')['ElSlider']
-    ElSpace: typeof import('element-plus/es')['ElSpace']
-    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
@@ -45,8 +33,5 @@ declare module 'vue' {
     WidgetsImageExtraction: typeof import('./src/components/widgets/ImageExtraction/index.vue')['default']
     WidgetsModulesNumberSlider: typeof import('./src/components/widgets/modules/numberSlider.vue')['default']
     WidgetsShortCut: typeof import('./src/components/widgets/ShortCut.vue')['default']
-  }
-  export interface ComponentCustomProperties {
-    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
