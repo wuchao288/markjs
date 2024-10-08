@@ -1,6 +1,8 @@
 <template>
     <div class="left-tab-plane">
        菜单
+       <div></div>
+       
     </div>
   </template>
   
@@ -14,4 +16,7 @@
            width: 200px;
            margin-top: 60px;
       }
+
+
+
   </style>

@@ -16,13 +16,11 @@
   </template>
   
   <script lang="ts" setup>
-    import {ref,onMounted,watch} from 'vue'
+    import {ref,onMounted,watch,computed} from 'vue'
 
     let tabs=ref<HTMLDivElement>()
 
     let activeTab=ref("text")
-
-    let showTab=ref(true)
 
     const topTabs= [
        
@@ -32,34 +30,14 @@
         { key: "toolkit", label: "tool", icon: "toolkit", index: 4 }
     ];
 
-    onMounted(()=>{
-        console.info(tabs.value.parentElement)
-    })
-
     const  showType=(type)=>{
-
-        if(activeTab.value==type){
-            activeTab.value=type
-
-            if(showTab.value==true){
-                showTab.value=false
-            }else{
-                showTab.value=true
-            }
-        }else{
-            activeTab.value=type
-            showTab.value=true
-        }
+      if(tabs.value?.parentElement?.classList.contains("show-tab")&&activeTab.value==type){
+        tabs.value?.parentElement?.classList.remove("show-tab")
+      }else{
+        tabs.value?.parentElement?.classList.add("show-tab")
+      }
+      activeTab.value=type
     }
-
-    watch(()=>showTab.value,(newVal)=>{
-        if(newVal==true){
-            tabs.value.parentElement.classList.add("show-tab")
-        }else{
-            tabs.value.parentElement.classList.remove("show-tab")
-        }
-    })
-
   </script>
   <style scoped lang="less">
       .left-tabs{
@@ -75,7 +53,10 @@
         width: 280px;
       }
       
-
+    
+      :deep(.center-tab){
+        margin-bottom: 10px;
+      }
       :deep(.center-tab>div){
         text-align: center;
         height: 90px;
@@ -88,6 +69,8 @@
         flex-direction: column;
         justify-content: space-evenly;
         cursor: pointer;
+        user-select: none;
+      
         .iconfont {
                 font-size: 22px;
                 height: 40px;
