@@ -1,5 +1,5 @@
 <template>
-    <div class="flex">
+    <div class="tab-warp-tab show-tab">
       <Label />
       <Menu />
     </div>
@@ -9,9 +9,9 @@
   import Label from "./Label/index.vue";
   import Menu from "./Menu/index.vue";
   </script>
-  <style>
-
-.flex{
+<style scoped>
+.tab-warp-tab{
     display: flex;
+    flex-direction: row;
 }
 </style>

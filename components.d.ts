@@ -8,7 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Canvas: typeof import('./src/components/Canvas.vue')['default']
-    CanvasLeft: typeof import('./src/components/CanvasLeft.vue')['default']
+    CanvasLeft: typeof import('./src/components/CanvasLeft/Index.vue')['default']
     CanvasLeftLabel: typeof import('./src/components/CanvasLeft/Label/index.vue')['default']
     CanvasLeftMenu: typeof import('./src/components/CanvasLeft/Menu/index.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']

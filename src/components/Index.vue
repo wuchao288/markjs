@@ -12,16 +12,17 @@
       @handleAddMateImg="addMateImg"
       @handlePageSizeTo="pageSizeTo"
       />
-     <Canvas ref="childRef"   />
-
- 
      
-
-
+    <div class="tab-warp">
+        <CanvasLeft />
+        <Canvas ref="childRef"   />
+    </div>
   </template>
 <script setup lang="ts">
 import Header from './Header.vue'
 import Canvas from './Canvas.vue'
+
+import CanvasLeft from './CanvasLeft/Index.vue'
 
 
 import {onMounted, ref,provide} from 'vue'
@@ -82,3 +83,10 @@ onMounted(()=>{
 })
 
 </script>
+
+<style scoped>
+  .tab-warp{
+      display: flex;
+      flex-direction: row;
+  }
+</style>

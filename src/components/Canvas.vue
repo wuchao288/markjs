@@ -202,6 +202,7 @@
         let appWrap=  document.getElementById("main-canvas") as HTMLDivElement
 
         appWrap.style.height= (window.innerHeight- 60)+"px"
+        appWrap.style.width= (window.innerWidth- 290)+"px"
         appWrap.style.marginTop="60px"
 
         var settingJson=(window.parent as any).getMarkJson?(window.parent as any).getMarkJson():undefined;
