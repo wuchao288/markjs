@@ -268,6 +268,11 @@ const setItemStyle = (img,index) => {
     &:hover{
         background-color: #c8c8c8;
     }
+    &:after{
+        content:'';
+        display:block;
+        padding-top:50%;
+    }
     img{
         
     }
