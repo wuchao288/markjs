@@ -39,11 +39,39 @@
     color: rgba(85, 85, 255, var(--un-text-opacity));
   }
 
-    .show-tab .arrow.left{
-            display: none;
-      }
+.show-tab .arrow.left{
+        display: none;
+}
 
-      .tab-warp-tab  .arrow.right{
-            display: block;
-      }
+.tab-warp-tab  .arrow.right{
+      display: block;
+}
+
+.show-tab .left-tab-plane{
+  opacity: 1;
+  width: 313px;
+}
+
+.left-tab-plane{
+ width: 0px;
+ opacity: 0;
+ transition-duration: .3s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
+.show-tab.tab-warp-tab{
+  width: 403px !important;
+  transition-duration: .3s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
+.tab-warp-tab{
+  width: 90px;
+  transition-duration: .3s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
 </style>

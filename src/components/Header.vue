@@ -633,7 +633,7 @@ const handleJsonSuccess: UploadProps['onChange'] = (
     padding: 0px;
     z-index: 2004;
     background-color: #fff;
-    box-shadow: 0 0 .4rem #0000004d;
+    box-shadow: 0 0 .2rem #0000004d;
     filter: drop-shadow(0 0 1.2rem rgba(255, 255, 255, .6));
 }
 .action{

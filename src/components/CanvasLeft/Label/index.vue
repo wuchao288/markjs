@@ -16,7 +16,13 @@
   </template>
   
   <script lang="ts" setup>
-    import {ref,onMounted,watch,computed} from 'vue'
+    import {ref} from 'vue'
+    import  useEditStore  from '@/stores/useEditStore'
+    import { storeToRefs } from 'pinia'
+
+    const mainStore = useEditStore()
+
+    const { poolType, poolShow } = storeToRefs(mainStore)
 
     let tabs=ref<HTMLDivElement>()
 
@@ -33,10 +39,13 @@
     const  showType=(type)=>{
       if(tabs.value?.parentElement?.classList.contains("show-tab")&&activeTab.value==type){
         tabs.value?.parentElement?.classList.remove("show-tab")
+        poolShow.value=false
       }else{
         tabs.value?.parentElement?.classList.add("show-tab")
+        poolShow.value=true
       }
       activeTab.value=type
+      poolType.value=type
     }
   </script>
   <style scoped lang="less">
@@ -45,12 +54,9 @@
            width: 90px;
            margin-top: 60px;
            padding-top: 20px;
-           border-right-color:rgb(238, 238, 238);
-            border-right-style: solid;
-            border-right-width: 1px;
-      }
-      .show-tab{
-        width: 280px;
+          //  border-right-color:rgb(238, 238, 238);
+          //   border-right-style: solid;
+          //   border-right-width: 1px;
       }
       
     

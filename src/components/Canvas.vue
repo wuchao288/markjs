@@ -1,5 +1,5 @@
 <template>
-    <div id="main-canvas" >
+    <div id="main-canvas" ref="appWrap">
 
     </div>
 
@@ -60,7 +60,7 @@
 <script setup lang="ts">
 
 
-    import {onMounted,ref,watch,shallowRef,defineAsyncComponent, provide} from 'vue'
+    import {onMounted,ref,watch,shallowRef,defineAsyncComponent, computed} from 'vue'
 
     import { App,Box,Frame,ZoomEvent,ResizeEvent,Rect,Ellipse,Polygon,Line,Star,Text,PointerEvent,Group,Platform} from 'leafer-ui'
     import '@leafer-in/editor' // 导入图形编辑器插件
@@ -104,6 +104,9 @@
 
     import Command from '@/command'
 
+    import { debouncedWatch } from '@vueuse/core'
+
+        
     const { t } = useI18n()
 
     let componen = shallowRef(null);
@@ -129,6 +132,7 @@
    
     let ctop=ref("0px")
     let cleft=ref("0px")
+
 
     //画板上按钮提示
     const tipContent=ref("")
@@ -191,19 +195,41 @@
 
     let windowWidth=ref(0)
 
+    let leftWidth=ref(0)
 
-    let selectLen=ref({ len:0})
+    let appWrap=ref()
 
+   let observer: ResizeObserver | null = null;
+   const handleResize = (entries: any) => {
+        for (const entry of entries) {
+          const { width, height } = entry.contentRect;
+          leftWidth.value=width
+        }
+     };
 
-    provide('selectLen',selectLen)
+     debouncedWatch(
+        leftWidth,
+        () => {
+            appWrap.value.style.width=(window.innerWidth- leftWidth.value)+"px"
+         },
+        { debounce: 500 }
+    )
 
     onMounted(() => {
-        
-        let appWrap=  document.getElementById("main-canvas") as HTMLDivElement
 
-        appWrap.style.height= (window.innerHeight- 60)+"px"
-        appWrap.style.width= (window.innerWidth- 290)+"px"
-        appWrap.style.marginTop="60px"
+
+        observer = new ResizeObserver(handleResize);
+
+        observer.observe(document.getElementsByClassName("tab-warp-tab")[0] as HTMLDivElement);
+
+        document.getElementById("main-canvas") as HTMLDivElement
+
+        appWrap.value.style.height= (window.innerHeight- 60)+"px"
+
+        console.info(appWrap.value.style.height)
+
+        appWrap.value.style.width=(window.innerWidth- 403)+"px"
+        appWrap.value.style.marginTop="60px"
 
         var settingJson=(window.parent as any).getMarkJson?(window.parent as any).getMarkJson():undefined;
 
@@ -213,7 +239,7 @@
           // 实例应用
         canvasApp = new App({
             view:'main-canvas',
-            fill: 'transparent',
+            fill: 'transparent'
             // 通过 app.editor = new Editor(); 时，不需要添加 editor 属性，会有问题
             // editor:{}
         })

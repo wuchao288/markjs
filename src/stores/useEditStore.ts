@@ -79,6 +79,10 @@ export type TImageSetting={
 
 
 type TStoreBaseState = {
+  lastEdit: string, // 左边栏
+  lastHelp: string, // 左边栏
+  poolType: string, // 左边栏
+  poolShow: boolean, // 显示左边栏:
   scale: number| IPointData
   editor:App|null
   useTool:string
@@ -114,6 +118,10 @@ type TSotreAction = {
 
 const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('editor', {
   state: () => ({
+    lastEdit: 'editor', // 左边栏
+    lastHelp: 'editor', // 左边栏
+    poolType: 'editor', // 左边栏
+    poolShow: false, // 显示左边栏:
     scale: 1,
     editor:null,
     useTool:"",
