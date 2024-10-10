@@ -53,7 +53,7 @@ export default class Command {
 
     frame.on('remove', this.change)
 
-    frame.on('update', this.change)
+    //frame.on('update', this.change)
 
 
     this.app.tree.on("redo.redo",this.redo)
@@ -198,8 +198,10 @@ export default class Command {
         frame.emit('update',{})
   }
  }
-  change = () => {
+  change = (e) => {
     
+    console.info(e)
+
     let frame=this.app.tree.findOne("Frame")
 
     const json = _.cloneDeep(frame.toJSON())

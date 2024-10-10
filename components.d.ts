@@ -12,6 +12,7 @@ declare module 'vue' {
     CanvasLeftLabel: typeof import('./src/components/CanvasLeft/Label/index.vue')['default']
     CanvasLeftMenu: typeof import('./src/components/CanvasLeft/Menu/index.vue')['default']
     CanvasLeftMenuComponentsMaterialPool: typeof import('./src/components/CanvasLeft/Menu/components/MaterialPool.vue')['default']
+    CanvasLeftMenuComponentsShapePool: typeof import('./src/components/CanvasLeft/Menu/components/ShapePool.vue')['default']
     CanvasLeftMenuComponentsTextboxPool: typeof import('./src/components/CanvasLeft/Menu/components/TextboxPool.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']

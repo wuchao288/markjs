@@ -15,7 +15,7 @@ import { storeToRefs } from 'pinia'
 import { computed,ref } from 'vue'
 import TextboxPool from './components/TextboxPool.vue'
 import MaterialPool from './components/MaterialPool.vue'
-
+import ShapePool from './components/ShapePool.vue'
 
 
 const mainStore = useEditStore()
@@ -25,6 +25,7 @@ let lefttabplane=ref()
 const { poolType, poolShow } = storeToRefs(mainStore)
 
 const leftMap = {
+  'shape': ShapePool,
   'editor': TextboxPool,
   'template': TextboxPool,
   'material': MaterialPool,

@@ -348,7 +348,6 @@ const handleJsonSuccess: UploadProps['onChange'] = (
 ) => {
 
   let rawFile=(uploadFile.raw)
-  console.info(uploadFile)
   var reader=new FileReader()
   reader.onload=function(e){
    var content=e.target.result 

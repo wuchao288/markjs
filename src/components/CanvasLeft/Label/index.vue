@@ -6,7 +6,7 @@
        :key="tab.key" >
           <div :id="`left-tabs-${tab.key}`">
               <a class="tab-btn" @click="showType(tab.key)">
-                <span class="iconfont icon icon-wenzi-L"></span>
+                <span :class="'iconfont icon '+tab.icon"></span>
                 <p>{{tab.label}}</p>
               </a>
           </div>
@@ -26,14 +26,14 @@
 
     let tabs=ref<HTMLDivElement>()
 
-    let activeTab=ref("text")
+    let activeTab=ref("shape")
 
     const topTabs= [
-       
-        { key: "text", label: "text", icon: "text", index: 1 },
-        { key: "material", label: "material", icon: `material`, index: 2 },
-        { key: "image", label: "image", icon: "picture", index: 3 },
-        { key: "toolkit", label: "tool", icon: "toolkit", index: 4 }
+        { key: "shape", label: "shape", icon: "icon-hexagon", index: 0 },
+        { key: "text", label: "text", icon: "icon-wenzi-L", index: 1 },
+        { key: "material", label: "material", icon: `icon-star`, index: 2 },
+        { key: "image", label: "image", icon: "icon-shangchuantupian1", index: 3 },
+        { key: "toolkit", label: "tool", icon: "icon-wenzi-L", index: 4 }
     ];
 
     const  showType=(type)=>{

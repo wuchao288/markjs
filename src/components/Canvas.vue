@@ -517,10 +517,10 @@
 
 
         canvasApp.editor.on(PointerEvent.MENU,function(e){
-
+            let apprect=appWrap.value.getBoundingClientRect()
             menuVisible.value=true
-            cleft.value=e.x+"px"
-            ctop.value=e.y+"px"
+            cleft.value=(e.x+apprect.x)+"px"
+            ctop.value=(e.y+apprect.y)+"px"
 
             if(canvasApp.editor.list.length>1){
                isGroup.value=true
@@ -656,8 +656,7 @@
 
         canvasApp.tree.zoom("fit", 100)
 
-        frame.emit('update',{})
-
+        frame.emit('redo.add',{})
     })
 
     watch([()=>usePageSetting.value.pageBgClass,()=>usePageSetting.value.pageBgSet],(newValues, oldValues)=>{
@@ -747,7 +746,7 @@
             }
         }
 
-        frame.emit('update',{})
+        frame.emit('redo.add',{})
     },{deep:true})
 
 
@@ -757,7 +756,7 @@
             elem.cornerRadius=value0
         })
 
-        frame.emit('update',{})
+        frame.emit('redo.add',{})
     })
 
 
@@ -768,7 +767,7 @@
         })
 
         
-        frame.emit('update',{})
+        frame.emit('redo.add',{})
     })
 
     watch(()=>useImageStyle.value.width,(value0)=>{
@@ -777,7 +776,7 @@
             elem.width=value0
         })
 
-        frame.emit('update',{})
+        frame.emit('redo.add',{})
     })
 
     
@@ -787,7 +786,7 @@
             elem.opacity=value0
         })
 
-        frame.emit('update',{})
+        frame.emit('redo.add',{})
     })
 
 
@@ -829,7 +828,7 @@
                 canvasApp.editor.target.data.cropData=null
             }
             //canvasApp.editor.target.data.original=newValue
-            frame.emit('update',{})
+            frame.emit('redo.add',{})
          }
 
          
@@ -856,7 +855,7 @@
         let text= canvasApp.editor.target as Text
         text.fontFamily=newValue
 
-        frame.emit('update',{})
+        frame.emit('redo.add',{})
     })
 
 
@@ -866,7 +865,7 @@
             let text= canvasApp.editor.target as Text
             text.fill=newValue
 
-            frame.emit('update',{})
+            frame.emit('redo.add',{})
         }
 
    })
@@ -877,7 +876,7 @@
         let text= canvasApp.editor.target as Text
         text.fontSize=newValue
 
-        frame.emit('update',{})
+        frame.emit('redo.add',{})
     }
  })
 
@@ -889,7 +888,7 @@
      let text= canvasApp.editor.target as Text
      text.text=newValue
 
-     frame.emit('update',{})
+     frame.emit('redo.add',{})
  }
 })
 
@@ -898,7 +897,7 @@ watch(()=>useTextStyle.value.stroke, (newValue, oldValue)=>{
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.stroke=newValue
-     frame.emit('update',{})
+     frame.emit('redo.add',{})
  }
 })
 
@@ -907,7 +906,7 @@ watch(()=>useTextStyle.value.strokeWidth, (newValue, oldValue)=>{
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.strokeWidth=newValue
-     frame.emit('update',{})
+     frame.emit('redo.add',{})
  }
 })
 watch(()=>useTextStyle.value.letterSpacing, (newValue, oldValue)=>{
@@ -915,7 +914,7 @@ watch(()=>useTextStyle.value.letterSpacing, (newValue, oldValue)=>{
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.letterSpacing=newValue
-     frame.emit('update',{})
+     frame.emit('redo.add',{})
  }
 })
 
@@ -926,7 +925,7 @@ watch(()=>useTextStyle.value.lineHeight.value, (newValue, oldValue)=>{
         type:"percent",
         value:newValue
     }
-    frame.emit('update',{})
+    frame.emit('redo.add',{})
 })
 
 watch(()=>useTextStyle.value.textDecoration, (newValue, oldValue)=>{
@@ -934,7 +933,7 @@ watch(()=>useTextStyle.value.textDecoration, (newValue, oldValue)=>{
  if(oldValue!=newValue&&oldValue!=""){
      let text= canvasApp.editor.target as Text
      text.textDecoration=newValue
-     frame.emit('update',{})
+     frame.emit('redo.add',{})
  }
 })
 
@@ -942,7 +941,7 @@ watch(()=>useTextStyle.value.bold, (newValue, oldValue)=>{
 
     let text= canvasApp.editor.target as Text
     text.fontWeight= newValue?"bold":"normal"
-    frame.emit('update',{})
+    frame.emit('redo.add',{})
 
 })
 
@@ -951,7 +950,7 @@ watch(()=>useTextStyle.value.italic, (newValue, oldValue)=>{
      let text= canvasApp.editor.target as Text
      text.italic=newValue
 
-     frame.emit('update',{})
+     frame.emit('redo.add',{})
 })
 
 watch(()=>useTextStyle.value.lineStyle, (newValue, oldValue)=>{
@@ -963,7 +962,7 @@ watch(()=>useTextStyle.value.lineStyle, (newValue, oldValue)=>{
         }else{
             text.dashPattern=[];
       }
-       frame.emit('update',{})
+      frame.emit('redo.add',{})
 })
 
 watch(()=>useTextStyle.value.isShadow, (newValue, oldValue)=>{
@@ -976,7 +975,7 @@ watch(()=>useTextStyle.value.isShadow, (newValue, oldValue)=>{
         text.shadow=""
     }
 
-    frame.emit('update',{})
+    frame.emit('redo.add',{})
 })
 
 watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
@@ -989,7 +988,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
      text.shadow=""
  }
 
- frame.emit('update',{})
+ frame.emit('redo.add',{})
 },{deep:true})
 
 
@@ -1108,7 +1107,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
          }
      })
 
-     frame.emit('update',{})
+     frame.emit('redo.add',{})
  },{ deep: true })
     
 
@@ -1325,7 +1324,7 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
            let obj= canvasApp.editor.group()
            obj.hitFill='none'
-           console.info(obj)
+          
         }else{
             canvasApp.editor.ungroup()
            // canvasApp.editor.list.forEach((elem)=>{ console.info(elem.toString())  })

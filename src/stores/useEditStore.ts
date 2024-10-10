@@ -118,9 +118,9 @@ type TSotreAction = {
 
 const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('editor', {
   state: () => ({
-    lastEdit: 'editor', // 左边栏
-    lastHelp: 'editor', // 左边栏
-    poolType: 'editor', // 左边栏
+    lastEdit: 'shape', // 左边栏
+    lastHelp: 'shape', // 左边栏
+    poolType: 'shape', // 左边栏
     poolShow: false, // 显示左边栏:
     scale: 1,
     editor:null,

@@ -116,10 +116,11 @@
 import { ElForm,ElFormItem,ElCard,ElButton,ElRow,ElCol,ElTooltip,ElLink,ElSpace} from 'element-plus'
 
 import { useI18n } from "vue-i18n"
+const { t } = useI18n()
 
 import { ref,onActivated,watch } from 'vue';
 import { App } from 'leafer-ui';
-const { t } = useI18n()
+
 
 import { storeToRefs } from 'pinia'
 
