@@ -2,16 +2,27 @@
   <el-card shadow="never"  body-class="panel-container" v-if="typeRef === 'all'">
     <template #header>
       <div class="card-header">
-        <el-autocomplete  size="large"
-        :fetch-suggestions="querySearch"
-        clearable  class="inline-input w-50"
-        placeholder="搜索文字"
-        @select="handleSelect"
-        >
-            <template #prefix >
-                <el-icon class="el-input__icon"><search /></el-icon>
-            </template>
-       </el-autocomplete>
+
+        <el-popover
+            placement="bottom-start"
+            title="历史记录"
+            trigger="click"
+            :showArrow="false"
+            >
+            <template #reference>
+                <el-input size="large"
+                    v-model="state"
+                    placeholder="搜索内空"
+                    @change="handleSelect"
+                    > <template #prefix >
+                            <el-icon class="el-input__icon"><search /></el-icon>
+                        </template>
+                </el-input>
+           </template>
+           <template #default>
+            <a href="#">历史1 </a>   <a  href="#">记录1 </a>
+           </template>
+        </el-popover>
       </div>
     </template>
 
@@ -24,16 +35,16 @@
             </div>
             <div class="panel-block_body">
                 <el-row class="panel-resource-list">
-                    <el-col :span="4" class="panel-resource-list-item">
-                    <p class="panel-resource-list-item-icon">H1</p>
-                    <p class="panel-resource-list-item-title">标题</p>
+                    <el-col :span="4" class="panel-resource-list-item" @click="addText(18)">
+                        <p class="panel-resource-list-item-icon">H1</p>
+                        <p class="panel-resource-list-item-title">标题</p>
                     </el-col>
-                    <el-col :span="4" class="panel-resource-list-item">
+                    <el-col :span="4" class="panel-resource-list-item" @click="addText(16)">
                         <p class="panel-resource-list-item-icon">H2</p>
                         <p class="panel-resource-list-item-title">副标题</p>
                     </el-col>
-                    <el-col :span="4" class="panel-resource-list-item">
-                        <p class="panel-resource-list-item-icon">Aa</p>
+                    <el-col :span="4" class="panel-resource-list-item" @click="addText(12)">
+                        <p class="panel-resource-list-item-icon" >Aa</p>
                         <p class="panel-resource-list-item-title">正文</p>
                     </el-col>
                 </el-row>
@@ -50,7 +61,7 @@
             </div>
             <div class="panel-block_body">
                 <el-row class="panel-resource-list">
-                    <el-col :span="8" class="panel-resource-list-item"  v-for="it in  item.filter((m,idex)=>idex<3)">
+                    <el-col @click="addGroup(it)" :span="8" class="panel-resource-list-item"  v-for="it in  item.filter((m,idex)=>idex<3)">
                         <img :src="it.preview" lazy loading="lazy"  />
                     </el-col>
                     
@@ -68,26 +79,36 @@
             <el-icon :size="16">
                 <ArrowLeft />
             </el-icon>
-            <span>划重点</span>
+            <span>{{typeRef}}</span>
         </div>
 
-        <el-autocomplete  size="large"
-        :fetch-suggestions="querySearch"
-        clearable  class="inline-input w-50"
-        placeholder="搜索"
-        @select="handleSelect"
-        >
-            <template #prefix >
-                <el-icon class="el-input__icon"><search /></el-icon>
-            </template>
-       </el-autocomplete>
+        <el-popover
+            placement="bottom-start"
+            title="历史记录"
+            trigger="click"
+            :showArrow="false"
+            >
+            <template #reference>
+                <el-input size="large"
+                    v-model="state"
+                    placeholder="搜索内空"
+                    @change="handleSelect"
+                    > <template #prefix >
+                            <el-icon class="el-input__icon"><search /></el-icon>
+                        </template>
+                </el-input>
+           </template>
+           <template #default>
+            <a href="#">历史1 </a>   <a  href="#">记录1 </a>
+           </template>
+        </el-popover>
       </div>
     </template>
 
     <div class="total-box">
         <el-row  v-loading="categoryData.length === 0">
-            <el-col :span="8"  class="box-image" v-for="(img, index) in categoryData" :key="index">
-                <img :src="img.preview"  @click="createImage(img)" lazy loading="lazy" />
+            <el-col :span="8" @click="addGroup(img)" class="box-image" v-for="(img, index) in categoryData" :key="index">
+                <img :src="img.preview"  lazy loading="lazy" />
             </el-col>
       </el-row>
     </div>
@@ -100,8 +121,11 @@
 import { Search,ArrowLeft,ArrowRight } from '@element-plus/icons-vue'
 import _ from 'lodash'
 import {TextEffectItemList} from '@/assets/data/Material'
-import  {onMounted, ref,nextTick, computed } from 'vue'
+import {onMounted, ref,nextTick, computed } from 'vue'
 
+import  useHandleCreate from '@/hooks/useCreateElement'
+
+const { createTextElement,createGroup } = useHandleCreate();
 
 TextEffectItemList.forEach((item,index)=>{
     if(index%5==0){
@@ -120,7 +144,12 @@ const categoryRef =computed(()=>document.getElementsByClassName("panel-container
 const categoryTop = ref(0)
 const typeRef = ref("all")
 
+const state = ref('')
 
+
+const handleSelect = (item) => {
+  console.info(state.value)
+}
 
 let groupText=_.groupBy(TextEffectItemList,item=>item.cateName)
 
@@ -128,6 +157,7 @@ let groupText=_.groupBy(TextEffectItemList,item=>item.cateName)
 const categoryData = computed(() => {
   return groupText[typeRef.value]
 });
+
 
 
 const showTotal=(type)=>{
@@ -142,6 +172,12 @@ const hideTotal = () => {
   },50)
 };
 
+const addText=(fontSize)=>{
+    createTextElement("这是一个标题",fontSize)
+}
+const  addGroup=(item)=>{
+    createGroup(item)
+}
 
 const setItemStyle = (img,index) => {
   if (!img) return;
@@ -165,9 +201,7 @@ const setItemStyle = (img,index) => {
 
 <style scoped lang="less">
 
-  :deep(.inline-input.el-autocomplete .el-input__wrapper){
-    border-radius: 6px;
-  }
+
 
   :deep(.panel-container){
     padding: 0px;
@@ -265,16 +299,14 @@ const setItemStyle = (img,index) => {
     padding: 4px;
     cursor: pointer ;
     border-radius: 8px;
+    background: #f8fafc;
     &:hover{
         background-color: #c8c8c8;
     }
-    &:after{
-        content:'';
-        display:block;
-        padding-top:50%;
-    }
     img{
-        
+        width: 100%;
+        height: 95px;
+        object-fit: contain;
     }
 }
 

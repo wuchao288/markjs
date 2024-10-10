@@ -226,8 +226,6 @@
 
         appWrap.value.style.height= (window.innerHeight- 60)+"px"
 
-        console.info(appWrap.value.style.height)
-
         appWrap.value.style.width=(window.innerWidth- 403)+"px"
         appWrap.value.style.marginTop="60px"
 
@@ -548,11 +546,12 @@
             let target=(e.target.worldBoxBounds)  
             tipVisible.value=true
             tipContent.value=tipContentModel[name]
+            let apprect=appWrap.value.getBoundingClientRect()
             tipPosition.value = DOMRect.fromRect({
                     width: 0,
                     height: 0,
-                    x: target.x+16,
-                    y: target.y+60
+                    x: target.x+14+apprect.x,
+                    y: target.y+apprect.y
             })
         })
 
