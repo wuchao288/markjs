@@ -23,6 +23,7 @@ export type TPageSetting={
 
 
 export type TTextSetting={
+  tag:string,
   text:string,
   fontSize:number,
   fill:string,
@@ -41,7 +42,12 @@ export type TTextSetting={
   textDecoration:'none' | 'under' | 'delete'
   shadow:{x: number;y: number; blur: number; color: string;},
   locked:boolean,
-  visible:boolean
+  visible:boolean,
+  boxLineStyle:string,
+  boxStrokeWidth:number,
+  boxStroke:string,
+  boxFill:string,
+  boxCornerRadius:2
 }
 
 export type TSharpSetting={
@@ -148,6 +154,7 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
     } as TPageSetting,
 
     useTextStyle:{
+        tag:"Box",
         text:'10cm',
         fill:'#000000',
         bgcolor:'#ffffff',
@@ -171,10 +178,15 @@ const useEditStore = defineStore<'editor', TStoreBaseState, {}, TSotreAction>('e
           x: 0,
           y: 0,
           blur: 4,
-          color: "#4DCB71AA"
+          color: "#00000"
         },
         locked:false,
-        visible:true
+        visible:true,
+        boxLineStyle:'solid',
+        boxStrokeWidth:0,
+        boxStroke:"#6b79ee",
+        boxFill:"#6b79ee",
+        boxCornerRadius:2
     } as TTextSetting,
 
     useSharpStyle:{

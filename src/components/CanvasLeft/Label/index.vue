@@ -19,6 +19,9 @@
     import {ref} from 'vue'
     import  useEditStore  from '@/stores/useEditStore'
     import { storeToRefs } from 'pinia'
+    import { useI18n } from "vue-i18n"
+    const { t } = useI18n()   
+
 
     const mainStore = useEditStore()
 
@@ -29,11 +32,11 @@
     let activeTab=ref("shape")
 
     const topTabs= [
-        { key: "shape", label: "shape", icon: "icon-hexagon", index: 0 },
-        { key: "text", label: "text", icon: "icon-wenzi-L", index: 1 },
-        { key: "material", label: "material", icon: `icon-star`, index: 2 },
-        { key: "image", label: "image", icon: "icon-shangchuantupian1", index: 3 },
-        { key: "toolkit", label: "tool", icon: "icon-wenzi-L", index: 4 }
+        { key: "shape", label:t("header.sharp"), icon: "icon-hexagon", index: 0 },
+        { key: "text", label:t("header.text"), icon: "icon-wenzi-L", index: 1 },
+        { key: "material", label: t("header.material"), icon: `icon-star`, index: 2 }
+        // { key: "image", label: "image", icon: "icon-shangchuantupian1", index: 3 },
+        // { key: "toolkit", label: "tool", icon: "icon-wenzi-L", index: 4 }
     ];
 
     const  showType=(type)=>{

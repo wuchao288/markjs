@@ -1,6 +1,33 @@
 <template>
     <el-card shadow="never"  body-class="panel-container" >
-    
+        <div class="panel-block add-text">
+            <div class="panel-block_header">
+                <div class="panel-block_header-title">
+                    <span>添加文字</span>
+                </div>
+                <div class="panel-block_header-action"></div>
+            </div>
+            <div class="panel-block_body">
+                <el-row class="panel-resource-list">
+                    <el-col :span="4" class="panel-resource-list-item" @click="addText(18)">
+                        <p class="panel-resource-list-item-icon">H1</p>
+                        <p class="panel-resource-list-item-title">标题</p>
+                    </el-col>
+                    <el-col :span="4" class="panel-resource-list-item" @click="addText(16)">
+                        <p class="panel-resource-list-item-icon">H2</p>
+                        <p class="panel-resource-list-item-title">副标题</p>
+                    </el-col>
+                    <el-col :span="4" class="panel-resource-list-item" @click="addText(12)">
+                        <p class="panel-resource-list-item-icon" >Aa</p>
+                        <p class="panel-resource-list-item-title">正文</p>
+                    </el-col>
+                    <el-col :span="4" class="panel-resource-list-item" @click="addTextBox(12)">
+                        <p class="panel-resource-list-item-icon" >Aa</p>
+                        <p class="panel-resource-list-item-title">文本框</p>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
           <div class="panel-block">
               <div class="panel-block_header">
                   <div class="panel-block_header-title">
@@ -20,7 +47,7 @@
           <div class="panel-block">
               <div class="panel-block_header">
                   <div class="panel-block_header-title">
-                      <span>形状</span>
+                      <span>{{$t("header.polygon")}}</span>
                   </div>
                   <div class="panel-block_header-action"></div>
               </div>
@@ -36,7 +63,7 @@
           <div class="panel-block">
               <div class="panel-block_header">
                   <div class="panel-block_header-title">
-                      <span>箭头</span>
+                      <span>{{$t("header.arrow")}}</span>
                   </div>
                   <div class="panel-block_header-action"></div>
               </div>
@@ -52,7 +79,7 @@
           <div class="panel-block">
               <div class="panel-block_header">
                   <div class="panel-block_header-title">
-                      <span>标注</span>
+                      <span>{{$t("header.mark")}}</span>
                   </div>
                   <div class="panel-block_header-action"></div>
               </div>
@@ -78,7 +105,7 @@
   
   import  useHandleCreate from '@/hooks/useCreateElement'
   
-  const { createShape } = useHandleCreate();
+  const { createShape,createTextElement,createTextElementBox } = useHandleCreate();
   import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 
@@ -101,7 +128,13 @@ SharpTypeList.forEach(m=>m.title=t(m.title))
   
   
 
+  const addText=(fontSize)=>{
+    createTextElement("这是一个标题",fontSize)
+}
 
+const addTextBox=(fontSize)=>{
+    createTextElementBox("这是一个标题",fontSize)
+}
   
   
   </script>

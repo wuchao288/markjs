@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Box,PointerEvent,Platform, Line,Text,Group,Rect,Ellipse,Polygon,Star} from 'leafer-ui'
+import { UI,Box,PointerEvent,Platform, Line,Text,Group,Rect,Ellipse,Polygon,Star} from 'leafer-ui'
 import { Flow } from '@leafer-in/flow'
 import  {nanoid} from  'nanoid'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -212,8 +212,6 @@ export default()=>{
                     fontFamily:'アプリ明朝',
                     fill:'#000000',
                     padding: [4, 8],
-                    x:defaultOption.x,
-                    y:defaultOption.y,
                     shadow: {
                          x: 0,
                          y: 0,
@@ -239,8 +237,6 @@ export default()=>{
                     fill: '#ffffff',
                     stroke:stroke,
                     strokeWidth:2,
-                    x:defaultOption.x,
-                    y:defaultOption.y,
                     editable:true,
                     id,
                     name:'Polygon',
@@ -265,8 +261,6 @@ export default()=>{
                     corners: Number(subType),
                     stroke:stroke,
                     strokeWidth:2,
-                    x:defaultOption.x,
-                    y:defaultOption.y,
                     editable:true,
                     id,
                     name:'Star',
@@ -337,6 +331,56 @@ export default()=>{
         })
     }
 
+
+    const createTextElementBox=(textValue,fontSize)=>{
+
+        const box = new Box({
+            x: 100,
+            y: 100,
+            editable:true,
+            fill: '#FF4B4B',
+            name:"TextBox",
+            cornerRadius: 6,
+            textBox: true,
+            resizeChildren:true,
+            hitChildren:false,
+            dashPattern:[],
+            strokeWidth:2,
+            stroke:"#6b79ee",
+            id:nanoid(),
+            children: [
+               new Text({
+                    id: nanoid(10),
+                    name:'Text',
+                    text: textValue,
+                    letterSpacing:0,
+                    lineHeight:{
+                        type: 'percent',
+                        value: 1.5, // 150%
+                    },
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                    fontSize:fontSize,
+                    editable:true,
+                    resizeFontSize: false,  //加了这个属性为true后Box的缩放不正常
+                    stroke:'rgba(0,0,0,0)',
+                    strokeWidth:0,
+                    fontFamily:'アプリ明朝',
+                    fill:'#000000',
+                    padding: [10, 20],
+                    shadow: {
+                        x: 0,
+                        y: 0,
+                        blur: 4,
+                        color: "#000000"
+                    }
+                })
+            ]
+        })
+
+        _canvasAddElement(box)
+    }
+
     const createImage=async (imgUrl)=>{
 
         const { centerPoint, workSpaceDraw,canvas,width:pageWidth,height:pageHeight } = useCenter();
@@ -386,7 +430,7 @@ export default()=>{
     const createGroup=(item)=>{
 
 
-        const group = new Group(item.data)
+        const group = UI.one(item.data)
 
         group.around='top-left'
         group.id=nanoid()
@@ -419,7 +463,7 @@ export default()=>{
       shadow: {
            x: 0,
            y: 0,
-           blur: 0,
+           blur: 4,
            color: "#000000"
        }
     })
@@ -440,6 +484,7 @@ export default()=>{
     createTextElement,
     createGroup,
     createImage,
-    createShape
+    createShape,
+    createTextElementBox
   }
 }

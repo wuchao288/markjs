@@ -47,6 +47,10 @@
                         <p class="panel-resource-list-item-icon" >Aa</p>
                         <p class="panel-resource-list-item-title">正文</p>
                     </el-col>
+                    <el-col :span="4" class="panel-resource-list-item" @click="addTextBox(12)">
+                        <p class="panel-resource-list-item-icon" >Aa</p>
+                        <p class="panel-resource-list-item-title">文本框</p>
+                    </el-col>
                 </el-row>
             </div>
         </div>
@@ -125,7 +129,7 @@ import {onMounted, ref,nextTick, computed } from 'vue'
 
 import  useHandleCreate from '@/hooks/useCreateElement'
 
-const { createTextElement,createGroup } = useHandleCreate();
+const { createTextElement,createGroup,createTextElementBox } = useHandleCreate();
 
 TextEffectItemList.forEach((item,index)=>{
     if(index%5==0){
@@ -178,6 +182,11 @@ const addText=(fontSize)=>{
 const  addGroup=(item)=>{
     createGroup(item)
 }
+
+const addTextBox=(fontSize)=>{
+    createTextElementBox("这是一个标题",fontSize)
+}
+
 
 const setItemStyle = (img,index) => {
   if (!img) return;

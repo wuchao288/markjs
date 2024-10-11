@@ -281,8 +281,8 @@ const handleExportPng=()=>{
   }
 
   if(canvasApp.editor.list[0].tag!="Group"){
-      ElMessage.warning("只能选择一个编组元素导出，多个元素请右键-编组后导出！")
-      return
+      // ElMessage.warning("只能选择一个编组元素导出，多个元素请右键-编组后导出！")
+      // return
   }
 
   let rect=canvasApp.editor.list[0];
@@ -362,7 +362,7 @@ const handleJsonSuccess: UploadProps['onChange'] = (
  <div class="header">
      <div class="action">
          <ul>
-          <li>
+          <li v-show="false">
             <el-tooltip
                         class="box-item"
                         effect="dark"
@@ -399,21 +399,21 @@ const handleJsonSuccess: UploadProps['onChange'] = (
           </el-button>
         </el-tooltip>
          </li>
-          <li>
+          <li v-show="false">
             <el-button @click="handleSharp('Text','normal')">
               <span class="iconfont icon icon-wenzi-L"></span>
               {{$t('header.text')}}</el-button>
          </li>
           <li style="margin-right: 20px;"></li>
 
-          <li>
+          <li v-show="false">
           <el-button @click="handleSharp('Line','')">
             <span class="iconfont  icon-xianduan-zhixian"></span>
             {{$t('header.line')}}
           </el-button>
          </li>
 
-        <li>
+        <li v-show="false">
           <el-dropdown split-button @click="handleSharp(sharpType.type,sharpType.value)">
             <span :class="'iconfont icon8 '+ sharpType.icon"></span>  {{sharpType.title}}
                   <template #dropdown>
@@ -428,7 +428,7 @@ const handleJsonSuccess: UploadProps['onChange'] = (
          </li>
 
          
-         <li>
+         <li v-show="false">
           <el-dropdown split-button @click="handleSharp('Arrow',arrowType.type)">
             <span :class="'iconfont icon8 '+ arrowType.icon"></span>  {{arrowType.title}}
                   <template #dropdown>
@@ -442,7 +442,7 @@ const handleJsonSuccess: UploadProps['onChange'] = (
                   </template>
               </el-dropdown>
          </li>
-         <li>
+         <li v-show="false">
           <el-dropdown split-button @click="handleSharp('Mark',markType.rotate)">
             <span :class="'iconfont icon8 '+ markType.icon"></span> {{markType.title}}
                   <template #dropdown>
@@ -469,8 +469,8 @@ const handleJsonSuccess: UploadProps['onChange'] = (
           </el-tooltip>
          </li>
         
-         <li>&nbsp;&nbsp;</li>
-         <li>
+         <li v-show="false">&nbsp;&nbsp;</li>
+         <li >
             <el-upload
               :show-file-list="false"
               :auto-upload="false"

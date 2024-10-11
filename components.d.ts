@@ -15,7 +15,6 @@ declare module 'vue' {
     CanvasLeftMenuComponentsShapePool: typeof import('./src/components/CanvasLeft/Menu/components/ShapePool.vue')['default']
     CanvasLeftMenuComponentsTextboxPool: typeof import('./src/components/CanvasLeft/Menu/components/TextboxPool.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
-    ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     ElCard: typeof import('element-plus/es')['ElCard']

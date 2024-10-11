@@ -378,9 +378,19 @@
             if(e.list.length==1&&e.list[0].tag!="Group"){
 
             
-               if(e.list[0].name==("Text")){
+               if(e.list[0].name==("Text")||e.list[0].name==("TextBox")){
 
-                    let text=e.list[0] as Text
+
+                    let text=null
+
+                    if(e.list[0].tag=="Box"){
+                        text = e.list[0].children[0] as Text
+                        useTextStyle.value.tag='Box'
+                    }else{
+                        text = e.list[0] as Text
+                        useTextStyle.value.tag='Text'
+                    }
+                    
 
                     useTextStyle.value.fill=text.fill?.toString()
 
@@ -422,6 +432,27 @@
                             color:text.shadow?.color,
                         }
                     }
+
+                    if(e.list[0].tag=="Box"){
+
+                        let textBox=e.list[0]
+
+                        if(textBox.dashPattern&&textBox.dashPattern.length==2){
+
+                           useTextStyle.value.boxLineStyle="dashed"
+
+                        }else{
+
+                           useTextStyle.value.boxLineStyle="solid"
+                        }
+
+                        useTextStyle.value.boxFill=textBox.fill.toString()
+                        useTextStyle.value.boxCornerRadius=textBox.cornerRadius
+                        useTextStyle.value.boxStroke=textBox.stroke
+                        useTextStyle.value.boxStrokeWidth= textBox.strokeWidth
+
+                    }
+                    
 
 
                     componen.value = objcomponen.value.TextPanel
@@ -510,7 +541,7 @@
         canvasApp.editor.on(InnerEditorEvent.CLOSE, function (e:InnerEditorEvent) {
          
             if(e.editTarget.parent){
-                canvasApp.editor.openInnerEditor(e.editTarget.parent)
+                //canvasApp.editor.openInnerEditor(e.editTarget.parent)
             }   
             
         })
@@ -835,7 +866,24 @@
       
     })
 
+
+   const getTextBox=()=>{
+        if(canvasApp.editor.target.tag=="Text"){
+            return  canvasApp.editor.target
+        }else{
+            return  canvasApp.editor.target.children[0]
+        }
+    }
+
+
+    const getBox=()=>{
+        if(canvasApp.editor.target.tag=="Box"){
+            return  canvasApp.editor.target as Box
+        }
+    }
+
     watch(()=>useTextStyle.value.fontFamily,async (newValue, oldValue)=>{
+
 
         if(oldValue!=newValue&&oldValue!=""){
             let msg= ElMessage({
@@ -852,7 +900,7 @@
             msg.close()
         }
 
-        let text= canvasApp.editor.target as Text
+        let text= getTextBox()
         text.fontFamily=newValue
 
         frame.emit('redo.add',{})
@@ -862,7 +910,7 @@
     watch(()=>useTextStyle.value.fill, (newValue, oldValue)=>{
 
         if(oldValue!=newValue&&oldValue!=""){
-            let text= canvasApp.editor.target as Text
+            let text= getTextBox()
             text.fill=newValue
 
             frame.emit('redo.add',{})
@@ -873,7 +921,7 @@
    watch(()=>useTextStyle.value.fontSize, (newValue, oldValue)=>{
  
     if(oldValue!=newValue&&oldValue!=""){
-        let text= canvasApp.editor.target as Text
+        let text= getTextBox()
         text.fontSize=newValue
 
         frame.emit('redo.add',{})
@@ -885,7 +933,7 @@
  watch(()=>useTextStyle.value.text, (newValue, oldValue)=>{
  
  if(oldValue!=newValue&&oldValue!=""){
-     let text= canvasApp.editor.target as Text
+     let text= getTextBox()
      text.text=newValue
 
      frame.emit('redo.add',{})
@@ -895,7 +943,7 @@
 watch(()=>useTextStyle.value.stroke, (newValue, oldValue)=>{
  
  if(oldValue!=newValue&&oldValue!=""){
-     let text= canvasApp.editor.target as Text
+     let text= getTextBox()
      text.stroke=newValue
      frame.emit('redo.add',{})
  }
@@ -904,7 +952,7 @@ watch(()=>useTextStyle.value.stroke, (newValue, oldValue)=>{
 watch(()=>useTextStyle.value.strokeWidth, (newValue, oldValue)=>{
  
  if(oldValue!=newValue&&oldValue!=""){
-     let text= canvasApp.editor.target as Text
+     let text= getTextBox()
      text.strokeWidth=newValue
      frame.emit('redo.add',{})
  }
@@ -912,7 +960,7 @@ watch(()=>useTextStyle.value.strokeWidth, (newValue, oldValue)=>{
 watch(()=>useTextStyle.value.letterSpacing, (newValue, oldValue)=>{
  
  if(oldValue!=newValue&&oldValue!=""){
-     let text= canvasApp.editor.target as Text
+     let text= getTextBox()
      text.letterSpacing=newValue
      frame.emit('redo.add',{})
  }
@@ -920,7 +968,7 @@ watch(()=>useTextStyle.value.letterSpacing, (newValue, oldValue)=>{
 
 watch(()=>useTextStyle.value.lineHeight.value, (newValue, oldValue)=>{
  
-    let text= canvasApp.editor.target as Text
+    let text= getTextBox()
     text.lineHeight={
         type:"percent",
         value:newValue
@@ -931,7 +979,7 @@ watch(()=>useTextStyle.value.lineHeight.value, (newValue, oldValue)=>{
 watch(()=>useTextStyle.value.textDecoration, (newValue, oldValue)=>{
  
  if(oldValue!=newValue&&oldValue!=""){
-     let text= canvasApp.editor.target as Text
+     let text= getTextBox()
      text.textDecoration=newValue
      frame.emit('redo.add',{})
  }
@@ -939,7 +987,7 @@ watch(()=>useTextStyle.value.textDecoration, (newValue, oldValue)=>{
 
 watch(()=>useTextStyle.value.bold, (newValue, oldValue)=>{
 
-    let text= canvasApp.editor.target as Text
+    let text= getTextBox()
     text.fontWeight= newValue?"bold":"normal"
     frame.emit('redo.add',{})
 
@@ -947,7 +995,7 @@ watch(()=>useTextStyle.value.bold, (newValue, oldValue)=>{
 
 watch(()=>useTextStyle.value.italic, (newValue, oldValue)=>{
 
-     let text= canvasApp.editor.target as Text
+     let text= getTextBox()
      text.italic=newValue
 
      frame.emit('redo.add',{})
@@ -956,7 +1004,7 @@ watch(()=>useTextStyle.value.italic, (newValue, oldValue)=>{
 watch(()=>useTextStyle.value.lineStyle, (newValue, oldValue)=>{
  
 
-     let text= canvasApp.editor.target as Text
+     let text= getTextBox()
      if(newValue=="dashed"){
              text.dashPattern=[6,6];
         }else{
@@ -965,9 +1013,12 @@ watch(()=>useTextStyle.value.lineStyle, (newValue, oldValue)=>{
       frame.emit('redo.add',{})
 })
 
+
+
+
 watch(()=>useTextStyle.value.isShadow, (newValue, oldValue)=>{
  
-    let text= canvasApp.editor.target as Text
+    let text= getTextBox()
 
     if(newValue){
         text.shadow=useTextStyle.value.shadow
@@ -980,7 +1031,7 @@ watch(()=>useTextStyle.value.isShadow, (newValue, oldValue)=>{
 
 watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
  
- let text= canvasApp.editor.target as Text
+ let text= getTextBox()
 
  if(useTextStyle.value.isShadow){
      text.shadow=newValue
@@ -990,6 +1041,61 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
 
  frame.emit('redo.add',{})
 },{deep:true})
+
+
+watch(()=>useTextStyle.value.boxLineStyle, (newValue, oldValue)=>{
+
+ let text= getBox()
+ if(newValue=="dashed"){
+         text.dashPattern=[6,6];
+    }else{
+        text.dashPattern=[];
+  }
+  frame.emit('redo.add',{})
+})
+
+
+watch(()=>useTextStyle.value.boxStroke, (newValue, oldValue)=>{
+ 
+ if(oldValue!=newValue&&oldValue!=""){
+     let text= getBox()
+     text.stroke=newValue
+     frame.emit('redo.add',{})
+ }
+})
+
+
+watch(()=>useTextStyle.value.boxFill, (newValue, oldValue)=>{
+ 
+ if(oldValue!=newValue&&oldValue!=""){
+     let text= getBox()
+     text.fill=newValue
+     frame.emit('redo.add',{})
+ }
+})
+
+watch(()=>useTextStyle.value.boxStrokeWidth, (newValue, oldValue)=>{
+ console.info(useTextStyle.value.boxStrokeWidth)
+ if(oldValue!=newValue&&oldValue!=""){
+     let text= getBox()
+     text.strokeWidth=newValue
+     frame.emit('redo.add',{})
+ }
+})
+
+watch(()=>useTextStyle.value.boxCornerRadius, (newValue, oldValue)=>{
+ 
+ if(oldValue!=newValue&&oldValue!=""){
+     let text= getBox()
+     text.cornerRadius=newValue
+     frame.emit('redo.add',{})
+ }
+})
+
+
+
+
+
 
 
 
@@ -1177,10 +1283,10 @@ watch(()=>useTextStyle.value.shadow, (newValue, oldValue)=>{
                 return
         }
 
-        if(canvasApp.editor.list[0].tag!="Group"){
-            ElMessage.warning("只能选择一个编组元素导出，多个元素请-编组后导出！")
-            return
-        }
+        // if(canvasApp.editor.list[0].tag!="Group"){
+        //     ElMessage.warning("只能选择一个编组元素导出，多个元素请-编组后导出！")
+        //     return
+        // }
 
 
         ElMessageBox.prompt('输入编号,比如 200x1, 300x1', 'Tip', {
