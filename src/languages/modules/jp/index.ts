@@ -39,11 +39,18 @@ export default {
     "shortcut":"ショートカット操作",
     "createbg":"背景の生成",
     "createlineimg":"生成线稿",
-    "boxfill":"_文本框背景",
-    "boxstrokewidth":"_文本框边宽度",
-    "boxstroke":"_文本框边颜色",
-    "boxlinestyle":"_文本框边样式",
-    "boxcornerradius":"_文本框圆角"
+    "boxfill": "テキストボックスの背景",
+    "boxstrokewidth": "テキストボックスの枠幅",
+    "boxstroke": "テキストボックスの枠色",
+    "boxlinestyle": "テキストボックスの枠スタイル",
+    "boxcornerradius": "テキストボックスの角半径",
+    "title":"タイトル",
+    "subtitle":"サブタイトル",
+    "text":"本文",
+    "boxtext":"テキストボックス",
+    "addtext":"テキスト",
+    "showmore":"詳細を表示",
+    "thisistext":"これはテキストです"
   }, 
   header:{
     "material":"素材",

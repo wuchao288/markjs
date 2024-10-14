@@ -359,10 +359,10 @@ export default()=>{
                         value: 1.5, // 150%
                     },
                     textAlign: "center",
-                    verticalAlign: "middle",
+                    //verticalAlign: "middle",
                     fontSize:fontSize,
                     editable:true,
-                    resizeFontSize: false,  //加了这个属性为true后Box的缩放不正常
+                    resizeFontSize: true,  //加了这个属性为true后Box的缩放不正常
                     stroke:'rgba(0,0,0,0)',
                     strokeWidth:0,
                     fontFamily:'アプリ明朝',

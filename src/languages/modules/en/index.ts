@@ -40,11 +40,18 @@ export default {
     "shortcut":"Quick operation",
     "createbg":"Generate Background",
     "createlineimg":"Generate outline sketch",
-    "boxfill":"$文本框背景",
-    "boxstrokewidth":"$文本框边宽度",
-    "boxstroke":"$文本框边颜色",
-    "boxlinestyle":"$文本框边样式",
-    "boxcornerradius":"$文本框圆角"
+    "boxfill": "Text box background",
+    "boxstrokewidth": "Text box edge width",
+    "boxstroke": "Text box edge color",
+    "boxlinestyle": "Text box edge style",
+    "boxcornerradius": "Text box rounded corner",
+    "title":"Title",
+    "subtitle":"Subtitle",
+    "text":"Text",
+    "boxtext":"Textbox",
+    "addtext":"Character",
+    "showmore":"View more",
+    "thisistext":"This is a text"
   },  
   header:{
     "material":"Material",

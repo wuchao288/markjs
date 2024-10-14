@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="never"  body-class="panel-container" v-if="typeRef === 'all'">
-    <template #header>
+    <template #header v-if="false">
       <div class="card-header">
 
         <el-popover
@@ -29,7 +29,7 @@
         <div class="panel-block add-text">
             <div class="panel-block_header">
                 <div class="panel-block_header-title">
-                    <span>添加文字</span>
+                    <span>{{t("stylepanel.addtext")}}</span>
                 </div>
                 <div class="panel-block_header-action"></div>
             </div>
@@ -37,19 +37,19 @@
                 <el-row class="panel-resource-list">
                     <el-col :span="4" class="panel-resource-list-item" @click="addText(18)">
                         <p class="panel-resource-list-item-icon">H1</p>
-                        <p class="panel-resource-list-item-title">标题</p>
+                        <p class="panel-resource-list-item-title">{{t("stylepanel.title")}}</p>
                     </el-col>
                     <el-col :span="4" class="panel-resource-list-item" @click="addText(16)">
                         <p class="panel-resource-list-item-icon">H2</p>
-                        <p class="panel-resource-list-item-title">副标题</p>
+                        <p class="panel-resource-list-item-title">{{t("stylepanel.subtitle")}}</p>
                     </el-col>
-                    <el-col :span="4" class="panel-resource-list-item" @click="addText(12)">
+                    <el-col :span="4" class="panel-resource-list-item" @click="text(12)">
                         <p class="panel-resource-list-item-icon" >Aa</p>
-                        <p class="panel-resource-list-item-title">正文</p>
+                        <p class="panel-resource-list-item-title">{{t("stylepanel.text")}}</p>
                     </el-col>
                     <el-col :span="4" class="panel-resource-list-item" @click="addTextBox(12)">
                         <p class="panel-resource-list-item-icon" >Aa</p>
-                        <p class="panel-resource-list-item-title">文本框</p>
+                        <p class="panel-resource-list-item-title">{{t("stylepanel.boxtext")}}</p>
                     </el-col>
                 </el-row>
             </div>
@@ -60,7 +60,7 @@
                     <span>{{key}}</span>
                 </div>
                 <div class="panel-block_header-action">
-                    <span @click="showTotal(key)">查看更多</span>
+                    <span @click="showTotal(key)">{{t("stylepanel.showmore")}}</span>
                 </div>
             </div>
             <div class="panel-block_body">
@@ -76,7 +76,7 @@
 
 
   <el-card shadow="never"  body-class="panel-container" v-else>
-    <template #header>
+    <template #header v-if="false">
       <div class="card-header">
 
         <div class="card-header-back" @click="hideTotal">
@@ -129,6 +129,9 @@ import {onMounted, ref,nextTick, computed } from 'vue'
 
 import  useHandleCreate from '@/hooks/useCreateElement'
 
+import { useI18n } from "vue-i18n"
+const { t } = useI18n()
+
 const { createTextElement,createGroup,createTextElementBox } = useHandleCreate();
 
 TextEffectItemList.forEach((item,index)=>{
@@ -177,14 +180,14 @@ const hideTotal = () => {
 };
 
 const addText=(fontSize)=>{
-    createTextElement("这是一个标题",fontSize)
+    createTextElement("这是一段文本",fontSize)
 }
 const  addGroup=(item)=>{
     createGroup(item)
 }
 
 const addTextBox=(fontSize)=>{
-    createTextElementBox("这是一个标题",fontSize)
+    createTextElementBox("这是一段文本",fontSize)
 }
 
 

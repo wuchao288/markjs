@@ -1,3 +1,4 @@
+
 /*
 中文
  */
@@ -46,7 +47,14 @@ export default {
     boxstrokewidth:"文本框边宽度",
     boxstroke:"文本框边颜色",
     boxlinestyle:"文本框边样式",
-    boxcornerradius:"文本框圆角"
+    boxcornerradius:"文本框圆角",
+    title:"标题",
+    subtitle:"副标题",
+    text:"正文",
+    boxtext:"文本框",
+    addtext:"文字",
+    showmore:"查看更多",
+    thisistext:"这是一段文本"
   },  
   header:{
     material:'素材',
