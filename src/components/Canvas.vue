@@ -248,7 +248,7 @@
         canvasApp.editor = new Editor({
             buttonsFixed:true,
             buttonsDirection:'top',
-            lockRatio: 'corner',
+            //lockRatio: 'corner',
             stroke: 'rgba(77, 124, 255, 1)',
             strokeWidth:2,
             skewable: false,
