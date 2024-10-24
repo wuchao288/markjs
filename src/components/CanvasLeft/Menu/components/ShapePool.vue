@@ -10,21 +10,45 @@
 
             <div class="panel-block_body">
                 <el-row class="panel-resource-list">
-                    <el-col :span="4" class="panel-resource-list-item" @click="addText(18)">
-                        <p class="panel-resource-list-item-icon">H1</p>
-                        <p class="panel-resource-list-item-title">{{t("stylepanel.title")}}</p>
+                    <el-col :span="6" class="panel-resource-list-item" @click="addText(20,t('stylepanel.title'))">
+
+                          
+                            <p class="panel-resource-list-item-icon">H1</p>
+  
+                            <el-tooltip
+                            class="box-item"
+                            effect="dark"
+                            :content="t('stylepanel.title')"
+                            placement="top" >
+                            <p class="panel-resource-list-item-title">{{t("stylepanel.title")}}</p>
+                         
+                        </el-tooltip>
                     </el-col>
-                    <el-col :span="4" class="panel-resource-list-item" @click="addText(16)">
+                    <el-col :span="6" class="panel-resource-list-item" @click="addText(18,t('stylepanel.subtitle'))">
                         <p class="panel-resource-list-item-icon">H2</p>
-                        <p class="panel-resource-list-item-title">{{t("stylepanel.subtitle")}}</p>
+
+                        <el-tooltip
+                            class="box-item"
+                            effect="dark"
+                            :content="t('stylepanel.title')"
+                            placement="top" >
+                        <p class="panel-resource-list-item-title">{{t("stylepanel.subtitle")}}</p> </el-tooltip>
                     </el-col>
-                    <el-col :span="4" class="panel-resource-list-item" @click="text(12)">
+                    <el-col :span="6" class="panel-resource-list-item" @click="addText(16,t('stylepanel.text'))">
                         <p class="panel-resource-list-item-icon" >Aa</p>
-                        <p class="panel-resource-list-item-title">{{t("stylepanel.text")}}</p>
+                        <el-tooltip
+                            class="box-item"
+                            effect="dark"
+                            :content="t('stylepanel.title')"
+                            placement="top" >  <p class="panel-resource-list-item-title">{{t("stylepanel.text")}}</p> </el-tooltip>
                     </el-col>
-                    <el-col :span="4" class="panel-resource-list-item" @click="addTextBox(12)">
-                        <p class="panel-resource-list-item-icon" >Aa</p>
-                        <p class="panel-resource-list-item-title">{{t("stylepanel.boxtext")}}</p>
+                    <el-col :span="6" class="panel-resource-list-item" @click="addTextBox(12,t('stylepanel.boxtext'))">
+                        <p class="panel-resource-list-item-icon" >[Aa]</p>
+                        <el-tooltip
+                            class="box-item"
+                            effect="dark"
+                            :content="t('stylepanel.title')"
+                            placement="top" >  <p class="panel-resource-list-item-title">{{t("stylepanel.boxtext")}}</p></el-tooltip>
                     </el-col>
                 </el-row>
             </div>
@@ -32,13 +56,17 @@
           <div class="panel-block">
               <div class="panel-block_header">
                   <div class="panel-block_header-title">
-                    <span>{{$t("header.line")}}</span>
+                    <span>{{$t("header.line")}}・{{$t("header.arrow")}}</span>
                   </div>
                   <div class="panel-block_header-action"></div>
               </div>
               <div class="panel-block_body">
                 <el-row class="panel-resource-list">
-                    <el-col @click="createShape(item.type,item.value)" :span="6" class="panel-resource-list-item"  v-for="item in  SharpTypeList.filter(m=>m.type=='Line')">
+                    <el-col @click="createShape(item.type,item.value)" :span="6" class="panel-resource-list-item"
+                      v-for="item in  SharpTypeList.filter(m=>m.type=='Line')">
+                        <span :class="'iconfont icon8 '+ item.icon"></span>
+                      </el-col>
+                      <el-col @click="createShape('Arrow',item.type)"  :span="6" class="panel-resource-list-item"  v-for="item in  ArrowTypeList">
                         <span :class="'iconfont icon8 '+ item.icon"></span>
                       </el-col>
                   </el-row>
@@ -61,7 +89,7 @@
               </div>
           </div>
 
-          <div class="panel-block">
+          <div class="panel-block" v-if="false">
               <div class="panel-block_header">
                   <div class="panel-block_header-title">
                       <span>{{$t("header.arrow")}}</span>
@@ -129,12 +157,13 @@ SharpTypeList.forEach(m=>m.title=t(m.title))
   
   
 
-  const addText=(fontSize)=>{
-    createTextElement("这是一个标题",fontSize)
+  const addText=(fontSize,text)=>{
+    createTextElement(text,fontSize)
 }
 
-const addTextBox=(fontSize)=>{
-    createTextElementBox("这是一个标题",fontSize)
+
+const addTextBox=(fontSize,text)=>{
+    createTextElementBox(text,fontSize)
 }
   
   
@@ -228,9 +257,13 @@ const addTextBox=(fontSize)=>{
           width: 32px;
       }
       .panel-resource-list-item-title{
-          font-size: 12px;
-          font-weight: 400;
-      }
+        font-size: 12px;
+        font-weight: 400;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100%;
+    }
   
       img{
         width: 100%;

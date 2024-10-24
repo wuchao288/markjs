@@ -50,7 +50,8 @@ export default {
     "boxtext":"テキストボックス",
     "addtext":"テキスト",
     "showmore":"詳細を表示",
-    "thisistext":"これはテキストです"
+    "thisistext":"これはテキストです",
+    "template":'テンプレート'
   }, 
   header:{
     "material":"素材",

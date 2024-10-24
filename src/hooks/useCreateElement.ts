@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted } from 'vue'
-import { UI,Box,PointerEvent,Platform, Line,Text,Group,Rect,Ellipse,Polygon,Star} from 'leafer-ui'
+import { UI,Box,PointerEvent,Platform, Line,Text,Group,Rect,Ellipse,Polygon,Star,Image} from 'leafer-ui'
 import { Flow } from '@leafer-in/flow'
 import  {nanoid} from  'nanoid'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -402,7 +402,7 @@ export default()=>{
             widthx=(heightx*widthImg)/heightImg
         }
 
-        const rectImg = new Rect({
+        const rectImg = new Image({
                 id:id,
                 name:'image',
                 //around: 'center',

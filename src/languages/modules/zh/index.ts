@@ -54,7 +54,8 @@ export default {
     boxtext:"文本框",
     addtext:"文字",
     showmore:"查看更多",
-    thisistext:"这是一段文本"
+    thisistext:"这是一段文本",
+    template:'模板'
   },  
   header:{
     material:'素材',

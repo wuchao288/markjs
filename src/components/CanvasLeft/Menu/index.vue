@@ -16,7 +16,7 @@ import { computed,ref } from 'vue'
 import TextboxPool from './components/TextboxPool.vue'
 import MaterialPool from './components/MaterialPool.vue'
 import ShapePool from './components/ShapePool.vue'
-
+import TemplatePool from './components/TemplatePool.vue'
 
 const mainStore = useEditStore()
 
@@ -27,7 +27,7 @@ const { poolType, poolShow } = storeToRefs(mainStore)
 const leftMap = {
   'shape': ShapePool,
   'editor': TextboxPool,
-  'template': TextboxPool,
+  'template': TemplatePool,
   'material': MaterialPool,
   'text': TextboxPool,
   'image': TextboxPool,

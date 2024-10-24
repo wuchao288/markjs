@@ -126,6 +126,39 @@ export type TextEffectItem={
 }
 
 export const  TextEffectItemList=[
+  {"preview":new URL("@/assets/images/mate/texteffect/90111.png",import.meta.url).href,
+  "url":"","id":"90111",
+  "data":{"tag":"Group","x":30.19867125828614,"y":26.44492823415338,"scaleX":0.9999999999999999,"scaleY":0.9999999999999999,
+  "rotation":0,"skewX":0,"skewY":0,"editable":true,"hitChildren":false,"children":[{"tag":"Rect","id":"LI3-jzEuX_uO9exTzpCfQ",
+  "name":"Rect","visible":true,"locked":false,"zIndex":2,"x":2.2737367544323206e-13,"y":0,
+  "width":552.0973375770402,"height":150.02645042854368,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,
+  "rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#f2f4f3"}],
+  "stroke":"#fffceb","strokeWidth":0,"dashPattern":[],"cornerRadius":0,"data":{"fillData":{"activeColorKey":"pure",
+  "gradientColor":"linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#f2f4f3"}}},
+  {"tag":"Rect","id":"BzYIrk6Dy_g2Jewh0O7LR","name":"Rect","visible":true,"locked":false,"zIndex":2,"x":5.684341886080802e-14,
+  "y":108.3354885666622,"width":552.0973375770402,"height":39.00687711142135,"scaleX":1.0000000000000002,
+  "scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,"editable":true,"cursor":"pointer",
+  "fill":[{"type":"solid","color":"#9c0001"}],"stroke":"rgba(0, 0, 0, 1)","strokeWidth":0,"dashPattern":[],
+  "cornerRadius":0,"data":{"fillData":{"activeColorKey":"pure","gradientColor":
+  "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#9c0001"}}},
+  {"tag":"Rect","id":"ekRvbid_NGLT3nFdrWEUo","name":"Rect","visible":true,"locked":false,"zIndex":2,"x":1.1368683772161603e-13,
+  "y":108.3354885666622,"width":552,"height":7,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,
+  "skewX":0,"skewY":0,"editable":true,"cursor":"pointer","fill":[{"type":"solid","color":"#b59a2e"}],"stroke":"rgba(0, 0, 0, 1)",
+  "strokeWidth":0,"dashPattern":[],"cornerRadius":0,"data":{"fillData":{"activeColorKey":"pure","gradientColor":
+  "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)","pureColor":"#b59a2e"}}},
+  {"tag":"Text","resizeFontSize":true,"fill":"#000000","text":"特別ご優待券","fontFamily":"アプリ明朝","fontSize":52.5092576499903,
+  "fontWeight":"bold","letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"biiae4lq-Zeq90B9TwFez","name":"Text",
+  "visible":true,"zIndex":7,"x":106.51877980426599,"y":27.827226010674536,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,
+  "rotation":0,"skewX":0,"skewY":0,"padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":""},
+  {"tag":"Text","resizeFontSize":true,"fill":"#000000","text":"SAMPLE SHOP","fontFamily":"アプリ明朝","fontSize":21,"fontWeight":"bold",
+  "letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"cf8v-5djY3Ol-cFC6BvJs","name":"Text","visible":true,"zIndex":7,
+  "x":184.49901981760246,"y":0.6068406839074214,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,
+  "padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":"","data":{}},{"tag":"Text","resizeFontSize":true,
+  "fill":"#ffffff","text":"有効期間                  年      月      日","fontFamily":"アプリ明朝","fontSize":17,"fontWeight":"normal",
+  "letterSpacing":0,"lineHeight":{"type":"percent","value":"1.50"},"id":"UrQEJ5hxPFnwV5vv5LeW6","name":"Text","visible":true,"zIndex":7,
+  "x":133.09456722602016,"y":114.40046739103943,"scaleX":1.0000000000000002,"scaleY":1.0000000000000002,"rotation":0,"skewX":0,"skewY":0,
+  "padding":[4,8],"editable":true,"stroke":"rgba(0,0,0,0)","strokeWidth":0,"shadow":"","data":{}}]}}
+  ,
   {
     preview:new URL("@/assets/images/mate/texteffect/11.png",import.meta.url).href,
     url:'',

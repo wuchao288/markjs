@@ -13,6 +13,7 @@ declare module 'vue' {
     CanvasLeftMenu: typeof import('./src/components/CanvasLeft/Menu/index.vue')['default']
     CanvasLeftMenuComponentsMaterialPool: typeof import('./src/components/CanvasLeft/Menu/components/MaterialPool.vue')['default']
     CanvasLeftMenuComponentsShapePool: typeof import('./src/components/CanvasLeft/Menu/components/ShapePool.vue')['default']
+    CanvasLeftMenuComponentsTemplatePool: typeof import('./src/components/CanvasLeft/Menu/components/TemplatePool.vue')['default']
     CanvasLeftMenuComponentsTextboxPool: typeof import('./src/components/CanvasLeft/Menu/components/TextboxPool.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElButton: typeof import('element-plus/es')['ElButton']

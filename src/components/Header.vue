@@ -54,6 +54,8 @@ import  {nanoid} from  'nanoid'
 
 const editorStore = useEditStore()
 
+const showSaveBtn=((window.parent) as any).savebtn===0
+
 let pageZoom=ref<ZoomItem>(ZoomItemList[ZoomItemList.length-1]);
 
 let pageSize=ref<PageSizeItem>(PageSizeList[0]);
@@ -76,7 +78,7 @@ let drawermate=ref<boolean>(false)
 
 let activeName=ref<string>('texteff')
 
-let isTest=ref<boolean>(window==window.parent)
+let isTest=ref<boolean>(location.host.includes("localhost")||location.host.includes("192.168"))
 
 watch(()=>usePageMove.value,(newVal,oldValue)=>{
 
@@ -521,7 +523,7 @@ const handleJsonSuccess: UploadProps['onChange'] = (
           </el-button>    
          </el-tooltip>
          </li>
-         <li>
+         <li v-if="!showSaveBtn">
           <el-button type="primary" :title="t('header.save')" @click="handleSaveImg">
             <span class="iconfont icon icon-ok" style="color: white;"></span>
             <span > {{$t('header.save')}} </span>

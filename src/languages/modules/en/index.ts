@@ -51,7 +51,8 @@ export default {
     "boxtext":"Textbox",
     "addtext":"Character",
     "showmore":"View more",
-    "thisistext":"This is a text"
+    "thisistext":"This is a text",
+    "template":'Template'
   },  
   header:{
     "material":"Material",

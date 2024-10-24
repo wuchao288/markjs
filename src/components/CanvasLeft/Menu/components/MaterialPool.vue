@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="never"  body-class="panel-container" v-if="typeRef === 'all'">
-    <template #header>
-      <div class="card-header">
+    <template #header  v-if="false">
+      <div class="card-header"  v-if="false">
 
         <el-popover
             placement="bottom-start"
@@ -26,7 +26,7 @@
       </div>
     </template>
 
-        <div class="panel-block">
+        <div class="panel-block"  v-if="false">
             <div class="panel-block_header">
                 <div class="panel-block_header-title">
                     <span>最近使用</span>
@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div class="panel-block">
+        <div class="panel-block"  v-if="false">
             <div class="panel-block_header">
                 <div class="panel-block_header-title">
                     <span>为您推荐</span>
@@ -91,7 +91,7 @@
             <span>{{typeRef}}</span>
         </div>
 
-        <el-popover
+        <el-popover  v-if="false"
             placement="bottom-start"
             title="历史记录"
             trigger="click"

@@ -35,21 +35,45 @@
             </div>
             <div class="panel-block_body">
                 <el-row class="panel-resource-list">
-                    <el-col :span="4" class="panel-resource-list-item" @click="addText(18)">
-                        <p class="panel-resource-list-item-icon">H1</p>
-                        <p class="panel-resource-list-item-title">{{t("stylepanel.title")}}</p>
+                    <el-col :span="6" class="panel-resource-list-item" @click="addText(20,t('stylepanel.title'))">
+
+                          
+                            <p class="panel-resource-list-item-icon">H1</p>
+  
+                            <el-tooltip
+                            class="box-item"
+                            effect="dark"
+                            :content="t('stylepanel.title')"
+                            placement="top" >
+                            <p class="panel-resource-list-item-title">{{t("stylepanel.title")}}</p>
+                         
+                        </el-tooltip>
                     </el-col>
-                    <el-col :span="4" class="panel-resource-list-item" @click="addText(16)">
+                    <el-col :span="6" class="panel-resource-list-item" @click="addText(18,t('stylepanel.subtitle'))">
                         <p class="panel-resource-list-item-icon">H2</p>
-                        <p class="panel-resource-list-item-title">{{t("stylepanel.subtitle")}}</p>
+
+                        <el-tooltip
+                            class="box-item"
+                            effect="dark"
+                            :content="t('stylepanel.title')"
+                            placement="top" >
+                        <p class="panel-resource-list-item-title">{{t("stylepanel.subtitle")}}</p> </el-tooltip>
                     </el-col>
-                    <el-col :span="4" class="panel-resource-list-item" @click="text(12)">
+                    <el-col :span="6" class="panel-resource-list-item" @click="addText(16,t('stylepanel.text'))">
                         <p class="panel-resource-list-item-icon" >Aa</p>
-                        <p class="panel-resource-list-item-title">{{t("stylepanel.text")}}</p>
+                        <el-tooltip
+                            class="box-item"
+                            effect="dark"
+                            :content="t('stylepanel.title')"
+                            placement="top" >  <p class="panel-resource-list-item-title">{{t("stylepanel.text")}}</p> </el-tooltip>
                     </el-col>
-                    <el-col :span="4" class="panel-resource-list-item" @click="addTextBox(12)">
-                        <p class="panel-resource-list-item-icon" >Aa</p>
-                        <p class="panel-resource-list-item-title">{{t("stylepanel.boxtext")}}</p>
+                    <el-col :span="6" class="panel-resource-list-item" @click="addTextBox(12,t('stylepanel.boxtext'))">
+                        <p class="panel-resource-list-item-icon" >[Aa]</p>
+                        <el-tooltip
+                            class="box-item"
+                            effect="dark"
+                            :content="t('stylepanel.title')"
+                            placement="top" >  <p class="panel-resource-list-item-title">{{t("stylepanel.boxtext")}}</p></el-tooltip>
                     </el-col>
                 </el-row>
             </div>
@@ -76,7 +100,7 @@
 
 
   <el-card shadow="never"  body-class="panel-container" v-else>
-    <template #header v-if="false">
+    <template #header >
       <div class="card-header">
 
         <div class="card-header-back" @click="hideTotal">
@@ -86,7 +110,7 @@
             <span>{{typeRef}}</span>
         </div>
 
-        <el-popover
+        <el-popover v-if="false"
             placement="bottom-start"
             title="历史记录"
             trigger="click"
@@ -126,7 +150,7 @@ import { Search,ArrowLeft,ArrowRight } from '@element-plus/icons-vue'
 import _ from 'lodash'
 import {TextEffectItemList} from '@/assets/data/Material'
 import {onMounted, ref,nextTick, computed } from 'vue'
-
+import  {mixins} from '@/mixin/index'
 import  useHandleCreate from '@/hooks/useCreateElement'
 
 import { useI18n } from "vue-i18n"
@@ -134,7 +158,57 @@ const { t } = useI18n()
 
 const { createTextElement,createGroup,createTextElementBox } = useHandleCreate();
 
-TextEffectItemList.forEach((item,index)=>{
+ let templist=[]
+
+ let TextEffectItemListTemp=_.cloneDeep(TextEffectItemList)
+
+ await TextEffectItemListTemp.forEach(async (item,index)=>{
+   
+//     item.data=JSON.stringify(item.data)
+//     item.data=item.data.replace("http://localhost:5175/editor/src/assets/images/mate","/resources/image")
+//     //计算尺寸
+//     let img=await mixins.getImage(item.preview)
+//     var temp= { 
+//         "TemplateId":item.id,
+//         "TemplateClass":"PluginTxt",
+//         "Status":"1",
+//         "GId":0,
+//         "Name":"未命名",
+//         "Num":item.id,
+//         "Title":"",
+//         "Description":"",
+//         "KeyWord":"markjs",
+//         "CreateTime":"2024-07-27 07:23:41",
+//         "CreateBy":"admin",
+//         "ModifyTime":"2024-07-27 07:23:41",
+//         "ModifyBy":"admin",
+//         "AppID":33,
+//         "StoreMallIds":"",
+//         "Sources":item.data,
+//         "ThumbImg": item.preview.replace("http://localhost:5175/editor/src/assets/images/mate","/resources/image"),
+//         "TempPath":"resources\\image\\systemplet\\"+item.id,
+//         "UseDescription":"",
+//         "Remarks":"",
+//         "TempleteLen":40436,
+//         "Color":"",
+//         "Version":1,
+//         "SortId":index,
+//         "Width":img.width,
+//         "Height":img.height,
+//         "CreateClass":"Crawlers",
+//         "Original":item.id,
+//         "Category":"30013",
+//         "EditClass":0
+//     };
+    
+//     templist.push(temp)
+ })
+
+
+ console.info(TextEffectItemListTemp)
+
+
+ TextEffectItemList.forEach((item,index)=>{
     if(index%5==0){
         item.cateName="划重点"
     }else if(index%5==1){
@@ -179,17 +253,17 @@ const hideTotal = () => {
   },50)
 };
 
-const addText=(fontSize)=>{
-    createTextElement("这是一段文本",fontSize)
+const addText=(fontSize,text)=>{
+    createTextElement(text,fontSize)
+}
+
+
+const addTextBox=(fontSize)=>{
+    createTextElementBox(text,fontSize)
 }
 const  addGroup=(item)=>{
     createGroup(item)
 }
-
-const addTextBox=(fontSize)=>{
-    createTextElementBox("这是一段文本",fontSize)
-}
-
 
 const setItemStyle = (img,index) => {
   if (!img) return;
@@ -301,6 +375,10 @@ const setItemStyle = (img,index) => {
     .panel-resource-list-item-title{
         font-size: 12px;
         font-weight: 400;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100%;
     }
 }
 
