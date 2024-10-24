@@ -52,7 +52,7 @@ export default {
     "addtext":"Character",
     "showmore":"View more",
     "thisistext":"This is a text",
-    "template":'Template'
+    "template":"Template"
   },  
   header:{
     "material":"Material",
@@ -123,16 +123,26 @@ export default {
     "startedit":"Enter editing mode",
     "paste":'Paste',
     "iptprompt":"Please enter background prompt words！",
-    jixi:"Ultra fine",
-    jingxi: "Fine",
-    yiban: "General",
-    shaochu: "Slightly coarse",
-    chaochu: "Super coarse",
-    jichu: "Ultra coarse",
-    fudiao: "Emboss",
-    xiaogao: "Line drawing",
-    xianjiqz: "Line weight",
-    xiandzsl: "Number of line tones",
-    jianggao: "Noise reduction"
+    "jixi":"Ultra fine",
+    "jingxi": "Fine",
+    "yiban": "General",
+    "shaochu": "Slightly coarse",
+    "chaochu": "Super coarse",
+    "jichu": "Ultra coarse",
+    "fudiao": "Emboss",
+    "xiaogao": "Line drawing",
+    "xianjiqz": "Line weight",
+    "xiandzsl": "Number of line tones",
+    "jianggao": "Noise reduction",
+    "biaotiwenzi":"テキスト - タイトルテキスト",
+    "shuziwenzi":"デジタルテキスト",
+    "yinwenwenzi":"英語テキスト",
+    "threedwenzi":"3Dテキスト",
+    "baozhawenzi":"Hotタグ",
+    "cuxiaowenzi":"プロモーションタグ",
+    "zhuangshi":"飾り",
+    "liti":"3D",
+    "biankuang":"ボーダー",
+    "cuxiao":"プロモーション"
   }
 }

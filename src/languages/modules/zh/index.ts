@@ -136,6 +136,16 @@ export default {
     xiaogao: "线稿",
     xianjiqz: "线迹轻重",
     xiandzsl: "线调子数量",
-    jianggao: "降噪"
+    jianggao: "降噪",
+    biaotiwenzi:"标题文字",
+    shuziwenzi:"数字文字",
+    yinwenwenzi:"英文文字",
+    threedwenzi:"3D文字",
+    baozhawenzi:"爆炸帖",
+    cuxiaowenzi:"促销标签",
+    zhuangshi:"装饰",
+    liti:"立体",
+    biankuang:"边框",
+    cuxiao:"促销"
   }
 }

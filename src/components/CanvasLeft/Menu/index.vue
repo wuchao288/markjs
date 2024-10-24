@@ -26,19 +26,14 @@ const { poolType, poolShow } = storeToRefs(mainStore)
 
 const leftMap = {
   'shape': ShapePool,
-  'editor': TextboxPool,
   'template': TemplatePool,
   'material': MaterialPool,
-  'text': TextboxPool,
-  'image': TextboxPool,
-  'illustration': TextboxPool,
-  'code': TextboxPool,
-  'toolkit': TextboxPool,
-  'layer': TextboxPool,
-  'chatgpt': TextboxPool
+  'text': TextboxPool
 }
 const currentComponent = computed(() => {
-  return leftMap[poolType.value] || null
+  debugger
+  console.info(poolType.value)
+  return leftMap[poolType.value] 
 })
 
 

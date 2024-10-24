@@ -327,12 +327,17 @@
 
         canvasApp.editor.on(EditorEvent.SELECT, (e: EditorEvent) => {
 
+           
 
             if(e.list.length==0){
                 canvasApp.editor.target=null
                 componen.value = objcomponen.value.PagePanel
                return;
             }
+
+            console.info(e.list[0].x,e.list[0].y)
+
+
 
             if(canvasApp.editor.multiple){
 
@@ -638,7 +643,8 @@
                 fill:usePageBgColor.value,
                 y:0,
                 width: pageWidth.value,
-                height: pageHeight.value
+                height: pageHeight.value,
+                around:'top-left'
             })
 
             

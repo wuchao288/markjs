@@ -32,12 +32,10 @@
     let activeTab=ref("template")
 
     const topTabs= [
-        { key: "template", label: t("stylepanel.template"), icon: `icon-moban`, index: 0 },
+        { key: "template", label: t("stylepanel.template"), icon: "icon-moban", index: 0 },
         { key: "shape", label:t("header.sharp"), icon: "icon-hexagon", index: 1 },
         { key: "text", label:t("header.text"), icon: "icon-wenzi-L", index: 2 },
         { key: "material", label: t("header.material"), icon: `icon-star`, index: 3 }
-        // { key: "image", label: "image", icon: "icon-shangchuantupian1", index: 3 },
-        // { key: "toolkit", label: "tool", icon: "icon-wenzi-L", index: 4 }
     ];
 
     const  showType=(type)=>{

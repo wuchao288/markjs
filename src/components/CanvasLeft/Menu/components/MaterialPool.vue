@@ -71,8 +71,9 @@
             </div>
             <div class="panel-block_body">
                 <el-row class="panel-resource-list">
-                    <el-col @click="createImage(img.url)" :span="6" class="panel-resource-list-item"  v-for="img in  item.filter((m,idex)=>idex<4)">
+                    <el-col @click="createImage(img.url)" :title="img.id" :span="6" class="panel-resource-list-item"  v-for="img in  item.filter((m,idex)=>idex<4)">
                         <img :src="img.preview" lazy loading="lazy"  />
+                        
                     </el-col>
                 </el-row>
             </div>
@@ -118,6 +119,9 @@
         <el-row  v-loading="categoryData.length === 0">
             <el-col :span="8" @click="createImage(img.url)" class="box-image" v-for="(img, index) in categoryData" :key="index">
                 <img :src="img.preview"  lazy loading="lazy" />
+                <p style="background-color: #00000094;
+    color: white;padding-left: 4px;
+    border-radius: 3px;">{{img.id}}</p>
             </el-col>
       </el-row>
     </div>
@@ -129,31 +133,30 @@
   <script setup>
 import { Search,ArrowLeft,ArrowRight } from '@element-plus/icons-vue'
 import _ from 'lodash'
-import {ImageEffectList} from '@/assets/data/Material'
+import {ImageEffectList,MateCategoryList} from '@/assets/data/Material'
 import {onMounted, ref,nextTick, computed } from 'vue'
 
 import  useHandleCreate from '@/hooks/useCreateElement'
 
+import { useI18n } from "vue-i18n"
+const { t } = useI18n()
+
 const { createImage } = useHandleCreate();
 
+MateCategoryList.forEach(m=>m.name=t(m.name))
+
 ImageEffectList.forEach((item,index)=>{
-    if(index%5==0){
-        item.cateName="划重点"
-    }else if(index%5==1){
-        item.cateName="线箭头"
-    }else if(index%5==2){
-        item.cateName="基础装饰"
-    }else if(index%5==3){
-        item.cateName="雅虎促销"
-    }else if(index%5==4){
-        item.cateName="乐天促销"
-    }
+    item.cateName=MateCategoryList.find(m=>m.id==item.cateId)?MateCategoryList.find(m=>m.id==item.cateId).name:"unknow"
 })
+
+
 const categoryRef =computed(()=>document.getElementsByClassName("panel-container")[0])
 const categoryTop = ref(0)
 const typeRef = ref("all")
 
 const state = ref('')
+
+
 
 
 const handleSelect = (item) => {
@@ -164,6 +167,7 @@ let groupText=_.groupBy(ImageEffectList,item=>item.cateName)
 
 
 const categoryData = computed(() => {
+    //return ImageEffectList
   return groupText[typeRef.value]
 });
 

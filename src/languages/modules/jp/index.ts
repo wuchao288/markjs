@@ -51,7 +51,7 @@ export default {
     "addtext":"テキスト",
     "showmore":"詳細を表示",
     "thisistext":"これはテキストです",
-    "template":'テンプレート'
+    "template":"テンプレート"
   }, 
   header:{
     "material":"素材",
@@ -132,7 +132,17 @@ export default {
     "xiaogao": "線画",
     "xianjiqz": "線の強弱",
     "xiandzsl": "ライトトーン",
-    "jianggao": "ノイズ除去"
+    "jianggao": "ノイズ除去",
+    "biaotiwenzi":"テキスト - タイトルテキスト",
+    "shuziwenzi":"デジタルテキスト",
+    "yinwenwenzi":"英語テキスト",
+    "threedwenzi":"3Dテキスト",
+    "baozhawenzi":"Hotタグ",
+    "cuxiaowenzi":"プロモーションタグ",
+    "zhuangshi":"飾り",
+    "liti":"3D",
+    "biankuang":"ボーダー",
+    "cuxiao":"プロモーション"
   }
 }
 

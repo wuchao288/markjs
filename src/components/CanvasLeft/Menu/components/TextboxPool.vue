@@ -91,6 +91,7 @@
                 <el-row class="panel-resource-list">
                     <el-col @click="addGroup(it)" :span="8" class="panel-resource-list-item"  v-for="it in  item.filter((m,idex)=>idex<3)">
                         <img :src="it.preview" lazy loading="lazy"  />
+                       
                     </el-col>
                     
                 </el-row>
@@ -136,7 +137,10 @@
     <div class="total-box">
         <el-row  v-loading="categoryData.length === 0">
             <el-col :span="8" @click="addGroup(img)" class="box-image" v-for="(img, index) in categoryData" :key="index">
-                <img :src="img.preview"  lazy loading="lazy" />
+                <img :title="img.id":src="img.preview"  lazy loading="lazy" />
+                <p style="background-color: #00000094;
+    color: white;padding-left: 4px;
+    border-radius: 3px;">{{img.id}}</p>
             </el-col>
       </el-row>
     </div>
@@ -148,7 +152,7 @@
   <script setup>
 import { Search,ArrowLeft,ArrowRight } from '@element-plus/icons-vue'
 import _ from 'lodash'
-import {TextEffectItemList} from '@/assets/data/Material'
+import { TextEffectItemList,TextCategoryList } from '@/assets/data/Material'
 import {onMounted, ref,nextTick, computed } from 'vue'
 import  {mixins} from '@/mixin/index'
 import  useHandleCreate from '@/hooks/useCreateElement'
@@ -156,70 +160,64 @@ import  useHandleCreate from '@/hooks/useCreateElement'
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 
+
 const { createTextElement,createGroup,createTextElementBox } = useHandleCreate();
 
- let templist=[]
 
- let TextEffectItemListTemp=_.cloneDeep(TextEffectItemList)
+TextCategoryList.forEach(m=>m.name=t(m.name))
 
- await TextEffectItemListTemp.forEach(async (item,index)=>{
+//  let templist=[]
+
+//  let TextEffectItemListTemp=_.cloneDeep(TextEffectItemList)
+
+//  await TextEffectItemListTemp.forEach(async (item,index)=>{
    
-//     item.data=JSON.stringify(item.data)
-//     item.data=item.data.replace("http://localhost:5175/editor/src/assets/images/mate","/resources/image")
-//     //计算尺寸
-//     let img=await mixins.getImage(item.preview)
-//     var temp= { 
-//         "TemplateId":item.id,
-//         "TemplateClass":"PluginTxt",
-//         "Status":"1",
-//         "GId":0,
-//         "Name":"未命名",
-//         "Num":item.id,
-//         "Title":"",
-//         "Description":"",
-//         "KeyWord":"markjs",
-//         "CreateTime":"2024-07-27 07:23:41",
-//         "CreateBy":"admin",
-//         "ModifyTime":"2024-07-27 07:23:41",
-//         "ModifyBy":"admin",
-//         "AppID":33,
-//         "StoreMallIds":"",
-//         "Sources":item.data,
-//         "ThumbImg": item.preview.replace("http://localhost:5175/editor/src/assets/images/mate","/resources/image"),
-//         "TempPath":"resources\\image\\systemplet\\"+item.id,
-//         "UseDescription":"",
-//         "Remarks":"",
-//         "TempleteLen":40436,
-//         "Color":"",
-//         "Version":1,
-//         "SortId":index,
-//         "Width":img.width,
-//         "Height":img.height,
-//         "CreateClass":"Crawlers",
-//         "Original":item.id,
-//         "Category":"30013",
-//         "EditClass":0
-//     };
+// //     item.data=JSON.stringify(item.data)
+// //     item.data=item.data.replace("http://localhost:5175/editor/src/assets/images/mate","/resources/image")
+// //     //计算尺寸
+// //     let img=await mixins.getImage(item.preview)
+// //     var temp= { 
+// //         "TemplateId":item.id,
+// //         "TemplateClass":"PluginTxt",
+// //         "Status":"1",
+// //         "GId":0,
+// //         "Name":"未命名",
+// //         "Num":item.id,
+// //         "Title":"",
+// //         "Description":"",
+// //         "KeyWord":"markjs",
+// //         "CreateTime":"2024-07-27 07:23:41",
+// //         "CreateBy":"admin",
+// //         "ModifyTime":"2024-07-27 07:23:41",
+// //         "ModifyBy":"admin",
+// //         "AppID":33,
+// //         "StoreMallIds":"",
+// //         "Sources":item.data,
+// //         "ThumbImg": item.preview.replace("http://localhost:5175/editor/src/assets/images/mate","/resources/image"),
+// //         "TempPath":"resources\\image\\systemplet\\"+item.id,
+// //         "UseDescription":"",
+// //         "Remarks":"",
+// //         "TempleteLen":40436,
+// //         "Color":"",
+// //         "Version":1,
+// //         "SortId":index,
+// //         "Width":img.width,
+// //         "Height":img.height,
+// //         "CreateClass":"Crawlers",
+// //         "Original":item.id,
+// //         "Category":"30013",
+// //         "EditClass":0
+// //     };
     
-//     templist.push(temp)
- })
+// //     templist.push(temp)
+//  })
 
-
- console.info(TextEffectItemListTemp)
+// debugger
+//  console.info(TextEffectItemListTemp)
 
 
  TextEffectItemList.forEach((item,index)=>{
-    if(index%5==0){
-        item.cateName="划重点"
-    }else if(index%5==1){
-        item.cateName="基础文字"
-    }else if(index%5==2){
-        item.cateName="晒图标记"
-    }else if(index%5==3){
-        item.cateName="标题文字"
-    }else if(index%5==4){
-        item.cateName="雅虎标题"
-    }
+    item.cateName=TextCategoryList.find(m=>m.id==item.cateId)?TextCategoryList.find(m=>m.id==item.cateId).name:"unknow"
 })
 const categoryRef =computed(()=>document.getElementsByClassName("panel-container")[0])
 const categoryTop = ref(0)
@@ -236,6 +234,7 @@ let groupText=_.groupBy(TextEffectItemList,item=>item.cateName)
 
 
 const categoryData = computed(() => {
+    //return TextEffectItemList;
   return groupText[typeRef.value]
 });
 

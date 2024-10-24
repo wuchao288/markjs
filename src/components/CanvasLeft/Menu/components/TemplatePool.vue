@@ -2,15 +2,17 @@
   <el-card shadow="never"  body-class="panel-container" >
     <el-row :gutter="16">
         <el-col :span="12"   >
-          <div :title="item.id"  v-for="item in  ImageEffectList.filter((m,index)=> { return index%2==0 })" 
+          <div :title="item.id"  v-for="item in  TemplateEffectItemList.filter((m,index)=> { return index%2==0 })" 
           :key="item.id" class="mateitem" >
-            <el-image @click="handleAddMateImg(item)" class="mateitem-img" :src="item.preview"></el-image>
+
+            <el-image  @click="createTemp(item)" class="mateitem-img" :src="item.preview"></el-image>
           </div>
         </el-col>
         <el-col :span="12"   >
-          <div :title="item.id"  v-for="item in  ImageEffectList.filter((m,index)=> { return index%2==1 })" :key="item.id" class="mateitem" 
+          <div :title="item.id"  v-for="item in  TemplateEffectItemList.filter((m,index)=> { return index%2==1 })" :key="item.id" class="mateitem" 
            >
-            <el-image @click="handleAddMateImg(item)" class="mateitem-img"   :src="item.preview"></el-image>
+           <el-image  @click="createTemp(item)" class="mateitem-img" :src="item.preview"></el-image>
+           
           </div>
         </el-col>
      </el-row>
@@ -20,26 +22,20 @@
   <script setup>
 import { Search,ArrowLeft,ArrowRight } from '@element-plus/icons-vue'
 import _ from 'lodash'
-import {ImageEffectList} from '@/assets/data/Material'
+import {TemplateEffectItemList} from '@/assets/data/Material'
 import {onMounted, ref,nextTick, computed } from 'vue'
 
 import  useHandleCreate from '@/hooks/useCreateElement'
 
-const { createImage } = useHandleCreate();
+const { createImage,createGroup } = useHandleCreate();
 
-ImageEffectList.forEach((item,index)=>{
-    if(index%5==0){
-        item.cateName="划重点"
-    }else if(index%5==1){
-        item.cateName="线箭头"
-    }else if(index%5==2){
-        item.cateName="基础装饰"
-    }else if(index%5==3){
-        item.cateName="雅虎促销"
-    }else if(index%5==4){
-        item.cateName="乐天促销"
+const  createTemp=(item)=>{
+    if(item.data){
+      createGroup(item)
+    }else{
+      createImage(item.preview)
     }
-})
+}
 
 
 
@@ -50,7 +46,7 @@ ImageEffectList.forEach((item,index)=>{
 
 
   :deep(.panel-container){
-    padding: 0px;
+    padding: 8px;
     flex: 1;
     overflow: auto;
     padding-bottom: 30px;
@@ -108,64 +104,28 @@ ImageEffectList.forEach((item,index)=>{
 }
 
 
-.panel-resource-list-item{
-    position: relative;
-    display: grid;
-    flex-direction: column;
-    grid-gap: 8px;
-    gap: 8px;
-    place-items: center;
-    justify-content: center;
-    justify-items: center;
-    padding: 8px;
-    line-height: 18px;
-    text-align: center;
-    white-space: nowrap;
-    cursor: pointer;
-    -webkit-user-select: none;
-    user-select: none;
-    border-radius: 8px;
-    &:hover{
-        background-color: #c8c8c8;
-    }
-    .panel-resource-list-item-icon{
-        height: 32px;
-        width: 32px;
-    }
-    .panel-resource-list-item-title{
-        font-size: 12px;
-        font-weight: 400;
-    }
-
-    img{
-      width: 100%;
-        height: 50px;
-        object-fit: contain;
-    }
+.mateitem{
+  margin-bottom: 10px;
+  cursor: pointer;
+  border:1px solid #ccc;
+  box-shadow: var(--el-box-shadow-light);
+  border-radius: 5px;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%), linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%);
+    background-position: 0 0, 14px 14px;
+    background-size: 28px 28px;
 }
 
-.box-image{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 4px;
-    cursor: pointer ;
-    border-radius: 8px;
-    background: #f8fafc;
-    &:hover{
-        background-color: #c8c8c8;
-    }
-    img{
-        width: 100%;
-        height: 95px;
-        object-fit: contain;
-    }
+.mateitem:hover{
+  box-shadow: var(--el-box-shadow);
+}
+.mateitem-img{
+  width: 100%;
 }
 
-.total-box{
-    padding: 8px;
+:deep(.mateitem-img img){
+   display: block;
+   object-fit: fill;
 }
-
 
 
 </style>

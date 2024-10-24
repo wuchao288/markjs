@@ -304,24 +304,22 @@ export default()=>{
 
     const _canvasAddElement=(eleItem,emit=true)=>{
 
+
         const { centerPoint, workSpaceDraw,canvas } = useCenter();
         
-        if(canvas.editor.multiple||canvas.editor.single){
-
-            eleItem.x = canvas.editor.element.x+10
-            eleItem.y = canvas.editor.element.y+10
-
-        }else{
-
-            eleItem.x = centerPoint.x - eleItem.width / 2;
-            eleItem.y = centerPoint.y - eleItem.height / 2;
-        }
+       
 
         eleItem.zIndex=workSpaceDraw.children.length+1
 
         workSpaceDraw.add(eleItem)
 
+      
+        eleItem.x = (centerPoint.x*2 - eleItem.getBounds('box', 'local').width) / 2;
+        eleItem.y = (centerPoint.y*2 - eleItem.getBounds('box', 'local').height) / 2;
+
         canvas.editor.target=eleItem
+
+        //console.info( )
 
         emit?workSpaceDraw.emit("redo.add",{}):""
 
@@ -432,7 +430,7 @@ export default()=>{
 
         const group = UI.one(item.data)
 
-        group.around='top-left'
+        //group.around='top-left'
         group.id=nanoid()
 
         group.x=0; //pageWidth.value/2+group.width/2
