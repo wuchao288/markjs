@@ -237,7 +237,7 @@
           // 实例应用
         canvasApp = new App({
             view:'main-canvas',
-            fill: 'transparent'
+            fill: '#f1f2f4'
             // 通过 app.editor = new Editor(); 时，不需要添加 editor 属性，会有问题
             // editor:{}
         })
@@ -1913,10 +1913,10 @@ watch(()=>useTextStyle.value.boxCornerRadius, (newValue, oldValue)=>{
         width: 100%;
         height: 100%;
         margin-top: 60px !important;
-        
-        background-image: 
+        background-color:#f1f2f4;
+        /*background-image: 
         linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%),
-        linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%);
+        linear-gradient(45deg, rgba(0, 0, 0, 0.2) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.2) 75%);*/
         background-position: 0 0, 14px 14px;
         background-size: 28px 28px;
     }

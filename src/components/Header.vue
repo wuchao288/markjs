@@ -553,9 +553,9 @@ const handleJsonSuccess: UploadProps['onChange'] = (
             </el-upload>
           
          </li>
-         <li v-if="isTest">
+         <li>
           <el-button @click="handleExportPng">
-              导出效果图
+                {{t('canvas.donwoneimg')}}
           </el-button>
          </li>
          

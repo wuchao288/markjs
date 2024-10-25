@@ -146,6 +146,7 @@ export default {
     zhuangshi:"装饰",
     liti:"立体",
     biankuang:"边框",
-    cuxiao:"促销"
+    cuxiao:"促销",
+    donwoneimg:"下载选择的元素"
   }
 }

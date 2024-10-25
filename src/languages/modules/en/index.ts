@@ -143,6 +143,7 @@ export default {
     "zhuangshi":"飾り",
     "liti":"3D",
     "biankuang":"ボーダー",
-    "cuxiao":"プロモーション"
+    "cuxiao":"プロモーション",
+    "donwoneimg":"Download the selected elements"
   }
 }
