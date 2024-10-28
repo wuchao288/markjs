@@ -217,7 +217,7 @@ TextCategoryList.forEach(m=>m.name=t(m.name))
 
 
  TextEffectItemList.forEach((item,index)=>{
-    item.cateName=TextCategoryList.find(m=>m.id==item.cateId)?TextCategoryList.find(m=>m.id==item.cateId).name:"unknow"
+    item.cateName=TextCategoryList.find(m=>m.id==item.cateId)?TextCategoryList.find(m=>m.id==item.cateId).name:item.cateId
 })
 const categoryRef =computed(()=>document.getElementsByClassName("panel-container")[0])
 const categoryTop = ref(0)

@@ -143,6 +143,7 @@ export default {
     "liti":"3D",
     "biankuang":"ボーダー",
     "cuxiao":"プロモーション",
+    "qipao":"きほう",
     "donwoneimg":"選択した要素のダウンロード"
   }
 }

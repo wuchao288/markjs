@@ -325,7 +325,9 @@ export default()=>{
 
         ElMessage({
             message: 'Success!',
-            type: 'success'
+            type: 'success',
+            duration:1000,
+            offset:80
         })
     }
 

@@ -147,6 +147,7 @@ export default {
     liti:"立体",
     biankuang:"边框",
     cuxiao:"促销",
+    qipao:"气泡",
     donwoneimg:"下载选择的元素"
   }
 }

@@ -144,6 +144,7 @@ export default {
     "liti":"3D",
     "biankuang":"ボーダー",
     "cuxiao":"プロモーション",
+    "qipao":"きほう",
     "donwoneimg":"Download the selected elements"
   }
 }
